@@ -1,1541 +1,466 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Соціальні мережі — Інтерактивна безпека | CyberSecure</title>
-  <meta name="description" content="Інтерактивна платформа для навчання безпеці в соціальних мережах" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      /* Оновлені CSS змінні для відповідності темній темі */
-      --body-bg-gradient: linear-gradient(135deg, #0a0f2b 0%, #1b1436 50%, #2a1a5a 100%);
-      --primary-accent-gradient: linear-gradient(135deg, #ff416c, #ff4b2b); /* Основний рожево-помаранчевий */
-      --secondary-accent-color: #ff6b68; /* Додатковий акцентний колір */
-      
-      /* Градієнти для спеціальних блоків (можна залишити або адаптувати) */
-      --success-gradient: linear-gradient(135deg, #28a745 0%, #20bf55 100%); /* Зелений для успіху */
-      --warning-gradient: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%); /* Помаранчево-жовтий для попереджень */
-      --info-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%); /* Синій для інформаційних блоків (якщо потрібен) */
-      
-      --card-bg-dark: rgba(20, 20, 40, 0.6); /* Темний фон для карток */
-      --glass-bg: rgba(255, 255, 255, 0.08); /* "Скло" для світлих елементів на темному фоні */
-      --glass-border: rgba(255, 255, 255, 0.15);
-      --accent-border-color: rgba(255, 65, 108, 0.2);
-
-      --text-light: #eee;
-      --text-medium: #ccc;
-      --text-dark: #999;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--body-bg-gradient);
-      color: var(--text-light); /* Основний колір тексту світлий */
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    /* Animated background particles */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
-    }
-
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2); /* Частинки трохи менш яскраві */
-      border-radius: 50%;
-      animation: float 8s ease-in-out infinite; /* Збільшив тривалість анімації */
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg) scale(0.8); opacity: 0.2; }
-      50% { transform: translateY(-25px) rotate(180deg) scale(1); opacity: 0.6; }
-    }
-
-    /* Header */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.7); /* Темний фон хедера */
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border-bottom: 1px solid var(--accent-border-color);
-      z-index: 1000;
-      padding: 1rem 0;
-    }
-
-    .header-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 2rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 800;
-      font-size: 1.8rem;
-      color: var(--secondary-accent-color); /* Акцентний колір лого */
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-
-    .logo-img {
-      font-size: 2.5rem;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    .nav-controls {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .theme-toggle { /* Кнопка перемикання теми - стилізована, але функціонал потребує доопрацювання */
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 50px;
-      color: var(--text-light);
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .theme-toggle:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .back-btn {
-      background: var(--primary-accent-gradient); /* Основний акцентний градієнт */
-      color: white;
-      padding: 0.7rem 1.5rem;
-      border: none;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .back-btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
-    }
-
-    /* Main content */
-    main {
-      padding-top: 100px; /* Відступ для фіксованого хедера */
-      padding: 2rem;
-      max-width: 1400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Безпека в соціальних мережах - CyberSecure</title>
   
-    /* Hero section */
-    .hero-section {
-      background: var(--glass-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 30px;
-      padding: 4rem;
-      text-align: center;
-      margin-bottom: 4rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-    }
-
-    .hero-section::before { /* Залишаємо анімацію, але робимо її менш помітною */
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.05), transparent);
-      animation: rotate 15s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes rotate {
-      100% { transform: rotate(360deg); }
-    }
-
-    .hero-section h1 {
-      font-size: 3.5rem; /* Трохи зменшив для балансу */
-      font-weight: 800;
-      /* Градієнт для заголовка */
-      background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      color: var(--secondary-accent-color); /* Резервний колір */
-      margin-bottom: 1rem;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      animation: fadeInUp 1s ease-out;
-    }
-
-    .hero-subtitle {
-      font-size: 1.3rem; /* Трохи зменшив */
-      color: var(--text-medium);
-      max-width: 800px;
-      margin: 0 auto 2rem;
-      animation: fadeInUp 1s ease-out 0.2s both;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Interactive dashboard */
-    .dashboard {
-      display: grid;
-      grid-template-columns: 1fr 2.5fr; /* Трохи змінив пропорції */
-      gap: 2rem;
-      margin: 3rem 0;
-    }
-
-    .sidebar {
-      background: var(--glass-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 2rem;
-      height: fit-content;
-      position: sticky;
-      top: 120px; /* Відступ від фіксованого хедера */
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .sidebar h3 {
-      color: var(--text-light);
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-    }
-
-    .platform-selector {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .platform-btn {
-      background: rgba(255,255,255,0.05); /* Дуже прозорий фон */
-      border: 1px solid var(--glass-border);
-      border-radius: 15px;
-      padding: 1rem;
-      color: var(--text-medium);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-weight: 600;
-    }
-
-    .platform-btn:hover, .platform-btn.active {
-      background: var(--primary-accent-gradient); /* Основний акцентний градієнт */
-      color: white;
-      transform: translateX(10px) scale(1.03);
-      box-shadow: 0 5px 20px rgba(255, 65, 108, 0.3);
-      border-color: transparent;
-    }
-
-    .platform-icon {
-      font-size: 1.8rem; /* Трохи зменшив іконки */
-      opacity: 0.8;
-    }
-    .platform-btn.active .platform-icon, .platform-btn:hover .platform-icon {
-        opacity: 1;
-    }
-
-
-    /* Content area */
-    .content-area {
-      background: var(--glass-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 2rem;
-      min-height: 600px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .platform-content {
-      display: none;
-      animation: slideIn 0.5s ease-out;
-    }
-
-    .platform-content.active {
-      display: block;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .platform-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      color: var(--text-light);
-    }
-    .platform-header .platform-icon { color: var(--secondary-accent-color); }
-
-    .platform-header h2 {
-      font-size: 2.2rem; /* Трохи зменшив */
-      font-weight: 700;
-      color: var(--text-light);
-    }
-
-    /* Interactive privacy simulator */
-    .privacy-simulator {
-      background: var(--card-bg-dark); /* Темний фон для симулятора */
-      border-radius: 15px;
-      padding: 2rem;
-      margin: 2rem 0;
-      color: var(--text-light);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .simulator-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .simulator-header h3 { color: var(--secondary-accent-color); font-size: 1.8rem;}
-    .simulator-header p { color: var(--text-medium); font-size: 0.9rem;}
-
-
-    .profile-preview {
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-      border: 2px solid transparent;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    .profile-preview h4 { margin-bottom: 0.5rem; font-weight: 600; }
-    .profile-preview p { font-size: 0.9rem; color: var(--text-medium); margin-bottom: 0.3rem;}
-
-
-    .profile-preview.public {
-      border-color: #ff6b6b; /* Червоний для небезпеки */
-      box-shadow: 0 0 20px rgba(255,107,107,0.3);
-    }
-
-    .profile-preview.private {
-      border-color: #4CAF50; /* Зелений для безпеки */
-      box-shadow: 0 0 20px rgba(76,175,80,0.3);
-    }
-
-    .privacy-controls {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-
-    .control-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-medium);
-    }
-    .control-item span { font-weight: 600;}
-
-    .toggle-switch {
-      position: relative;
-      width: 50px; /* Трохи менший */
-      height: 26px;
-      background: rgba(255,255,255,0.2); /* Світліший неактивний */
-      border-radius: 13px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .toggle-switch.active {
-      background: var(--secondary-accent-color); /* Акцентний колір */
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      width: 22px; /* Трохи менший */
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.3s ease;
-    }
-
-    .toggle-switch.active::after {
-      transform: translateX(24px); /* Скоригований зсув */
-    }
-
-    /* Security score */
-    .security-score {
-      text-align: center;
-      margin: 2rem 0;
-    }
-    .security-score h4 { margin-top: 0.5rem; color: var(--text-light); }
-    .security-score p { font-size: 0.9rem; color: var(--text-medium); }
-
-
-    .score-circle {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      /* Оновлений градієнт для кола */
-      background: conic-gradient(from 0deg, var(--secondary-accent-color) 0deg, var(--secondary-accent-color) var(--score-deg), rgba(255,255,255,0.1) var(--score-deg));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      position: relative;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    }
-
-    .score-circle::after { /* Внутрішнє коло */
-      content: '';
-      width: 120px;
-      height: 120px;
-      background: var(--card-bg-dark); /* Темний фон, як у симулятора */
-      border-radius: 50%;
-      position: absolute;
-    }
-
-    .score-text {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--text-light);
-      z-index: 1;
-    }
-
-    /* Interactive quiz */
-    .quiz-section {
-      background: var(--success-gradient); /* Залишаємо зелений для квізу */
-      border-radius: 20px;
-      padding: 3rem;
-      margin: 3rem 0;
-      color: white;
-      text-align: center;
-    }
-    .quiz-section h2 { font-weight: 700; margin-bottom: 0.5rem; }
-
-    .quiz-container {
-      max-width:100%;
-      margin: 0 auto;
-    }
-
-    .question-card {
-      background: rgba(255,255,255,0.15); /* Трохи яскравіше на зеленому фоні */
-      border-radius: 15px;
-      padding: 2rem;
-      margin: 2rem 0;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .question-card h3 { color: white; font-weight: 600; }
-
-    .quiz-options {
-      display: grid;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-
-    .quiz-option {
-      background: rgba(255,255,255,0.1);
-      border: 2px solid transparent;
-      border-radius: 10px;
-      padding: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: white;
-      font-weight: 600;
-    }
-
-    .quiz-option:hover {
-      background: rgba(255,255,255,0.25);
-      transform: translateY(-2px);
-    }
-
-    .quiz-option.correct {
-      border-color: #fff; /* Біла межа для правильної відповіді */
-      background: rgba(255,255,255,0.3);
-      color: white;
-    }
-
-    .quiz-option.incorrect {
-      border-color: #ffc107; /* Жовта межа для неправильної */
-      background: rgba(255,193,7,0.3);
-      color: white;
-    }
-    #quizResult { font-weight: 600; }
-    #quizResult strong { font-weight: 800; }
-
-    /* Tips Carousel */
-    .tips-carousel {
-      position: relative;
-      overflow: hidden;
-      border-radius: 20px;
-      margin: 3rem 0;
-      background: var(--glass-bg); /* Фон для всієї каруселі */
-      padding: 1rem 0;
-      border: 1px solid var(--glass-border);
-    }
-
-    .carousel-container {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-
-    .tip-slide {
-      min-width: 100%;
-      background: var(--warning-gradient); /* Залишаємо градієнт для слайдів */
-      padding: 3rem;
-      text-align: center;
-      color: white;
-      border-radius: 15px; /* Додав заокруглення для слайдів всередині каруселі */
-      margin: 0 1rem; /* Невеликий відступ, якщо контейнер ширший */
-      flex-shrink: 0;
-    }
-    .tip-slide h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-    .tip-slide h4 { font-size: 1.2rem; margin-bottom: 1rem; opacity: 0.9; }
-    .tip-slide p { font-size: 1rem; opacity: 0.8; }
-
-
-    .carousel-controls {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1.5rem; /* Відступ зверху */
-    }
-
-    .carousel-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-light);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .carousel-btn:hover {
-      background: rgba(255,255,255,0.2);
-      transform: scale(1.1);
-      color: white;
-    }
-
-    /* Progress Tracking */
-    .progress-section {
-      background: var(--glass-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 2rem;
-      margin: 3rem 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .progress-header {
-      text-align: center;
-      color: var(--text-light);
-      margin-bottom: 2rem;
-    }
-    .progress-header h2 { font-weight: 700; font-size: 2rem; margin-bottom: 0.3rem; }
-    .progress-header p { color: var(--text-medium); }
-
-
-    .progress-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .progress-item {
-      background: rgba(255,255,255,0.05); /* Дуже прозорий фон */
-      border: 1px solid var(--glass-border);
-      border-radius: 15px;
-      padding: 1.5rem;
-      text-align: center;
-      color: var(--text-light);
-    }
-    .progress-item h4 { font-weight: 600; margin-bottom: 0.5rem; }
-    .progress-item p { font-size: 0.9rem; color: var(--text-medium); }
-
-    .progress-bar {
-      width: 100%;
-      height: 10px;
-      background: rgba(255,255,255,0.1); /* Світліший фон для треку прогресу */
-      border-radius: 5px;
-      overflow: hidden;
-      margin: 1rem 0;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--primary-accent-gradient); /* Основний акцентний градієнт */
-      border-radius: 5px;
-      transition: width 0.5s ease;
-    }
-
-    /* Floating action button */
-    .fab {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--primary-accent-gradient); /* Основний акцентний градієнт */
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 65, 108, 0.4);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .fab:hover {
-      transform: scale(1.1) translateY(-3px);
-      box-shadow: 0 6px 30px rgba(255, 65, 108, 0.5);
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.85); /* Більш темний фон модалки */
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: 1rem; /* Додав відступи для мобільних */
-    }
-
-    .modal-content {
-      background: var(--card-bg-dark); /* Темний фон для модального вікна */
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 2.5rem; /* Збільшив відступи */
-      max-width: 550px; /* Трохи ширше */
-      width: 95%;
-      color: var(--text-light);
-      animation: modalSlideIn 0.3s ease-out;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    }
-    .modal-content h3 { color: var(--secondary-accent-color); margin-bottom: 1.5rem; font-size: 1.8rem;}
-    .modal-content p { color: var(--text-medium); margin-bottom: 1rem; }
-    .modal-content ul { margin: 1.5rem 0; padding-left: 1.5rem; }
-    .modal-content ul li { margin-bottom: 0.5rem; color: var(--text-medium); }
-
-
-    @keyframes modalSlideIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    /* Responsive design */
-    @media (max-width: 768px) {
-      .dashboard {
-        grid-template-columns: 1fr;
-      }
-      
-      .sidebar {
-        position: static; /* Або можна зробити горизонтальний скрол для кнопок */
-        margin-bottom: 2rem;
-      }
-       .platform-selector {
-        flex-direction: row; /* Кнопки в ряд */
-        overflow-x: auto; /* Горизонтальний скрол */
-        padding-bottom: 1rem; /* Для тіні скролбара, якщо є */
-      }
-      .platform-btn {
-        flex-shrink: 0; /* Щоб кнопки не стискалися */
-      }
-      
-      .hero-section h1 {
-        font-size: 2.2rem; /* Адаптуємо розмір */
-        /* Виправлення для iOS Safari для градієнтного тексту h1 */
-        background: none !important;
-        -webkit-background-clip: unset !important;
-        background-clip: unset !important;
-        -webkit-text-fill-color: unset !important;
-        color: var(--secondary-accent-color) !important; /* Резервний колір, який використовується для градієнта */
-      }
-      
-      .hero-section {
-        padding: 2.5rem 1.5rem; /* Зменшені відступи */
-      }
-      .hero-subtitle { font-size: 1.1rem; }
-      
-      .privacy-controls {
-        grid-template-columns: 1fr;
-      }
-      .progress-grid {
-        grid-template-columns: 1fr;
-      }
-      .modal-content { padding: 1.5rem; }
-    }
-
-    /* Button styles */
-    .btn {
-      padding: 0.9rem 1.8rem; /* Трохи змінив розміри */
-      border: none;
-      border-radius: 50px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-      margin: 0.5rem;
-      text-transform: uppercase; /* Додав верхній регістр */
-      letter-spacing: 0.5px; /* Невеликий міжлітерний інтервал */
-    }
-
-    .btn-primary {
-      background: var(--primary-accent-gradient);
-      color: white;
-      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
-    }
-
-    .btn-success {
-      background: var(--success-gradient);
-      color: white;
-      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-    }
-    .btn-success:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
-    }
-
-
-    .btn-warning { /* Кнопка попередження */
-      background: var(--warning-gradient);
-      color: #5D4037; /* Темний колір тексту для світлого градієнта */
-      box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
-    }
-     .btn-warning:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 25px rgba(255, 126, 95, 0.4);
-    }
-
-    /* Стилізація сценаріїв */
-    .scenario-section {
-        background: var(--card-bg-dark); /* Темний фон */
-        border-radius: 20px;
-        padding: 3rem;
-        margin: 3rem 0;
-        color: var(--text-light);
-        border: 1px solid var(--glass-border);
-    }
-    .scenario-section h2 {
-        text-align: center;
-        margin-bottom: 2rem;
-        color: var(--secondary-accent-color);
-        font-size: 2rem;
-    }
-    .scenario-card {
-        background: rgba(255,255,255,0.05);
-        border-radius: 15px;
-        padding: 2rem;
-        margin: 1rem 0;
-        border: 1px solid var(--glass-border);
-    }
-    .scenario-card h3 {
-        color: var(--text-light);
-        margin-bottom: 1rem;
-        font-weight: 600;
-    }
-    .scenario-card p {
-        color: var(--text-medium);
-        margin-bottom: 1.5rem;
-    }
-    .scenario-options {
-        display: grid;
-        gap: 1rem;
-        margin: 2rem 0;
-    }
-    .scenario-btn.btn { /* Кнопки вибору в сценаріях */
-        background: rgba(255,255,255,0.1);
-        border: 1px solid var(--glass-border);
-        color: var(--text-medium);
-        width: 100%; /* Кнопки на всю ширину */
-    }
-    .scenario-btn.btn:hover {
-        background: rgba(255,255,255,0.2);
-        color: var(--text-light);
-    }
-    .scenario-result {
-        display: none;
-        margin-top: 1rem;
-        padding: 1rem;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-    .scenario-result.good {
-        background: rgba(76,175,80,0.2);
-        border: 1px solid #4CAF50;
-        color: #c8e6c9;
-    }
-    .scenario-result.bad {
-        background: rgba(255,107,107,0.2);
-        border: 1px solid #ff6b6b;
-        color: #ffcdd2;
-    }
-  </style>
+  <!-- Основні мета-теги -->
+  <meta name="description" content="Як безпечно користуватися соціальними мережами, захистити особисті дані та налаштувати приватність в Facebook, Instagram, Twitter та Telegram.">
+  <meta name="keywords" content="безпека в соцмережах, приватність в соціальних мережах, Facebook безпека, Instagram безпека, Twitter безпека, Telegram безпека, конфіденційність даних">
+  <meta name="author" content="CyberSecure">
+  
+  <!-- Мета-теги для социальных сетей -->
+  <meta property="og:title" content="Безпека в соціальних мережах - CyberSecure">
+  <meta property="og:description" content="Як безпечно користуватися соціальними мережами, захистити особисті дані та налаштувати приватність в Facebook, Instagram, Twitter та Telegram.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dot-gh.github.io/social-media-security.html">
+  <meta property="og:image" content="images/social-media-security.jpg">
+  
+  <!-- Іконки та фавіконки -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  
+  <!-- Шрифти -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic-ext,latin-ext" rel="stylesheet">
+  
+  <!-- Стилі -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/topic-styles.css">
 </head>
 <body>
-  <div class="particles" id="particles"></div>
-
   <header>
-    <div class="header-content">
-      <div class="logo">
-        <div class="logo-img">🛡️</div> <span>CyberSecure</span>
-      </div>
-      <div class="nav-controls">
-        <a href="index.html" class="back-btn">← Назад на головну</a>
-      </div>
+    <div class="logo">
+      <div class="logo-img">🔒</div>
+      <span>CyberSecure</span>
     </div>
+    
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+    </div>
+    
+    <nav id="nav">
+      <a href="index.html">Головна</a>
+      <a href="about.html">Про нас</a>
+      <a href="resources.html">Ресурси</a>
+    </nav>
   </header>
-
+  
   <main>
-    <section class="hero-section">
-      <h1>🛡️ Інтерактивна Безпека Соцмереж</h1>
-      <p class="hero-subtitle">
-        Навчайтесь безпеці в інтерактивному режимі! Симулятор приватності, тести знань, 
-        персоналізовані рекомендації та багато іншого.
-      </p>
+    <section class="topic-banner">
+      <div class="topic-content">
+        <h1>Безпека в соціальних мережах</h1>
+        <p>Захистіть свою приватність та особисті дані в популярних соціальних платформах</p>
+      </div>
+      <div class="topic-image">
+        <div class="icon-large">📱</div>
+      </div>
     </section>
-
-    <div class="dashboard">
-      <aside class="sidebar">
-        <h3>Оберіть платформу:</h3>
-        <div class="platform-selector">
-          <button class="platform-btn active" data-platform="facebook">
-            <span class="platform-icon">📘</span>
-            <span>Facebook</span>
-          </button>
-          <button class="platform-btn" data-platform="instagram">
-            <span class="platform-icon">📷</span>
-            <span>Instagram</span>
-          </button>
-          <button class="platform-btn" data-platform="tiktok">
-            <span class="platform-icon">🎵</span>
-            <span>TikTok</span>
-          </button>
-          <button class="platform-btn" data-platform="linkedin">
-            <span class="platform-icon">💼</span>
-            <span>LinkedIn</span>
-          </button>
-          <button class="platform-btn" data-platform="twitter">
-            <span class="platform-icon">🐦</span>
-            <span>Twitter/X</span>
-          </button>
+    
+    <section class="topic-content">
+      <h2>Чому важлива безпека в соціальних мережах</h2>
+      
+      <p>
+        Соціальні мережі стали невід'ємною частиною нашого життя, але вони також є величезним джерелом особистих 
+        даних, які можуть бути використані зловмисниками. Від викрадення особистості до таргетованого фішингу, 
+        неправильне використання соціальних медіа може призвести до серйозних проблем з безпекою.
+      </p>
+      
+      <div class="warning-box">
+        <h3>Основні ризики в соціальних мережах:</h3>
+        <ul>
+          <li><strong>Витік особистих даних</strong> — ваша інформація може потрапити в руки зловмисників через хакерські атаки на платформи</li>
+          <li><strong>Викрадення особистості</strong> — шахраї можуть створювати фейкові профілі, використовуючи ваші фотографії та інформацію</li>
+          <li><strong>Соціальна інженерія</strong> — збір інформації для фішингових атак або для відповідей на секретні питання</li>
+          <li><strong>Сталкінг і переслідування</strong> — надмірне розкриття інформації про ваше місцезнаходження може бути небезпечним</li>
+          <li><strong>Репутаційні ризики</strong> — необдумані публікації можуть мати довгострокові наслідки для кар'єри та особистого життя</li>
+          <li><strong>Шкідливе програмне забезпечення</strong> — розповсюдження через заражені посилання в повідомленнях</li>
+        </ul>
+      </div>
+      
+      <h2>Загальні рекомендації з безпеки</h2>
+      
+      <div class="info-box">
+        <h3>Основні правила безпечного користування соціальними мережами:</h3>
+        <ul class="checklist">
+          <li>Використовуйте надійні унікальні паролі для кожної соціальної мережі</li>
+          <li>Увімкніть двофакторну автентифікацію на всіх платформах, де це можливо</li>
+          <li>Регулярно перевіряйте налаштування приватності своїх акаунтів</li>
+          <li>Обмежуйте коло осіб, які можуть бачити ваші публікації (тільки друзі замість "усі")</li>
+          <li>Не приймайте запити в друзі від незнайомців</li>
+          <li>Будьте обережні з тим, яку особисту інформацію ви розміщуєте</li>
+          <li>Не публікуйте інформацію про своє місцезнаходження в реальному часі</li>
+          <li>Не діліться повними датами народження, домашніми адресами або номерами телефонів</li>
+          <li>Регулярно переглядайте список підключених додатків і видаляйте непотрібні</li>
+          <li>Виходьте з акаунтів при використанні спільних або публічних комп'ютерів</li>
+        </ul>
+      </div>
+      
+      <h2>Налаштування безпеки в популярних соціальних мережах</h2>
+      
+      <div class="sm-security-tabs">
+        <div class="tabs-nav">
+          <button class="tab-btn active" data-tab="facebook">Facebook</button>
+          <button class="tab-btn" data-tab="instagram">Instagram</button>
+          <button class="tab-btn" data-tab="twitter">Twitter</button>
+          <button class="tab-btn" data-tab="telegram">Telegram</button>
         </div>
-      </aside>
-
-      <div class="content-area">
-        <div class="platform-content active" id="facebook">
-          <div class="platform-header">
-            <span class="platform-icon">📘</span>
-            <h2>Facebook Security Center</h2>
-          </div>
-
-          <div class="privacy-simulator">
-            <div class="simulator-header">
-              <h3>🔒 Симулятор Приватності</h3>
-              <p>Налаштуйте параметри та подивіться, як це впливає на вашу безпеку</p>
+        
+        <div class="tabs-content">
+          <!-- Facebook -->
+          <div class="tab-content active" id="facebook-content">
+            <h3>Безпека Facebook</h3>
+            
+            <div class="security-steps">
+              <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Перевірка налаштувань приватності</h4>
+                  <p>Натисніть на стрілку вниз у правому верхньому куті → <strong>Налаштування та конфіденційність</strong> → <strong>Налаштування приватності</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Обмежте аудиторію для майбутніх дописів</h4>
+                  <p>У налаштуваннях приватності встановіть для параметра "Хто може бачити ваші майбутні дописи?" значення <strong>Друзі</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Увімкніть двофакторну автентифікацію</h4>
+                  <p><strong>Налаштування</strong> → <strong>Безпека та входу</strong> → <strong>Використання двоетапної перевірки</strong> → <strong>Редагувати</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4>Перевірте підключені додатки</h4>
+                  <p><strong>Налаштування</strong> → <strong>Додатки та веб-сайти</strong> → Видаліть ті, якими ви більше не користуєтеся</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <h4>Обмежте видимість вашого профілю в пошукових системах</h4>
+                  <p><strong>Налаштування приватності</strong> → <strong>Як люди знаходять вас та зв'язуються з вами</strong> → <strong>Чи бажаєте ви, щоб пошукові системи показували посилання на ваш профіль?</strong> → Встановіть "Ні"</p>
+                </div>
+              </div>
             </div>
-
-            <div class="profile-preview public" id="profilePreview">
-              <h4>👤 Ваш профіль зараз: <span id="profileStatus">ПУБЛІЧНИЙ</span></h4>
-              <p>Ваші дані можуть бачити: <span id="visibilityStatus">Всі користувачі інтернету</span></p>
-              <p>Ризик: <span id="riskLevel" style="color: #ff6b6b;">ВИСОКИЙ</span></p>
-            </div>
-
-            <div class="privacy-controls">
-              <div class="control-item">
-                <span>Приватний профіль</span>
-                <div class="toggle-switch" data-setting="private"></div>
-              </div>
-              <div class="control-item">
-                <span>Двофакторна автентифікація</span>
-                <div class="toggle-switch" data-setting="twofa"></div>
-              </div>
-              <div class="control-item">
-                <span>Обмежити пошук</span>
-                <div class="toggle-switch" data-setting="search"></div>
-              </div>
-              <div class="control-item">
-                <span>Заборонити теги</span>
-                <div class="toggle-switch" data-setting="tags"></div>
-              </div>
-            </div>
-
-            <div class="security-score">
-              <div class="score-circle" style="--score-deg: 72deg;"> <span class="score-text" id="securityScore">20%</span>
-              </div>
-              <h4>Рівень Безпеки</h4>
-              <p id="scoreDescription">Потрібно покращення</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="platform-content" id="instagram">
-          <div class="platform-header">
-            <span class="platform-icon">📷</span>
-            <h2>Instagram Security Hub</h2>
           </div>
           
-          <div class="privacy-simulator">
-            <div class="simulator-header">
-                <h3>📸 Контроль Контенту</h3>
-                <p>Instagram має багато налаштувань для контролю вашої приватності.</p>
-            </div>
-            <div class="control-item">
-              <span>Приватний акаунт</span>
-              <div class="toggle-switch" data-setting="private-insta"></div>
-            </div>
-            <div class="control-item">
-              <span>Заборонити коментарі від незнайомців</span>
-              <div class="toggle-switch" data-setting="comments"></div>
-            </div>
-            <div class="control-item">
-              <span>Сховати статус "онлайн"</span>
-              <div class="toggle-switch" data-setting="online"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="platform-content" id="tiktok">
-          <div class="platform-header">
-            <span class="platform-icon">🎵</span>
-            <h2>TikTok Privacy Control</h2>
-          </div>
-          <div class="privacy-simulator">
-            <div class="simulator-header">
-                <h3>🎪 Контроль Аудиторії</h3>
-                <p>TikTok збирає особливо багато даних. Ось що потрібно налаштувати:</p>
-            </div>
-            <div class="control-item">
-              <span>Приватний акаунт</span>
-              <div class="toggle-switch" data-setting="private-tiktok"></div>
-            </div>
-            <div class="control-item">
-              <span>Заборонити персоналізовану рекламу</span>
-              <div class="toggle-switch" data-setting="ads"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="platform-content" id="linkedin">
-          <div class="platform-header">
-            <span class="platform-icon">💼</span>
-            <h2>LinkedIn Professional Security</h2>
-          </div>
-          <div class="privacy-simulator">
-             <div class="simulator-header">
-                <h3>👔 Професійна Безпека</h3>
-                <p>Для LinkedIn важливо контролювати, хто бачить вашу професійну інформацію.</p>
-            </div>
-            <div class="control-item">
-              <span>Сховати список контактів</span>
-              <div class="toggle-switch" data-setting="contacts"></div>
-            </div>
-            <div class="control-item">
-              <span>Заборонити показ активності</span>
-              <div class="toggle-switch" data-setting="activity"></div>
+          <!-- Instagram -->
+          <div class="tab-content" id="instagram-content">
+            <h3>Безпека Instagram</h3>
+            
+            <div class="security-steps">
+              <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Зробіть свій акаунт приватним</h4>
+                  <p>Натисніть на меню профілю → <strong>Налаштування</strong> → <strong>Конфіденційність</strong> → Увімкніть <strong>Приватний акаунт</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Увімкніть двофакторну автентифікацію</h4>
+                  <p><strong>Налаштування</strong> → <strong>Безпека</strong> → <strong>Двофакторна автентифікація</strong> → Виберіть бажаний метод</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Керуйте позначками на фотографіях</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність</strong> → <strong>Позначки</strong> → Увімкніть <strong>Вручну схвалювати позначки</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4>Обмежте коментарі</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність</strong> → <strong>Коментарі</strong> → Виберіть, хто може коментувати ваші публікації</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <h4>Керуйте видимістю історій</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність</strong> → <strong>Історії</strong> → Виберіть, хто може бачити ваші історії та відповідати на них</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="platform-content" id="twitter">
-          <div class="platform-header">
-            <span class="platform-icon">🐦</span>
-            <h2>X (Twitter) Privacy Settings</h2>
+          
+          <!-- Twitter -->
+          <div class="tab-content" id="twitter-content">
+            <h3>Безпека Twitter (X)</h3>
+            
+            <div class="security-steps">
+              <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Захистіть свої твіти</h4>
+                  <p><strong>Більше</strong> → <strong>Налаштування та підтримка</strong> → <strong>Налаштування та конфіденційність</strong> → <strong>Конфіденційність та безпека</strong> → <strong>Аудиторія та тегування</strong> → Увімкніть <strong>Захищені твіти</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Увімкніть двофакторну автентифікацію</h4>
+                  <p><strong>Налаштування та конфіденційність</strong> → <strong>Безпека та доступ до акаунта</strong> → <strong>Безпека</strong> → <strong>Двофакторна автентифікація</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Керуйте тегуванням на фотографіях</h4>
+                  <p><strong>Конфіденційність та безпека</strong> → <strong>Тегування на фото</strong> → Виберіть, хто може позначати вас на фото</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4>Обмежте доступ до вашої електронної пошти та телефону</h4>
+                  <p><strong>Конфіденційність та безпека</strong> → <strong>Аудиторія та тегування</strong> → Вимкніть <strong>Дозволити пошук за адресою електронної пошти</strong> та <strong>Дозволити пошук за номером телефону</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <h4>Перевірте підключені додатки</h4>
+                  <p><strong>Безпека та доступ до акаунта</strong> → <strong>Додатки та сеанси</strong> → <strong>Підключені додатки</strong> → Видаліть ті, якими ви більше не користуєтеся</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="privacy-simulator">
-            <div class="simulator-header">
-                <h3>🐦 Контроль Твітів</h3>
-                <p>Налаштування приватності для ваших публікацій та даних.</p>
-            </div>
-            <div class="control-item">
-              <span>Захистити твіти</span>
-              <div class="toggle-switch" data-setting="protected"></div>
-            </div>
-            <div class="control-item">
-              <span>Заборонити геолокацію</span>
-              <div class="toggle-switch" data-setting="location"></div>
+          
+          <!-- Telegram -->
+          <div class="tab-content" id="telegram-content">
+            <h3>Безпека Telegram</h3>
+            
+            <div class="security-steps">
+              <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Налаштуйте приватність номера телефону</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність та безпека</strong> → <strong>Номер телефону</strong> → Виберіть, хто може бачити ваш номер телефону (рекомендовано: "Ніхто")</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Налаштуйте двоетапну верифікацію</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність та безпека</strong> → <strong>Двоетапна верифікація</strong> → Встановіть пароль</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Обмежте видимість статусу "В мережі" та "Останній візит"</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність та безпека</strong> → <strong>Останній візит та статус "В мережі"</strong> → Виберіть "Ніхто" або "Мої контакти"</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4>Налаштуйте групи та канали</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність та безпека</strong> → <strong>Групи та канали</strong> → Виберіть, хто може додавати вас у групи (рекомендовано: "Мої контакти")</p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <h4>Використовуйте секретні чати для конфіденційних розмов</h4>
+                  <p>Натисніть на ім'я контакту → Меню (три крапки) → <strong>Розпочати секретний чат</strong></p>
+                </div>
+              </div>
+              
+              <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                  <h4>Налаштуйте автоматичне видалення акаунта</h4>
+                  <p><strong>Налаштування</strong> → <strong>Конфіденційність та безпека</strong> → <strong>Видалення акаунта</strong> → Виберіть період неактивності, після якого акаунт буде видалено</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <section class="quiz-section">
-      <h2>🧠 Тест Знань Безпеки</h2>
-      <div class="quiz-container">
-        <div class="question-card" id="quizCard">
-          <h3 id="quizQuestion">Що з наведеного є найбільш небезпечним для вашої приватності?</h3>
-          <div class="quiz-options" id="quizOptions">
-            <div class="quiz-option" data-correct="false">Публікація фото їжі</div>
-            <div class="quiz-option" data-correct="true">Публікація геолокації в реальному часі</div>
-            <div class="quiz-option" data-correct="false">Лайки під постами друзів</div>
-            <div class="quiz-option" data-correct="false">Коментарі під публічними постами</div>
+      
+      <div class="tool-section">
+        <h2>Що не слід публікувати в соціальних мережах</h2>
+        
+        <div class="dont-share-grid">
+          <div class="dont-share-item">
+            <div class="dont-share-icon">🆔</div>
+            <div class="dont-share-title">Документи та особисті дані</div>
+            <div class="dont-share-description">Паспорти, ID-картки, свідоцтва, права водія та інші документи з особистими даними</div>
           </div>
-          <div id="quizResult" style="display: none; margin-top: 1rem; font-weight: 600;"></div>
-          <button class="btn btn-primary" id="nextQuizBtn" style="display: none; margin-top:1rem;">Наступне питання</button>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">💳</div>
+            <div class="dont-share-title">Банківські картки</div>
+            <div class="dont-share-description">Номери карток, термін дії, CVV-код, навіть часткові дані</div>
+          </div>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">🏠</div>
+            <div class="dont-share-title">Домашню адресу та місцезнаходження</div>
+            <div class="dont-share-description">Фото вашого будинку з номером квартири, геолокації в реальному часі</div>
+          </div>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">✈️</div>
+            <div class="dont-share-title">Плани щодо відпусток</div>
+            <div class="dont-share-description">Інформація про те, коли ви будете відсутні вдома тривалий час</div>
+          </div>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">👶</div>
+            <div class="dont-share-title">Дані про дітей</div>
+            <div class="dont-share-description">Імена, дати народження, школи, садочки та фото дітей у формі</div>
+          </div>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">📋</div>
+            <div class="dont-share-title">Скріншоти квитанцій або посилки</div>
+            <div class="dont-share-description">Номери замовлень, адреси, трек-номери, які можуть бути використані для перехоплення</div>
+          </div>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">🔑</div>
+            <div class="dont-share-title">Паролі та відповіді на секретні питання</div>
+            <div class="dont-share-description">Будь-які дані, що можуть бути використані для відновлення вашого пароля</div>
+          </div>
+          
+          <div class="dont-share-item">
+            <div class="dont-share-icon">💉</div>
+            <div class="dont-share-title">Медичну інформацію</div>
+            <div class="dont-share-description">Діагнози, результати аналізів, рецепти та інша конфіденційна інформація про здоров'я</div>
+          </div>
         </div>
-        <div style="text-align: center; margin-top: 2rem; font-weight: 600;">
-          <span>Правильних відповідей: <strong id="quizScore">0/0</strong></span>
+        
+        <div class="warning-box" style="margin-top: 40px;">
+          <h3>Пам'ятайте!</h3>
+          <p>
+            Навіть якщо ви видалите публікацію пізніше, вона може бути збережена іншими користувачами або залишитися 
+            в кеші пошукових систем. Двічі подумайте перед тим, як щось публікувати, і завжди запитуйте себе: 
+            "Чи хотів би я, щоб ця інформація стала загальнодоступною?"
+          </p>
         </div>
+      </div>
+      
+      <h2>Розпізнавання та захист від фейкових профілів</h2>
+      
+      <p>
+        Фейкові профілі — це акаунти, які видають себе за інших людей або використовують вигадані особи. 
+        Вони можуть бути створені з метою шахрайства, збору особистої інформації або розповсюдження 
+        дезінформації.
+      </p>
+      
+      <div class="info-box">
+        <h3>Як розпізнати фейковий профіль:</h3>
+        <ul class="checklist">
+          <li>Мало особистих фотографій або всі фото надто професійні</li>
+          <li>Мало публікацій або активності</li>
+          <li>Акаунт створений нещодавно</li>
+          <li>Невелика кількість друзів або підписників</li>
+          <li>Відсутність спільних знайомих</li>
+          <li>Невідповідність інформації в профілі (суперечливі дані)</li>
+          <li>Надто привабливі пропозиції або невідповідний романтичний інтерес</li>
+          <li>Прохання про фінансову допомогу або особисті дані</li>
+        </ul>
+      </div>
+      
+      <div class="info-box">
+        <h3>Що робити, якщо ви зіткнулися з фейковим профілем:</h3>
+        <ol>
+          <li>Не взаємодійте з підозрілим акаунтом</li>
+          <li>Заблокуйте та поскаржтеся на профіль через функціонал соціальної мережі</li>
+          <li>Якщо хтось видає себе за вас, зберіть докази (скріншоти) і зв'яжіться з адміністрацією платформи</li>
+          <li>Повідомте друзів і родичів, щоб вони не приймали запити від цього акаунту</li>
+          <li>У серйозних випадках (шахрайство, переслідування) зверніться до поліції</li>
+        </ol>
       </div>
     </section>
-
-    <section class="tips-carousel">
-      <div class="carousel-container" id="carouselContainer">
-        <div class="tip-slide">
-          <h3>💡 Порада №1</h3>
-          <h4>Використовуйте унікальні паролі</h4>
-          <p>Кожна соціальна мережа повинна мати свій унікальний пароль. Використовуйте менеджер паролів для зручності.</p>
-        </div>
-        <div class="tip-slide">
-          <h3>🔍 Порада №2</h3>
-          <h4>Перевіряйте налаштування щомісяця</h4>
-          <p>Соціальні мережі часто змінюють налаштування приватності. Регулярно перевіряйте свої параметри безпеки.</p>
-        </div>
-        <div class="tip-slide">
-          <h3>🚫 Порада №3</h3>
-          <h4>Не діліться особистою інформацією</h4>
-          <p>Уникайте публікування адреси, номеру телефону, даних паспорта та іншої конфіденційної інформації.</p>
-        </div>
-        <div class="tip-slide">
-          <h3>👥 Порада №4</h3>
-          <h4>Обережно з друзями онлайн</h4>
-          <p>Не всі люди в інтернеті є тими, за кого себе видають. Будьте обережні з новими знайомствами онлайн.</p>
-        </div>
-        <div class="tip-slide">
-          <h3>📱 Порада №5</h3>
-          <h4>Увімкніть двофакторну автентифікацію</h4>
-          <p>Це додатковий рівень захисту, який значно ускладнює зламування вашого акаунта.</p>
-        </div>
-      </div>
-      <div class="carousel-controls">
-        <button class="carousel-btn" id="prevBtn">‹</button>
-        <button class="carousel-btn" id="nextBtn">›</button>
-      </div>
-    </section>
-
-    <section class="progress-section">
-      <div class="progress-header">
-        <h2>📊 Ваш Прогрес Навчання</h2>
-        <p>Відслідковуйте свої досягнення в вивченні кібербезпеки</p>
-      </div>
-      <div class="progress-grid">
-        <div class="progress-item">
-          <h4>🎯 Завершені модулі</h4>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 60%"></div>
-          </div>
-          <p>3 з 5 модулів</p>
-        </div>
-        <div class="progress-item">
-          <h4>🧠 Правильні відповіді</h4>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 75%"></div>
-          </div>
-          <p>15 з 20 питань</p>
-        </div>
-        <div class="progress-item">
-          <h4>🔒 Налаштування безпеки</h4>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 40%"></div>
-          </div>
-          <p>2 з 5 платформ</p>
-        </div>
-        <div class="progress-item">
-          <h4>⏰ Час навчання</h4>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 85%"></div>
-          </div>
-          <p>17 хв сьогодні</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="scenario-section">
-      <h2>🎭 Інтерактивні Сценарії</h2>
-      <div class="scenario-container">
-        <div class="scenario-card">
-          <h3>📧 Сценарій: Підозрілий лист</h3>
-          <p>Ви отримали лист від "банку" з проханням підтвердити дані карти. Що робити?</p>
-          <div class="scenario-options">
-            <button class="scenario-btn btn" data-scenario="phishing" data-choice="bad">Ввести дані на сайті</button>
-            <button class="scenario-btn btn" data-scenario="phishing" data-choice="good">Зателефонувати в банк напряму</button>
-            <button class="scenario-btn btn" data-scenario="phishing" data-choice="bad">Проігнорувати лист</button>
-          </div>
-          <div class="scenario-result" id="scenarioResultPhishing" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 10px;"></div>
-        </div>
+    
+    <section class="related-topics">
+      <h2>Пов'язані теми</h2>
+      <div class="links-grid">
+        <a href="passwords.html" class="quick-link-card">
+          <div class="card-icon">🔐</div>
+          <h3>Безпека паролів</h3>
+          <p>Створення та управління надійними паролями</p>
+        </a>
+        <a href="phishing.html" class="quick-link-card">
+          <div class="card-icon">🎣</div>
+          <h3>Фішинг</h3>
+          <p>Як розпізнати та уникнути шахрайських схем</p>
+        </a>
+        <a href="wifi-security.html" class="quick-link-card">
+          <div class="card-icon">📶</div>
+          <h3>Wi-Fi безпека</h3>
+          <p>Захист вашої мережі та безпечне використання публічного Wi-Fi</p>
+        </a>
       </div>
     </section>
   </main>
-
-  <button class="fab" id="helpBtn" title="Допомога">❓</button>
-
-  <div class="modal" id="helpModal">
-    <div class="modal-content">
-      <h3>🆘 Довідка</h3>
-      <p>Цей інтерактивний тренажер допоможе вам:</p>
-      <ul>
-        <li>Налаштувати приватність в соцмережах</li>
-        <li>Вивчити основи кібербезпеки</li>
-        <li>Перевірити свої знання</li>
-        <li>Відслідковувати прогрес</li>
-      </ul>
-      <button class="btn btn-primary" onclick="closeModal()">Зрозуміло</button>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Про CyberSecure</h4>
+        <p>
+          Ми допомагаємо людям навчитися основам кібербезпеки та захищати
+          свої дані в цифровому світі. Наша місія - зробити інтернет безпечнішим для всіх.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>Корисні посилання</h4>
+        <ul>
+          <li><a href="guides.html">Посібники</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Підтримка</h4>
+        <ul>
+          <li><a href="help.html">Допомога</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Слідкуйте за нами</h4>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/dot-gh" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></li>
+          <li><a href="https://t.me/dot_gh" target="_blank" rel="noopener noreferrer">📱 Telegram</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-
-  <script>
-    // Create animated particles
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles');
-      if (!particlesContainer) return; // Запобігання помилці, якщо елемент не знайдено
-      const particleCount = 30; // Зменшив кількість для кращої продуктивності
-      
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 8 + 's'; // Трохи збільшив затримку
-        particle.style.animationDuration = (8 + Math.random() * 5) + 's'; // Збільшив тривалість
-        particlesContainer.appendChild(particle);
-      }
-    }
-
-    // Platform switching
-    function switchPlatform() {
-      const platformBtns = document.querySelectorAll('.platform-btn');
-      const platformContents = document.querySelectorAll('.platform-content');
-      
-      platformBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          platformBtns.forEach(b => b.classList.remove('active'));
-          platformContents.forEach(c => c.classList.remove('active'));
-          
-          btn.classList.add('active');
-          const platform = btn.getAttribute('data-platform');
-          const targetContent = document.getElementById(platform);
-          if (targetContent) {
-            targetContent.classList.add('active');
-          }
-        });
-      });
-    }
-
-    // Privacy simulator
-    function initPrivacySimulator() {
-      const toggles = document.querySelectorAll('.privacy-simulator .toggle-switch');
-      // Об'єкт для зберігання стану налаштувань для кожної платформи окремо
-      let platformSecuritySettings = {
-        facebook: { private: false, twofa: false, search: false, tags: false },
-        instagram: { "private-insta": false, comments: false, online: false },
-        tiktok: { "private-tiktok": false, ads: false },
-        linkedin: { contacts: false, activity: false },
-        twitter: { protected: false, location: false }
-      };
-
-      function updateSecurityScore(platform) {
-        const settings = platformSecuritySettings[platform];
-        if (!settings) return;
-
-        const activeSettingsCount = Object.values(settings).filter(Boolean).length;
-        const totalSettingsCount = Object.keys(settings).length;
-        const score = totalSettingsCount > 0 ? Math.round((activeSettingsCount / totalSettingsCount) * 100) : 0;
-        
-        const platformElement = document.getElementById(platform);
-        if (!platformElement) return;
-
-        const scoreElement = platformElement.querySelector('#securityScore'); // Припускаємо, що ID унікальний в межах платформи або загальний
-        const profilePreview = platformElement.querySelector('#profilePreview'); // Або інший селектор
-        const profileStatus = platformElement.querySelector('#profileStatus');
-        const visibilityStatus = platformElement.querySelector('#visibilityStatus');
-        const riskLevel = platformElement.querySelector('#riskLevel');
-        const scoreDescription = platformElement.querySelector('#scoreDescription');
-        const scoreCircle = platformElement.querySelector('.score-circle');
-
-        // Оновлюємо лише якщо елементи знайдені (актуально для Facebook вкладки)
-        if (scoreElement && scoreCircle) {
-            scoreElement.textContent = score + '%';
-            scoreCircle.style.setProperty('--score-deg', (score * 3.6) + 'deg');
-        }
-        if (profilePreview && profileStatus && visibilityStatus && riskLevel && scoreDescription) {
-            if (score >= 75) {
-            profilePreview.className = 'profile-preview private';
-            profileStatus.textContent = 'ЗАХИЩЕНИЙ';
-            visibilityStatus.textContent = 'Тільки друзі';
-            riskLevel.textContent = 'НИЗЬКИЙ';
-            riskLevel.style.color = '#4CAF50'; // Зелений
-            scoreDescription.textContent = 'Відмінний рівень безпеки!';
-            } else if (score >= 50) {
-            profilePreview.className = 'profile-preview'; // Нейтральний
-            profileStatus.textContent = 'ЧАСТКОВО ЗАХИЩЕНИЙ';
-            visibilityStatus.textContent = 'Обмежений доступ';
-            riskLevel.textContent = 'СЕРЕДНІЙ';
-            riskLevel.style.color = '#ffa726'; // Помаранчевий
-            scoreDescription.textContent = 'Можна покращити';
-            } else {
-            profilePreview.className = 'profile-preview public';
-            profileStatus.textContent = 'ПУБЛІЧНИЙ';
-            visibilityStatus.textContent = 'Всі користувачі інтернету';
-            riskLevel.textContent = 'ВИСОКИЙ';
-            riskLevel.style.color = '#ff6b6b'; // Червоний
-            scoreDescription.textContent = 'Потрібно покращення';
-            }
-        }
-      }
-      
-      toggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-          toggle.classList.toggle('active');
-          const settingName = toggle.getAttribute('data-setting');
-          const currentPlatformContent = toggle.closest('.platform-content');
-          if (!currentPlatformContent) return;
-          const platformId = currentPlatformContent.id;
-
-          if (platformSecuritySettings[platformId] && settingName in platformSecuritySettings[platformId]) {
-            platformSecuritySettings[platformId][settingName] = toggle.classList.contains('active');
-            updateSecurityScore(platformId);
-          }
-        });
-      });
-      
-      // Ініціалізація для активної платформи (Facebook)
-      if (document.getElementById('facebook') && document.getElementById('facebook').classList.contains('active')) {
-          updateSecurityScore('facebook');
-      }
-    }
-
-
-    // Quiz functionality
-    function initQuiz() {
-      const questions = [
-        {
-          question: "Що з наведеного є найбільш небезпечним для вашої приватності?",
-          options: [
-            { text: "Публікація фото їжі", correct: false },
-            { text: "Публікація геолокації в реальному часі", correct: true },
-            { text: "Лайки під постами друзів", correct: false },
-            { text: "Коментарі під публічними постами", correct: false }
-          ],
-          explanation: "Геолокація в реальному часі дозволяє зловмисникам відстежувати ваше місцезнаходження."
-        },
-        {
-          question: "Як часто слід змінювати паролі в соціальних мережах?",
-          options: [
-            { text: "Кожен день", correct: false },
-            { text: "Кожні 3-6 місяців", correct: true },
-            { text: "Раз на рік", correct: false },
-            { text: "Ніколи", correct: false }
-          ],
-          explanation: "Регулярна зміна паролів кожні 3-6 місяців знижує ризик зламування акаунта."
-        },
-        {
-          question: "Що таке двофакторна автентифікація?",
-          options: [
-            { text: "Використання двох різних паролів", correct: false },
-            { text: "Додатковий код підтвердження через SMS або додаток", correct: true },
-            { text: "Вхід з двох різних пристроїв", correct: false },
-            { text: "Два різні акаунти", correct: false }
-          ],
-          explanation: "2FA додає додатковий рівень безпеки через код підтвердження."
-        }
-      ];
-      
-      let currentQuizQuestion = 0;
-      let correctQuizAnswers = 0;
-      let totalQuizAnswered = 0; // Рахуємо тільки ті питання, на які відповіли
-      
-      const quizQuestionEl = document.getElementById('quizQuestion');
-      const quizOptionsEl = document.getElementById('quizOptions');
-      const quizResultEl = document.getElementById('quizResult');
-      const nextQuizBtnEl = document.getElementById('nextQuizBtn');
-      const quizScoreEl = document.getElementById('quizScore');
-
-      if (!quizQuestionEl || !quizOptionsEl || !quizResultEl || !nextQuizBtnEl || !quizScoreEl) return; // Перевірка наявності елементів
-      
-      function displayQuizQuestion() {
-        const question = questions[currentQuizQuestion];
-        quizQuestionEl.textContent = question.question;
-        quizOptionsEl.innerHTML = '';
-        
-        question.options.forEach(option => {
-          const optionElement = document.createElement('div');
-          optionElement.className = 'quiz-option';
-          optionElement.textContent = option.text;
-          optionElement.setAttribute('data-correct', option.correct);
-          optionElement.addEventListener('click', selectQuizAnswer);
-          quizOptionsEl.appendChild(optionElement);
-        });
-        
-        quizResultEl.style.display = 'none';
-        nextQuizBtnEl.style.display = 'none';
-        quizScoreEl.textContent = `${correctQuizAnswers}/${questions.length}`; // Оновлюємо загальний рахунок
-      }
-      
-      function selectQuizAnswer(e) {
-        const selectedOption = e.target;
-        const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
-        const options = quizOptionsEl.querySelectorAll('.quiz-option');
-        
-        options.forEach(option => {
-          option.style.pointerEvents = 'none';
-          if (option.getAttribute('data-correct') === 'true') {
-            option.classList.add('correct');
-          } else if (option === selectedOption && !isCorrect) {
-            option.classList.add('incorrect');
-          }
-        });
-        
-        if (isCorrect) correctQuizAnswers++;
-        
-        const question = questions[currentQuizQuestion];
-        quizResultEl.innerHTML = `
-          <strong>${isCorrect ? '✅ Правильно!' : '❌ Неправильно'}</strong><br>
-          ${question.explanation}
-        `;
-        quizResultEl.style.display = 'block';
-        
-        quizScoreEl.textContent = `${correctQuizAnswers}/${questions.length}`;
-        nextQuizBtnEl.style.display = 'inline-block';
-        if (currentQuizQuestion >= questions.length -1) {
-            nextQuizBtnEl.textContent = "Завершити тест";
-        } else {
-            nextQuizBtnEl.textContent = "Наступне питання";
-        }
-      }
-      
-      nextQuizBtnEl.addEventListener('click', () => {
-        if (currentQuizQuestion >= questions.length - 1) {
-            // Кінець тесту
-            quizQuestionEl.textContent = `Тест завершено! Ваш результат: ${correctQuizAnswers} з ${questions.length}.`;
-            quizOptionsEl.innerHTML = '';
-            quizResultEl.style.display = 'none';
-            nextQuizBtnEl.textContent = "Пройти знову";
-            currentQuizQuestion = -1; // Для скидання при наступному кліку
-            correctQuizAnswers = 0; // Скидаємо рахунок
-        } else {
-            currentQuizQuestion++;
-            displayQuizQuestion();
-        }
-      });
-      
-      displayQuizQuestion(); // Починаємо тест
-    }
-
-    // Carousel functionality
-    function initCarousel() {
-      const container = document.getElementById('carouselContainer');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      if (!container || !prevBtn || !nextBtn) return;
-
-      let currentSlide = 0;
-      const slides = container.querySelectorAll('.tip-slide');
-      const totalSlides = slides.length;
-      if (totalSlides === 0) return;
-      
-      function updateCarousel() {
-        const translateX = -currentSlide * (slides[0].offsetWidth + parseFloat(getComputedStyle(slides[0]).marginLeft) * 2); // Враховуємо margin
-        container.style.transform = `translateX(${translateX}px)`;
-      }
-
-      // Clone first and last slides for infinite loop effect if desired, simpler for now
-      
-      nextBtn.addEventListener('click', () => {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        updateCarousel();
-      });
-      
-      prevBtn.addEventListener('click', () => {
-        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-        updateCarousel();
-      });
-      
-      // Auto-advance carousel
-      let autoAdvanceInterval = setInterval(() => {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        updateCarousel();
-      }, 7000); // Збільшив інтервал
-
-      container.addEventListener('mouseenter', () => clearInterval(autoAdvanceInterval));
-      container.addEventListener('mouseleave', () => {
-         autoAdvanceInterval = setInterval(() => {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
-        }, 7000);
-      });
-
-      // Initial setup if slides have margins
-      if (slides.length > 0) {
-        const slideWidth = slides[0].offsetWidth;
-        const slideMargin = parseFloat(getComputedStyle(slides[0]).marginLeft); // Assuming left and right margins are the same
-        // container.style.width = (slideWidth + slideMargin * 2) * totalSlides + "px"; // Only if not using min-width:100%
-      }
-       updateCarousel(); // Initial position
-    }
-
-    // Scenario functionality
-    function initScenarios() {
-      const scenarioContainers = document.querySelectorAll('.scenario-card');
-      
-      scenarioContainers.forEach(container => {
-        const scenarioBtns = container.querySelectorAll('.scenario-btn');
-        const resultElement = container.querySelector('.scenario-result'); // Кожен сценарій має свій результат
-        if (!resultElement) return;
-
-        scenarioBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            const choice = btn.getAttribute('data-choice');
-            
-            scenarioBtns.forEach(b => b.style.pointerEvents = 'none'); // Блокуємо всі кнопки в цьому сценарії
-            btn.style.background = 'var(--primary-accent-gradient)'; // Виділяємо обрану кнопку
-            btn.style.color = 'white';
-            
-            if (choice === 'good') {
-              resultElement.innerHTML = '✅ <strong>Правильно!</strong><br>Завжди перевіряйте інформацію через офіційні канали банку. Це класичний приклад фішингу.';
-              resultElement.className = 'scenario-result good'; // Додаємо клас для стилізації
-            } else {
-              resultElement.innerHTML = '❌ <strong>Неправильно.</strong><br>Це небезпечно! Банки ніколи не просять конфіденційні дані через email. Завжди телефонуйте в банк для перевірки.';
-              resultElement.className = 'scenario-result bad'; // Додаємо клас для стилізації
-            }
-            
-            resultElement.style.display = 'block';
-            
-            setTimeout(() => {
-              scenarioBtns.forEach(b => {
-                b.style.pointerEvents = 'auto';
-                b.style.background = 'rgba(255,255,255,0.1)'; // Повертаємо стиль кнопки
-                b.style.color = 'var(--text-medium)';
-              });
-              resultElement.style.display = 'none';
-            }, 5000);
-          });
-        });
-      });
-    }
-
-
-    // Modal functionality
-    function openModal() {
-      const helpModal = document.getElementById('helpModal');
-      if (helpModal) helpModal.style.display = 'flex';
-    }
-    
-    function closeModal() {
-      const helpModal = document.getElementById('helpModal');
-      if (helpModal) helpModal.style.display = 'none';
-    }
-    
-    const helpBtn = document.getElementById('helpBtn');
-    if (helpBtn) helpBtn.addEventListener('click', openModal);
-    
-    const helpModalEl = document.getElementById('helpModal');
-    if (helpModalEl) {
-        helpModalEl.addEventListener('click', (e) => {
-        if (e.target.id === 'helpModal') {
-            closeModal();
-        }
-        });
-    }
-
-    // Initialize all functionality
-    document.addEventListener('DOMContentLoaded', () => {
-      createParticles();
-      switchPlatform();
-      initPrivacySimulator();
-      initQuiz();
-      initCarousel();
-      initScenarios();
-
-      // Поки що функціонал themeToggle не змінює змінні, лише текст кнопки
-      const themeToggleButton = document.getElementById('themeToggle');
-      if(themeToggleButton){
-        themeToggleButton.addEventListener('click', function() {
-          // Тут мала б бути логіка зміни CSS змінних для світлої/темної теми
-          // Наразі ця кнопка лише змінює свій текст
-          if (this.textContent.includes('Dark')) {
-            this.textContent = '☀️ Light';
-            // document.body.classList.add('light-theme-variables'); // Потрібно визначити ці змінні
-          } else {
-            this.textContent = '🌙 Dark';
-            // document.body.classList.remove('light-theme-variables');
-          }
-        });
-      }
-    });
-
-  </script>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CyberSecure. Всі права захищені. | Політика конфіденційності | Умови використання</p>
+    </div>
+  </footer>
+  
+  <script src="js/script.js"></script>
+  <script src="js/social-media-tabs.js"></script>
 </body>
 </html>
