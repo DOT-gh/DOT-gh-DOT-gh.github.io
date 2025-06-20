@@ -1,344 +1,284 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Про мене - CyberSecure</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css"> 
-    <style>
-        /* Специфічні стилі для about.html, якщо потрібні, або їх можна перенести в style.css */
-        body.about-page-body { /* Унікальний клас для body цієї сторінки, щоб не конфліктувати з style.css */
-            /* Фон тіла вже заданий в style.css, якщо він підключений */
-            padding-top: 80px; /* Відступ для фіксованого хедера */
-            padding-bottom: 2rem;
-        }
-
-        .about-section-container { /* Новий контейнер для центрування контенту */
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .section-title {
-            text-align: center;
-            /* Колір заголовка буде успадкований або заданий в style.css */
-            font-size: 2.8rem; /* Трохи зменшив */
-            font-weight: 700;
-            margin-bottom: 3rem;
-            /* Тінь можна залишити або прибрати, якщо вже є в style.css */
-            /* text-shadow: 0 4px 8px rgba(0,0,0,0.3); */
-             /* Використовуємо градієнт як на інших заголовках */
-            background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: #ff6b68; /* Резервний колір */
-        }
-
-        .profile-card {
-            background: var(--glass-bg, rgba(255, 255, 255, 0.08)); /* Використовуємо CSS змінну або дефолт */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.15));
-            border-radius: 25px;
-            padding: 2.5rem; /* Трохи зменшив */
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 3rem; /* Збільшив відступ */
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-
-        .profile-card::before { /* Анімація обертання фону */
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.05), transparent 40%);
-            animation: rotate 10s linear infinite;
-            z-index: 0;
-        }
-
-        .profile-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .photo-container {
-            position: relative;
-            width: 180px; /* Трохи зменшив */
-            height: 180px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .profile-photo {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid rgba(255,255,255,0.2); /* Зробив межу менш яскравою */
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-
-        .profile-photo:hover {
-            transform: scale(1.05);
-            border-color: var(--secondary-accent-color, #ff6b68); /* Акцентний колір при наведенні */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        /* Видаляємо .photo-placeholder та .upload-text, оскільки фото буде статичним */
-
-        .name {
-            color: var(--text-light, #eee);
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .status {
-            color: var(--text-medium, #ccc);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .university {
-            color: var(--text-dark-placeholder, #999);
-            font-size: 1rem;
-            margin-bottom: 2rem;
-            font-style: italic;
-        }
-
-        .bio {
-            color: var(--text-medium, #ccc);
-            line-height: 1.7; /* Збільшив міжрядковий інтервал */
-            margin-bottom: 2rem;
-            text-align: justify; /* Вирівнювання по ширині */
-            font-size: 1.05rem;
-        }
-
-        .info-block { /* Загальний клас для блоків project-info, skill-category, contact-info */
-            background: var(--glass-bg, rgba(255, 255, 255, 0.05)); /* Ще темніший фон для вкладених карток */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-        }
-        .info-block-title { /* Загальний клас для заголовків в .info-block */
-            color: var(--secondary-accent-color, #ff6b68);
-            font-size: 1.5rem; /* Збільшив */
-            font-weight: 700; /* Зробив жирнішим */
-            margin-bottom: 1.5rem; /* Збільшив відступ */
-            text-align: center;
-        }
-        .info-block-description { /* Загальний клас для опису в .info-block */
-            color: var(--text-medium, #ccc);
-            line-height: 1.7;
-            text-align: left;
-            font-size: 1rem;
-        }
-
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        /* .skill-category успадковує стилі від .info-block */
-        /* .skill-title успадковує стилі від .info-block-title */
-        .skill-title {
-            font-size: 1.3rem; /* Трохи менший, ніж .info-block-title */
-        }
-
-
-        .skill-list {
-            list-style: none;
-            padding: 0; /* Забрав відступи */
-        }
-
-        .skill-list li {
-            color: var(--text-medium, #ccc);
-            padding: 0.4rem 0; /* Збільшив вертикальні відступи */
-            position: relative;
-            padding-left: 1.8rem; /* Збільшив відступ для іконки */
-            font-size: 0.95rem;
-        }
-
-        .skill-list li::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: var(--secondary-accent-color, #ff6b68); /* Акцентний колір */
-            font-size: 1.2em; /* Зробив іконку трохи більшою */
-        }
-
-        /* .contact-info успадковує стилі від .info-block */
-        /* .contact-title успадковує стилі від .info-block-title */
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1rem; /* Додав відступ зверху */
-        }
-
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.7rem 1.3rem; /* Зменшив відступи */
-            background: rgba(255,255,255,0.1); /* Темніший фон */
-            border-radius: 25px;
-            text-decoration: none;
-            color: var(--text-light, #eee);
-            font-weight: 600; /* Зробив жирнішим */
-            transition: all 0.3s ease;
-            border: 1px solid var(--glass-border, rgba(255,255,255,0.2));
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .social-link:hover {
-            background: var(--primary-accent-gradient, linear-gradient(135deg, #ff416c, #ff4b2b)); /* Акцентний градієнт при наведенні */
-            color: white;
-            transform: translateY(-3px) scale(1.05); /* Збільшив ефект */
-            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
-            border-color: transparent;
-        }
-        
-        /* Футер вже має бути в style.css, якщо ні, його потрібно додати */
-        /* Приклад простого футера для цієї сторінки, якщо немає глобального */
-        .about-footer {
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 2rem;
-            color: var(--text-dark-placeholder, #999);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--glass-border, rgba(255,255,255,0.1));
-        }
-
-
-        @media (max-width: 768px) {
-
-            .section-title {
-                font-size: 2.2rem; /* Адаптація розміру */
-            }
-            
-            .profile-card {
-                padding: 2rem 1.5rem;
-            }
-            
-            .name {
-                font-size: 1.8rem;
-            }
-            
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-            .info-block {
-                padding: 1.5rem;
-            }
-            .social-link {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Про нас - CyberSecure</title>
+  
+  <!-- Основні мета-теги -->
+  <meta name="description" content="Ознайомтесь з нашою місією та командою, що працює над проектом CyberSecure.">
+  <meta name="keywords" content="кібербезпека, про нас, команда, місія, захист даних, інформаційна безпека, cybersecure">
+  <meta name="author" content="CyberSecure">
+  
+  <!-- Мета-теги для социальных сетей -->
+  <meta property="og:title" content="Про нас - CyberSecure">
+  <meta property="og:description" content="Ознайомтесь з нашою місією та командою, що працює над проектом CyberSecure.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dot-gh.github.io/about.html">
+  <meta property="og:image" content="images/about-us-og-image.jpg">
+  
+  <!-- Іконки та фавіконки -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  
+  <!-- Шрифти -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic-ext,latin-ext" rel="stylesheet">
+  
+  <!-- Стилі -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/topic-styles.css">
 </head>
-<header>
+<body>
+  <header>
     <div class="logo">
       <div class="logo-img">🔒</div>
       <span>CyberSecure</span>
     </div>
+    
     <div class="menu-toggle" id="menuToggle">
       <span></span>
     </div>
-  <nav id="nav">
-          <a href="index.html">Головна</a>
-          <a href="about.html">Про нас</a>
-          <a href="resources.html">Ресурси</a>
-    </nav> 
-</header>
-
-    <div class="about-section-container"> <section class="about-section">
-            <h2 class="section-title">Про мене</h2>
+    
+    <nav id="nav">
+      <a href="index.html">Головна</a>
+      <a href="about.html" class="active">Про нас</a>
+      <a href="resources.html">Ресурси</a>
+    </nav>
+  </header>
+  
+  <main>
+    <section class="topic-banner about-banner">
+      <div class="topic-content">
+        <h1>Про CyberSecure</h1>
+        <p>Наша місія — допомогти кожному безпечно користуватися цифровим світом</p>
+      </div>
+      <div class="topic-image">
+        <div class="icon-large">🛡️</div>
+      </div>
+    </section>
+    
+    <section class="topic-content">
+      <h2>Наша місія</h2>
+      
+      <p>
+        У сучасному світі кіберзагрози стають все більш витонченими і небезпечними. Щодня мільйони людей 
+        стикаються з ризиками викрадення даних, фішинговими атаками, шкідливим програмним забезпеченням та іншими 
+        загрозами їхньої цифрової безпеки.
+      </p>
+      
+      <p>
+        <strong>CyberSecure</strong> була створена з єдиною метою — зробити принципи та практики кібербезпеки 
+        доступними і зрозумілими для кожного. Ми вважаємо, що безпека в цифровому світі — це не привілей, а 
+        необхідність та право кожної людини.
+      </p>
+      
+      <div class="mission-quote">
+        <blockquote>
+          "Ми прагнемо створити світ, де люди можуть використовувати технології, не боячись за свою особисту інформацію, 
+          фінансові дані та цифрову ідентичність."
+        </blockquote>
+      </div>
+      
+      <h2>Наші цінності</h2>
+      
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🔍</div>
+          <h3>Доступність</h3>
+          <p>Ми пояснюємо складні концепції кібербезпеки простою і зрозумілою мовою для людей будь-якого рівня технічної підготовки.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">💡</div>
+          <h3>Практичність</h3>
+          <p>Ми зосереджуємось на практичних порадах і рішеннях, які легко впровадити в повсякденне життя.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <h3>Спільнота</h3>
+          <p>Ми створюємо спільноту людей, які цінують та практикують безпечну поведінку в цифровому світі.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🔄</div>
+          <h3>Актуальність</h3>
+          <p>Ми постійно оновлюємо наші матеріали, щоб відображати сучасні загрози та найкращі практики захисту.</p>
+        </div>
+      </div>
+      
+      <h2>Як ми працюємо</h2>
+      
+      <p>
+        <strong>CyberSecure</strong> — це освітній проект, спрямований на підвищення обізнаності про кібербезпеку. 
+        Наш підхід включає:
+      </p>
+      
+      <div class="work-process">
+        <div class="process-step">
+          <div class="process-icon">📚</div>
+          <div class="process-content">
+            <h3>Дослідження та аналіз</h3>
+            <p>Ми постійно вивчаємо нові загрози, тенденції та технології у сфері кібербезпеки.</p>
+          </div>
+        </div>
+        
+        <div class="process-step">
+          <div class="process-icon">✍️</div>
+          <div class="process-content">
+            <h3>Створення контенту</h3>
+            <p>Наша команда трансформує складну технічну інформацію в зрозумілі посібники та статті.</p>
+          </div>
+        </div>
+        
+        <div class="process-step">
+          <div class="process-icon">🔧</div>
+          <div class="process-content">
+            <h3>Розробка інструментів</h3>
+            <p>Ми створюємо практичні інструменти та чек-листи для самостійної оцінки безпеки.</p>
+          </div>
+        </div>
+        
+        <div class="process-step">
+          <div class="process-icon">🌐</div>
+          <div class="process-content">
+            <h3>Поширення знань</h3>
+            <p>Ми ділимося інформацією через наш веб-сайт, соціальні мережі та партнерські програми.</p>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Наша команда</h2>
+      
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-avatar">👨‍💻</div>
+          <h3>Олександр Петренко</h3>
+          <div class="member-role">Засновник та головний експерт з кібербезпеки</div>
+          <p>Сертифікований фахівець з інформаційної безпеки з 10-річним досвідом роботи у фінансовому секторі.</p>
+        </div>
+        
+        <div class="team-member">
+          <div class="member-avatar">👩‍💻</div>
+          <h3>Марія Ковальчук</h3>
+          <div class="member-role">Технічний редактор</div>
+          <p>Експерт з цифрової безпеки та конфіденційності даних, авторка книг про безпеку в інтернеті.</p>
+        </div>
+        
+        <div class="team-member">
+          <div class="member-avatar">👨‍🎨</div>
+          <h3>Віктор Лисенко</h3>
+          <div class="member-role">Дизайнер UX/UI</div>
+          <p>Спеціаліст зі створення доступних та інтуїтивно зрозумілих інтерфейсів, що полегшують сприйняття складної інформації.</p>
+        </div>
+        
+        <div class="team-member">
+          <div class="member-avatar">👩‍🏫</div>
+          <h3>Анна Зінченко</h3>
+          <div class="member-role">Освітній консультант</div>
+          <p>Розробниця навчальних програм з кібербезпеки для різних вікових категорій та рівнів підготовки.</p>
+        </div>
+      </div>
+      
+      <h2>Історія проекту</h2>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2023</div>
+          <div class="timeline-content">
+            <h3>Зародження ідеї</h3>
+            <p>Після серії масштабних кібератак на українські організації, засновник проекту Олександр Петренко помітив, що багато людей не мають базових знань з кібербезпеки.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-date">2024</div>
+          <div class="timeline-content">
+            <h3>Формування команди</h3>
+            <p>До ініціативи приєдналися Марія, Віктор та Анна, об'єднані спільним баченням доступної кібербезпеки для всіх.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-date">2025</div>
+          <div class="timeline-content">
+            <h3>Запуск проекту</h3>
+            <p>Офіційний запуск веб-платформи CyberSecure з першим набором навчальних матеріалів та інструментів.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-date">Майбутнє</div>
+          <div class="timeline-content">
+            <h3>Розвиток і розширення</h3>
+            <p>Плани включають створення мобільного додатку, проведення онлайн-тренінгів та розвиток спільноти експертів з кібербезпеки.</p>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Зв'яжіться з нами</h2>
+      
+      <div class="contact-section">
+        <div class="contact-info">
+          <p>Якщо у вас є запитання, пропозиції співпраці або ви хочете дізнатися більше про наш проект, будь ласка, зв'яжіться з нами:</p>
+          
+          <div class="contact-methods">
+            <div class="contact-method">
+              <div class="contact-icon">✉️</div>
+              <div class="contact-detail">
+                <h3>Електронна пошта</h3>
+                <p><a href="mailto:info@cybersecure.ua">info@cybersecure.ua</a></p>
+              </div>
+            </div>
             
-            <div class="profile-card">
-                <div class="profile-content">
-                    <div class="photo-container">
-                        <img src="photo_resume.png" alt="Фото Дмитра Турчина" class="profile-photo">
-                    </div>
-                    
-                    <div class="name">Турчин Дмитро Олександрович</div>
-                    <div class="status">Студент</div>
-                    <div class="university">СумДПУ, спеціальність "Інформатика", 3 курс, 433 група</div>
-                    
-                    <div class="bio">
-                        Привіт! Я, Турчин Дмитро Олександрович, студент 3-го курсу 433-ї групи Сумського державного педагогічного університету імені А.С. Макаренка, навчаюся за спеціальністю "Інформатика". Цей веб-сайт є моєю практичною роботою з дисципліни "Поліграфічний дизайн та айдентика". Мої інтереси охоплюють сфери кібербезпеки та інформаційних технологій. Я прагну досліджувати, як можна зробити цифровий простір безпечнішим та допомогти людям свідомо та захищено користуватися перевагами інтернету.
-                    </div>
-                </div>
+            <div class="contact-method">
+              <div class="contact-icon">📱</div>
+              <div class="contact-detail">
+                <h3>Соціальні мережі</h3>
+                <p><a href="https://www.linkedin.com/in/dot-gh" target="_blank" rel="noopener noreferrer">LinkedIn</a> | <a href="https://t.me/dot_gh" target="_blank" rel="noopener noreferrer">Telegram</a></p>
+              </div>
             </div>
-
-            <div class="info-block project-info"> <div class="info-block-title project-title">📚 Про цей проект</div>
-                <div class="info-block-description project-description">
-                    Веб-сайт "CyberSecure" створений як практична робота для демонстрації навичок веб-розробки та розуміння принципів подання інформації з кібербезпеки. Мета проекту — створити інформативний та зручний ресурс, який допоможе користувачам ознайомитися з основами захисту в цифровому середовищі. Під час розробки були застосовані знання HTML, CSS та JavaScript, а також принципи адаптивного дизайну для коректного відображення на різних пристроях. Особлива увага приділялася структуруванню інформації та створенню інтуїтивно зрозумілого інтерфейсу.
-                </div>
+          </div>
+        </div>
+        
+        <div class="contact-form-container">
+          <h3>Надіслати повідомлення</h3>
+          <form class="contact-form" id="contactForm">
+            <div class="form-group">
+              <label for="name">Ваше ім'я</label>
+              <input type="text" id="name" name="name" required>
             </div>
-
-            <div class="skills-grid">
-                <div class="info-block skill-category"> <div class="info-block-title skill-title">🖥️ Технології</div>
-                    <ul class="skill-list">
-                        <li>HTML5 & CSS3 (Flexbox, Grid)</li>
-                        <li>JavaScript (ES6+)</li>
-                        <li>Адаптивний дизайн (Responsive Design)</li>
-                        <li>Основи UI/UX</li>
-                        <li>Git & GitHub</li>
-                    </ul>
-                </div>
-                
-                <div class="info-block skill-category"> <div class="info-block-title skill-title">🔐 Сфери інтересу в кібербезпеці</div>
-                    <ul class="skill-list">
-                        <li>Захист персональних даних</li>
-                        <li>Безпека веб-додатків</li>
-                        <li>Розпізнавання та протидія фішингу</li>
-                        <li>Безпека бездротових мереж</li>
-                        <li>Соціальна інженерія</li>
-                    </ul>
-                </div>
+            
+            <div class="form-group">
+              <label for="email">Електронна пошта</label>
+              <input type="email" id="email" name="email" required>
             </div>
-
-            <div class="info-block contact-info"> <div class="info-block-title contact-title">📬 Як зі мною зв'язатися</div>
-                <div class="social-links">
-                    <a href="mailto:turchindimaua@gmail.com" class="social-link">
-                        📧 Email
-                    </a>
-                    <a href="https://t.me/dot_gh" class="social-link" target="_blank" rel="noopener noreferrer">
-                        📱 Telegram
-                    </a>
-                    <a href="https://github.com/DOT-gh" class="social-link" target="_blank" rel="noopener noreferrer">
-                        💻 GitHub
-                    </a>
-                    <a href="https://www.linkedin.com/in/dot-gh" class="social-link" target="_blank" rel="noopener noreferrer">
-                        💼 LinkedIn
-                    </a>
-                </div>
+            
+            <div class="form-group">
+              <label for="subject">Тема</label>
+              <input type="text" id="subject" name="subject" required>
             </div>
-        </section>
-    </div> 
-
+            
+            <div class="form-group">
+              <label for="message">Повідомлення</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn--primary">Надіслати</button>
+          </form>
+          
+          <div id="formSuccess" class="form-success" style="display: none;">
+            <div class="success-icon">✅</div>
+            <h3>Дякуємо за повідомлення!</h3>
+            <p>Ми зв'яжемося з вами якнайшвидше.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
   <footer>
     <div class="footer-content">
       <div class="footer-section">
@@ -352,13 +292,13 @@
         <h4>Корисні посилання</h4>
         <ul>
           <li><a href="guides.html">Посібники</a></li>
-          </ul>
+        </ul>
       </div>
       <div class="footer-section">
         <h4>Підтримка</h4>
         <ul>
           <li><a href="help.html">Допомога</a></li>
-          </ul>
+        </ul>
       </div>
       <div class="footer-section">
         <h4>Слідкуйте за нами</h4>
@@ -372,26 +312,8 @@
       <p>&copy; 2025 CyberSecure. Всі права захищені. | Політика конфіденційності | Умови використання</p>
     </div>
   </footer>
-
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const nav = document.getElementById('nav');
-
-        if (menuToggle && nav) {
-            menuToggle.addEventListener('click', () => {
-                menuToggle.classList.toggle('open');
-                nav.classList.toggle('show');
-            });
-
-            // Закриття меню при кліку на посилання, якщо навігація видима
-             nav.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A' && nav.classList.contains('show')) {
-                    menuToggle.classList.remove('open');
-                    nav.classList.remove('show');
-                }
-            });
-        }
-        // Функціонал завантаження фото видалено, оскільки фото тепер статичне
-    </script>
+  
+  <script src="js/script.js"></script>
+  <script src="js/contact-form.js"></script>
 </body>
 </html>
