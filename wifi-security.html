@@ -1,1211 +1,358 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wi-Fi безпека — Безпечне підключення до мереж | CyberSecure</title>
-  <meta name="description" content="Навчіться безпечно підключатися до Wi-Fi мереж, захищати домашню мережу та уникати ризиків публічних точок доступу" />
-  <meta name="keywords" content="Wi-Fi безпека, бездротові мережі, публічний Wi-Fi, безпека мережі, роутер" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      line-height: 1.6;
-      /* Змінено фон тіла на основний темний фон сайту */
-      background: linear-gradient(135deg, #0a0f2b 0%, #1b1436 50%, #2a1a5a 100%);
-      min-height: 100vh;
-      /* Змінено основний колір тексту на світлий */
-      color: #eee;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    header {
-      /* Змінено фон хедера на темний, напівпрозорий */
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(255, 65, 108, 0.2); /* Межа як на головній */
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #ff6b68; /* Акцентний колір лого як на головній */
-    }
-
-    .logo-img {
-      font-size: 2rem; /* Якщо тут іконка, вона успадкує колір .logo */
-    }
-
-    nav { /* Навігація в хедері (зараз лише кнопка назад) */
-      display: flex;
-      gap: 2rem;
-    }
-
-    /* Стилі для кнопки "Назад" - можна залишити синьо-фіолетовий градієнт або змінити на рожевий */
-    .back-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2); /* Поточний синьо-фіолетовий */
-      /* background: linear-gradient(135deg, #ff416c, #ff4b2b); // Альтернативний рожевий */
-      color: white;
-      padding: 0.7rem 1.5rem;
-      border: none;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .back-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .hero-section {
-      text-align: center;
-      padding: 4rem 0;
-      color: #eee; /* Світлий текст для параграфів */
-    }
-
-    .hero-section h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      background: linear-gradient(135deg, #667eea, #764ba2); /* Градієнт для заголовка */
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      color: #667eea; /* Резервний колір для H1 */
-    }
-
-    .hero-section p {
-      font-size: 1.3rem;
-      margin-bottom: 2rem;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      opacity: 0.9;
-      color: #ddd; /* Світлий текст */
-    }
-
-    .hero-icon {
-      font-size: 5rem;
-      margin-bottom: 2rem;
-      display: block;
-      color: #667eea; /* Колір для іконки */
-    }
-
-    .content-section, .step-by-step, .footer {
-      /* Оновлений фон для контентних блоків */
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 3rem;
-      margin: 2rem 0;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-      border: 1px solid rgba(255, 65, 108, 0.2);
-      color: #ddd; /* Світлий текст всередині */
-    }
-
-    .content-section h2, .step-by-step h3 {
-      color: #667eea; /* Синьо-фіолетовий акцент для заголовків */
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-     .step-by-step h3 { /* Окремо для .step-by-step якщо потрібен інший розмір */
-        font-size: 2.2rem;
-     }
-
-
-    .content-section h3 { /* Підзаголовки в .content-section */
-      color: #764ba2; /* Фіолетовий акцент */
-      font-size: 1.8rem;
-      margin: 2rem 0 1rem 0;
-    }
-
-    .danger-box {
-      background: linear-gradient(135deg, #e74c3c, #c0392b); /* Залишаємо червоний */
-      color: white;
-      padding: 2rem;
-      border-radius: 15px;
-      margin: 2rem 0;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
-    }
-
-    .danger-box h3 {
-      color: white;
-      margin-bottom: 1rem;
-    }
-    .danger-box p {
-        color: #f5c1ba;
-    }
-
-    .safe-box {
-      background: linear-gradient(135deg, #27ae60, #2ecc71); /* Залишаємо зелений */
-      color: white;
-      padding: 2rem;
-      border-radius: 15px;
-      margin: 2rem 0;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
-    }
-
-    .safe-box h3 {
-      color: white;
-      margin-bottom: 1rem;
-    }
-    .safe-box p {
-        color: #c8f5d8;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-
-    .info-card {
-      /* Оновлений фон для інформаційних карток */
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 2rem;
-      border-radius: 15px;
-      border-left: 5px solid #667eea; /* Синьо-фіолетова межа */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
-      color: #ccc;
-    }
-
-    .info-card:hover {
-      transform: translateY(-5px) scale(1.02); /* Збільшив ефект наведення */
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
-    }
-
-    .info-card h4 {
-      color: #667eea;
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-    }
-     .info-card p {
-        color: #bbb;
-    }
-
-
-    .danger-card {
-      /* Напівпрозорий червоний фон для небезпечних карток */
-      background: rgba(231, 76, 60, 0.15);
-      border-left-color: #e74c3c;
-    }
-    .danger-card:hover {
-      box-shadow: 0 10px 25px rgba(231, 76, 60, 0.2);
-    }
-
-    .danger-card h4 {
-      color: #e74c3c;
-    }
-
-    .safe-card {
-      /* Напівпрозорий зелений фон для безпечних карток */
-      background: rgba(39, 174, 96, 0.15);
-      border-left-color: #27ae60;
-    }
-     .safe-card:hover {
-      box-shadow: 0 10px 25px rgba(39, 174, 96, 0.2);
-    }
-
-    .safe-card h4 {
-      color: #27ae60;
-    }
-
-    .security-levels {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .security-level {
-      padding: 1.5rem;
-      border-radius: 15px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Додав box-shadow в transition */
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      color: white; /* Загальний колір тексту для всіх рівнів */
-    }
-
-    .security-level:hover {
-      transform: translateY(-10px) scale(1.02); /* Збільшив ефект */
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    .level-high { background: linear-gradient(135deg, #27ae60, #2ecc71); }
-    .level-medium { background: linear-gradient(135deg, #f39c12, #e67e22); }
-    .level-low { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-    .level-none { background: linear-gradient(135deg, #2c3e50, #34495e); }
-
-    .security-level h4 { margin-bottom: 0.5rem; }
-    .security-level p { font-size: 0.9rem; opacity: 0.9; }
-
-
-    .checklist {
-      /* Напівпрозорий зелений фон для чек-листа */
-      background: rgba(39, 174, 96, 0.15);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border: 1px solid rgba(39, 174, 96,0.3);
-      border-radius: 15px;
-      padding: 2rem;
-      margin: 2rem 0;
-      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.1);
-    }
-
-    .checklist h3 {
-      color: #27ae60; /* Зелений заголовок */
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .checklist ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .checklist li {
-      padding: 0.5rem 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #c8f5d8; /* Світло-зелений текст */
-      font-weight: 500;
-    }
-
-    .checklist li:before {
-      content: "✅";
-      font-size: 1.2rem;
-      color: #27ae60; /* Зелена галочка */
-    }
-
-    .danger-checklist {
-      /* Напівпрозорий червоний фон для небезпечного чек-листа */
-      background: rgba(198, 40, 40, 0.15);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border: 1px solid rgba(198, 40, 40,0.3);
-    }
-
-    .danger-checklist h3 {
-      color: #c62828; /* Червоний заголовок */
-    }
-
-    .danger-checklist li {
-      color: #ffcdd2; /* Світло-червоний текст */
-    }
-
-    .danger-checklist li:before {
-      content: "❌";
-      color: #c62828; /* Червоний хрестик */
-    }
-
-    .interactive-test, .network-scanner, .tools-section {
-      background: linear-gradient(135deg, #667eea, #764ba2); /* Залишаємо синьо-фіолетовий градієнт */
-      color: white;
-      border-radius: 20px;
-      padding: 3rem;
-      text-align: center;
-      margin: 3rem 0;
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-    }
-    .interactive-test p, .network-scanner p { color: #e0e7ff; }
-    .interactive-test h3, .network-scanner h3, .tools-section h3 {
-      color: white;
-      margin-bottom: 1rem;
-    }
-     .tools-section h3 { margin-bottom: 2rem; }
-
-
-    .test-btn { /* Кнопка "Почати тест" */
-      background: white;
-      color: #667eea; /* Синьо-фіолетовий текст */
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 25px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin: 1rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .test-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    }
-
-    .quiz-container, .scanner-result { /* Контейнери для тесту та результатів сканера */
-      display: none;
-      /* Темний напівпрозорий фон */
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      color: #eee; /* Світлий текст */
-      border-radius: 15px;
-      padding: 2rem;
-      margin-top: 2rem;
-      text-align: left;
-    }
-    .scanner-result h4 { color: #a7c5ff; margin-bottom: 1rem; }
-
-
-    .quiz-question {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #a7c5ff; /* Світло-синій для питання */
-    }
-
-    .quiz-options {
-      display: grid;
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-
-    .quiz-option { /* Варіанти відповідей */
-      background: rgba(255, 255, 255, 0.03);
-      border: 2px solid rgba(255,255,255,0.1);
-      color: #ccc;
-      border-radius: 10px;
-      padding: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .quiz-option:hover {
-      border-color: #667eea;
-      background: rgba(102, 126, 234, 0.1);
-      color: #e0e7ff;
-    }
-
-    .quiz-option.correct {
-      background: rgba(39, 174, 96, 0.2); /* Напівпрозорий зелений */
-      border-color: #27ae60;
-      color: #c8e6c9; /* Світло-зелений текст */
-    }
-
-    .quiz-option.incorrect {
-      background: rgba(231, 76, 60, 0.2); /* Напівпрозорий червоний */
-      border-color: #e74c3c;
-      color: #ffcdd2; /* Світло-червоний текст */
-    }
-
-    .quiz-result {
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-
-    .quiz-result.correct {
-      background: rgba(39, 174, 96, 0.3);
-      color: #c8e6c9;
-    }
-
-    .quiz-result.incorrect {
-      background: rgba(231, 76, 60, 0.3);
-      color: #ffcdd2;
-    }
-
-    .tool-card { /* Картки інструментів */
-      /* Темний напівпрозорий фон, щоб контрастувати з фоном секції */
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      padding: 1.5rem;
-      border-radius: 15px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      color: #eee;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .tool-card:hover {
-      transform: translateY(-10px) scale(1.02); /* Збільшив ефект */
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-
-    .tool-card h4 {
-      color: #a7c5ff; /* Світло-синій для заголовка */
-      margin-bottom: 0.5rem;
-    }
-    .tool-card p { color: #ccc; }
-
-    .tool-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      display: block;
-      color: #a7c5ff; /* Світло-синій для іконки */
-    }
-
-    .steps {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .step { /* Кроки в інструкції */
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      /* Темний напівпрозорий фон */
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 1.5rem;
-      border-radius: 15px;
-      /* border-left залишається, щоб відповідати .info-card, але можна прибрати, якщо не потрібно */
-      /* border-left: 5px solid #667eea; */
-    }
-
-    .step-number {
-      background: #667eea; /* Синьо-фіолетовий фон для номера кроку */
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .step-content h4 {
-      color: #a7c5ff; /* Світло-синій для заголовка кроку */
-      margin-bottom: 0.5rem;
-    }
-    .step-content p {
-        color: #bbb;
-    }
-
-    .footer h3 {
-      color: #667eea; /* Синьо-фіолетовий заголовок */
-      margin-bottom: 1rem;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin: 2rem 0;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      color: #764ba2; /* Фіолетові посилання */
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: #667eea; /* Світліший синьо-фіолетовий при наведенні */
-    }
-
-    .footer-copyright {
-      color: #888; /* Темно-сірий для копірайту */
-      font-size: 0.9rem;
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1); /* Світла межа */
-    }
-    
-    .network-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      /* Темний фон для елементів списку мереж */
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 10px;
-      border-left: 5px solid #667eea; /* Базова синьо-фіолетова межа */
-      color: #ccc; /* Світлий текст */
-    }
-
-    .network-secure { border-left-color: #27ae60; }
-    .network-warning { border-left-color: #f39c12; }
-    .network-danger { border-left-color: #e74c3c; }
-
-    .signal-strength { display: flex; gap: 2px; }
-    .signal-bar { width: 4px; height: 16px; background: #555; border-radius: 2px; } /* Темніший фон для неактивних */
-    .signal-bar.active { background: #667eea; } /* Акцентний колір для активних */
-
-
-    @media (max-width: 768px) {
-      .hero-section h1 {
-        font-size: 2.5rem;
-        /* Виправлення для iOS Safari для градієнтного тексту h1 */
-        background: none !important;
-        -webkit-background-clip: unset !important;
-        background-clip: unset !important;
-        -webkit-text-fill-color: unset !important;
-        color: #667eea !important; /* Залишаємо синьо-фіолетовий акцент для цього заголовка */
-      }
-      
-      .content-section, .step-by-step, .footer {
-        padding: 2rem 1.5rem;
-      }
-      
-      .header-content {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      /* Якщо навігація в хедері розшириться */
-      /* nav {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      } */
-
-      .footer-links {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .security-levels {
-        grid-template-columns: 1fr; /* Рівні безпеки в один стовпець */
-      }
-
-      .step {
-        flex-direction: column; /* Кроки інструкції в стовпець */
-        align-items: center; /* Центруємо вміст кроку */
-        text-align: center;
-      }
-      .step-number {
-        margin-bottom: 0.5rem; /* Відступ для номера кроку */
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Безпека Wi-Fi - CyberSecure</title>
+  
+  <!-- Основні мета-теги -->
+  <meta name="description" content="Захистіть свою домашню Wi-Fi мережу та безпечно користуйтеся публічним Wi-Fi. Поради та рекомендації з кібербезпеки.">
+  <meta name="keywords" content="wi-fi безпека, захист wi-fi мережі, безпечне користування wi-fi, безпека публічного wi-fi, vpn, кібербезпека">
+  <meta name="author" content="CyberSecure">
+  
+  <!-- Мета-теги для социальных сетей -->
+  <meta property="og:title" content="Безпека Wi-Fi - CyberSecure">
+  <meta property="og:description" content="Захистіть свою домашню Wi-Fi мережу та безпечно користуйтеся публічним Wi-Fi. Поради та рекомендації з кібербезпеки.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dot-gh.github.io/wifi-security.html">
+  <meta property="og:image" content="images/wifi-security.jpg">
+  
+  <!-- Іконки та фавіконки -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  
+  <!-- Шрифти -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic-ext,latin-ext" rel="stylesheet">
+  
+  <!-- Стилі -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/topic-styles.css">
 </head>
 <body>
   <header>
-    <div class="header-content">
-      <div class="logo">
-        <div class="logo-img">📶</div> <span>CyberSecure</span>
-      </div>
-      <nav>
-        <a href="index.html" class="back-btn">← Назад на головну</a>
-      </nav>
+    <div class="logo">
+      <div class="logo-img">🔒</div>
+      <span>CyberSecure</span>
     </div>
+    
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+    </div>
+    
+    <nav id="nav">
+      <a href="index.html">Головна</a>
+      <a href="about.html">Про нас</a>
+      <a href="resources.html">Ресурси</a>
+    </nav>
   </header>
-
-  <div class="container">
-    <section class="hero-section">
-      <span class="hero-icon">📶</span>
-      <h1>Wi-Fi Безпека</h1>
-      <p>Навчіться безпечно підключатися до бездротових мереж та захищати свої дані</p>
+  
+  <main>
+    <section class="topic-banner">
+      <div class="topic-content">
+        <h1>Безпека Wi-Fi</h1>
+        <p>Захистіть свою домашню мережу та безпечно користуйтеся публічним Wi-Fi</p>
+      </div>
+      <div class="topic-image">
+        <div class="icon-large">📶</div>
+      </div>
     </section>
-
-    <section class="content-section">
-      <h2>Що таке Wi-Fi та чому безпека важлива?</h2>
+    
+    <section class="topic-content">
+      <h2>Захист домашньої Wi-Fi мережі</h2>
+      
       <p>
-        <strong>Wi-Fi</strong> — це технологія бездротового підключення до інтернету, яка дозволяє 
-        пристроям підключатися до мережі без кабелів. Однак бездротові мережі можуть бути вразливими 
-        до перехоплення даних, несанкціонованого доступу та інших кіберзагроз.
+        Ваша домашня Wi-Fi мережа — це ворота до всіх пристроїв, підключених до неї. 
+        Незахищена мережа може дозволити зловмисникам перехоплювати ваш трафік, красти особисті дані 
+        або навіть використовувати ваше підключення до інтернету для незаконної діяльності.
       </p>
-
-      <div class="danger-box">
-        <h3>⚠️ Ризики незахищених Wi-Fi мереж</h3>
-        <p>
-          <strong>68%</strong> публічних Wi-Fi мереж не захищені<br>
-          <strong>43%</strong> користувачів підключаються до будь-яких доступних мереж<br>
-          <strong>21%</strong> хакерських атак відбувається через незахищені мережі
-        </p>
-      </div>
-
-      <h3>Типи загроз у Wi-Fi мережах</h3>
-      <div class="info-grid">
-        <div class="info-card danger-card">
-          <h4>🕵️ Перехоплення даних</h4>
-          <p>Зловмисники можуть перехоплювати ваш трафік і читати особисту інформацію, паролі та повідомлення.</p>
-        </div>
-        <div class="info-card danger-card">
-          <h4>👤 Атаки "Людина посередині"</h4>
-          <p>Хакери створюють фальшиві точки доступу, щоб перехоплювати весь ваш інтернет-трафік.</p>
-        </div>
-        <div class="info-card danger-card">
-          <h4>🦠 Розповсюдження малвару</h4>
-          <p>Через незахищені мережі можна заразити ваш пристрій вірусами та шкідливими програмами.</p>
-        </div>
-        <div class="info-card danger-card">
-          <h4>📱 Несанкціонований доступ</h4>
-          <p>Зловмисники можуть отримати доступ до файлів на вашому пристрої через слабко захищену мережу.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <h2>Рівні безпеки Wi-Fi мереж</h2>
-      <div class="security-levels">
-        <div class="security-level level-high">
-          <h4>🛡️ WPA3</h4>
-          <p><strong>Найвищий рівень</strong></p>
-          <p>Найновіший і найбезпечніший протокол шифрування</p>
-        </div>
-        <div class="security-level level-medium">
-          <h4>🔐 WPA2</h4>
-          <p><strong>Високий рівень</strong></p>
-          <p>Надійний протокол, підтримується більшістю пристроїв</p>
-        </div>
-        <div class="security-level level-low">
-          <h4>⚠️ WEP</h4>
-          <p><strong>Низький рівень</strong></p>
-          <p>Застарілий протокол, легко зламується</p>
-        </div>
-        <div class="security-level level-none">
-          <h4>🚫 Відкрита мережа</h4>
-          <p><strong>Небезпечно</strong></p>
-          <p>Жодного шифрування, всі дані передаються відкрито</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="network-scanner">
-      <h3>🔍 Симулятор сканування мереж</h3>
-      <p>Подивіться, як виглядають різні типи мереж та їх рівень безпеки</p>
-      <button class="test-btn" onclick="scanNetworks()">Сканувати мережі</button>
       
-      <div class="scanner-result" id="scannerResult">
-        <h4>Знайдені мережі:</h4>
-        <div id="networksList"></div>
-      </div>
-    </section>
-
-    <section class="interactive-test">
-      <h3>🧠 Тест: Безпека Wi-Fi мереж</h3>
-      <p>Перевірте свої знання про безпечне використання бездротових мереж</p>
-      <button class="test-btn" onclick="startWifiTest()">Почати тест</button>
-      
-      <div class="quiz-container" id="quizContainer">
-        <div class="quiz-question" id="quizQuestion"></div>
-        <div class="quiz-options" id="quizOptions"></div>
-        <div class="quiz-result" id="quizResult"></div>
-        <button class="test-btn" id="nextQuestion" onclick="nextQuestion()" style="display: none;">Наступне питання</button>
-        <button class="test-btn" id="restartTest" onclick="startWifiTest()" style="display: none;">Пройти знову</button>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <h2>🏠 Безпека домашньої Wi-Fi мережі</h2>
-      
-      <div class="step-by-step"> <h3>Покрокове налаштування безпечної мережі</h3>
-        <div class="steps">
-          <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <h4>Змініть стандартний пароль</h4>
-              <p>Обов'язково змініть стандартний пароль адміністратора роутера. Використовуйте складний пароль з літер, цифр та символів.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <h4>Увімкніть WPA3 або WPA2</h4>
-              <p>У налаштуваннях роутера оберіть найсучасніший доступний протокол шифрування. Уникайте WEP або відкритих мереж.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h4>Приховайте назву мережі (SSID)</h4>
-              <p>Зробіть вашу мережу невидимою для сторонніх, відключивши трансляцію SSID.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">4</div>
-            <div class="step-content">
-              <h4>Обмежте кількість підключень</h4>
-              <p>Налаштуйте максимальну кількість пристроїв, які можуть підключатися до вашої мережі.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">5</div>
-            <div class="step-content">
-              <h4>Регулярно оновлюйте прошивку</h4>
-              <p>Встановлюйте оновлення прошивки роутера для закриття вразливостей безпеки.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">6</div>
-            <div class="step-content">
-              <h4>Налаштуйте гостьову мережу</h4>
-              <p>Створіть окрему мережу для гостей, щоб вони не мали доступу до ваших пристроїв.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <h2>🌐 Безпечне користування публічними Wi-Fi</h2>
-      
-      <div class="danger-checklist checklist"> <h3>❌ Що НІКОЛИ не можна робити в публічних мережах</h3>
-        <ul>
-          <li>Заходити в онлайн-банкінг або платіжні системи</li>
-          <li>Вводити паролі від важливих акаунтів</li>
-          <li>Робити онлайн-покупки з введенням даних карток</li>
-          <li>Відправляти конфіденційну інформацію</li>
-          <li>Підключатися до підозрілих мереж без паролів</li>
-          <li>Залишати Wi-Fi та Bluetooth увімкненими без потреби</li>
+      <div class="info-box">
+        <h3>Основні кроки для захисту домашньої мережі:</h3>
+        <ul class="checklist">
+          <li>Змініть стандартні дані для входу до маршрутизатора (логін та пароль адміністратора)</li>
+          <li>Використовуйте WPA3 шифрування (або принаймні WPA2) замість застарілих WEP або WPA</li>
+          <li>Встановіть надійний пароль для Wi-Fi мережі (мінімум 12 символів різних типів)</li>
+          <li>Регулярно оновлюйте прошивку маршрутизатора</li>
+          <li>Використовуйте мережу з прихованим SSID (назвою мережі)</li>
+          <li>Увімкніть фільтрацію за MAC-адресами пристроїв</li>
+          <li>Вимикайте маршрутизатор, коли він не використовується тривалий час</li>
         </ul>
       </div>
-
-      <div class="checklist"> <h3>✅ Безпечні дії в публічних мережах</h3>
-        <ul>
-          <li>Використовуйте VPN для шифрування трафіку</li>
-          <li>Перевіряйте правильність назви мережі у персоналу</li>
-          <li>Відключайте автоматичне підключення до мереж</li>
-          <li>Використовуйте HTTPS сайти (зелений замок в браузері)</li>
-          <li>Вимикайте функцію "Поділитися файлами"</li>
-          <li>Перевіряйте,чи не підключені сторонні пристрої до вашого телефону</li>
-          <li>Користуйтеся мобільним інтернетом для важливих операцій</li>
-          <li>Очистіть історію браузера після використання</li>
+      
+      <div class="two-col-section">
+        <div class="col">
+          <h3>Як змінити налаштування маршрутизатора:</h3>
+          <ol>
+            <li>Відкрийте веб-браузер і введіть IP-адресу вашого маршрутизатора (зазвичай 192.168.0.1 або 192.168.1.1)</li>
+            <li>Введіть дані для входу (якщо не змінювали, пошукайте стандартні на корпусі пристрою або в інструкції)</li>
+            <li>У меню налаштувань знайдіть розділи:
+              <ul>
+                <li>"Безпека" або "Захист" – для зміни типу шифрування та пароля Wi-Fi</li>
+                <li>"Адміністрування" – для зміни паролю адміністратора</li>
+                <li>"Прошивка" або "Оновлення" – для оновлення ПЗ маршрутизатора</li>
+                <li>"Додаткові налаштування" – для фільтрації MAC-адрес і приховання SSID</li>
+              </ul>
+            </li>
+            <li>Застосуйте зміни та перезавантажте маршрутизатор за потреби</li>
+          </ol>
+        </div>
+        <div class="col">
+          <div class="info-box">
+            <h3>Шифрування Wi-Fi: що обрати?</h3>
+            <table class="encryption-table">
+              <tr>
+                <td><strong>WPA3</strong></td>
+                <td>Найновіший і найбезпечніший стандарт</td>
+              </tr>
+              <tr>
+                <td><strong>WPA2-PSK (AES)</strong></td>
+                <td>Надійний стандарт для більшості пристроїв</td>
+              </tr>
+              <tr>
+                <td><strong>WPA2/WPA змішаний</strong></td>
+                <td>Компроміс для старих пристроїв</td>
+              </tr>
+              <tr>
+                <td><strong>WPA</strong></td>
+                <td>Застарілий, має вразливості</td>
+              </tr>
+              <tr>
+                <td><strong>WEP</strong></td>
+                <td>Небезпечний, легко зламується</td>
+              </tr>
+              <tr>
+                <td><strong>Відкрита мережа</strong></td>
+                <td>Без захисту, уникайте використання</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <h3>Створення гостьової мережі</h3>
+      
+      <p>
+        Більшість сучасних маршрутизаторів дозволяють налаштувати окрему гостьову мережу. 
+        Це дозволяє гостям користуватися інтернетом, не маючи доступу до інших пристроїв у вашій основній мережі, 
+        таких як ваші комп'ютери, мережеві диски чи принтери.
+      </p>
+      
+      <div class="info-box">
+        <h3>Переваги гостьової мережі:</h3>
+        <ul class="checklist">
+          <li>Ізоляція головної мережі від потенційно небезпечних пристроїв гостей</li>
+          <li>Можливість встановлення обмежень швидкості для гостьової мережі</li>
+          <li>Можливість легкої зміни паролю без необхідності налаштовувати всі домашні пристрої</li>
+          <li>Підходить для IoT-пристроїв (розумні лампи, колонки тощо), які можуть мати слабку безпеку</li>
         </ul>
       </div>
-    </section>
-
-    <section class="tools-section">
-      <h3>🛠️ Корисні інструменти для Wi-Fi безпеки</h3>
+      
+      <div class="tool-section">
+        <h2>Перевірка безпеки вашої Wi-Fi мережі</h2>
+        
+        <div class="wifi-check-list">
+          <h3>Чек-лист безпеки Wi-Fi</h3>
+          <div class="checklist-container" id="wifiChecklist">
+            <div class="check-item">
+              <input type="checkbox" id="check1">
+              <label for="check1">Я змінив(ла) стандартний пароль адміністратора маршрутизатора</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check2">
+              <label for="check2">Я використовую WPA3 або WPA2 шифрування</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check3">
+              <label for="check3">Мій пароль Wi-Fi містить не менше 12 символів, включаючи літери, цифри та спецсимволи</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check4">
+              <label for="check4">Я регулярно оновлюю прошивку маршрутизатора</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check5">
+              <label for="check5">У мене налаштована окрема гостьова мережа</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check6">
+              <label for="check6">Я вимикаю Wi-Fi, коли не користуюсь ним тривалий час</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check7">
+              <label for="check7">Я змінив(ла) стандартну назву мережі (SSID)</label>
+            </div>
+            <div class="check-item">
+              <input type="checkbox" id="check8">
+              <label for="check8">Я вимкнув(ла) дистанційний доступ до маршрутизатора</label>
+            </div>
+          </div>
+          
+          <div id="wifiSafetyResult" class="safety-result">
+            <div class="progress-container">
+              <div class="progress-label">Рівень захисту вашої мережі:</div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="safetyBar" style="width: 0;"></div>
+              </div>
+              <div class="progress-percent" id="safetyPercent">0%</div>
+            </div>
+            <div id="safetyMessage"></div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Безпечне використання публічного Wi-Fi</h2>
+      
+      <p>
+        Публічні Wi-Fi мережі в кав'ярнях, аеропортах, готелях та інших місцях є зручними, але представляють 
+        значні загрози для безпеки ваших даних. Хакери можуть використовувати різні методи для перехоплення 
+        інформації, яку ви передаєте через такі мережі.
+      </p>
+      
+      <div class="warning-box">
+        <h3>Основні загрози публічного Wi-Fi:</h3>
+        <ul>
+          <li><strong>Man-in-the-Middle атаки</strong> — хакер ставить себе між вами і точкою підключення, перехоплюючи всі дані</li>
+          <li><strong>Фальшиві точки доступу</strong> — злочинці створюють підроблені мережі з назвами, схожими на легітимні</li>
+          <li><strong>Перехоплення незашифрованого трафіку</strong> — можливість бачити все, що ви надсилаєте через незахищені сайти</li>
+          <li><strong>Розповсюдження шкідливого ПЗ</strong> — зараження вашого пристрою через незахищену мережу</li>
+          <li><strong>Packet sniffing</strong> — перехоплення пакетів даних для аналізу та крадіжки інформації</li>
+        </ul>
+      </div>
+      
+      <div class="info-box">
+        <h3>Правила безпечного використання публічного Wi-Fi:</h3>
+        <ul class="checklist">
+          <li>Використовуйте VPN (Virtual Private Network) для шифрування всього трафіку</li>
+          <li>Переконайтесь, що сайти використовують HTTPS (зелений замок у браузері)</li>
+          <li>Уникайте входу в банківські акаунти та оплати через публічний Wi-Fi</li>
+          <li>Вимикайте функцію автоматичного підключення до Wi-Fi мереж</li>
+          <li>Вимикайте спільний доступ до файлів та принтерів</li>
+          <li>Використовуйте двофакторну автентифікацію для важливих сервісів</li>
+          <li>Регулярно видаляйте збережені Wi-Fi мережі з вашого пристрою</li>
+          <li>Завжди вимикайте Wi-Fi, коли не використовуєте його</li>
+        </ul>
+      </div>
+      
+      <h3>Що таке VPN і навіщо він потрібен?</h3>
+      
+      <div class="two-col-section">
+        <div class="col">
+          <p>
+            VPN (Virtual Private Network) — технологія, яка створює захищений тунель для ваших даних в інтернеті. 
+            Коли ви підключаєтесь через VPN, весь ваш трафік шифрується, роблячи його нечитабельним для сторонніх осіб, 
+            включаючи хакерів, інтернет-провайдерів та власників мереж Wi-Fi.
+          </p>
+          
+          <div class="info-box">
+            <h4>Переваги використання VPN:</h4>
+            <ul>
+              <li>Захист ваших даних при використанні публічних Wi-Fi мереж</li>
+              <li>Приховування вашої IP-адреси та фізичного місцезнаходження</li>
+              <li>Захист від відстеження вашої активності провайдером</li>
+              <li>Обхід географічних обмежень на контент</li>
+              <li>Захист від цензури інтернету</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col">
+          <div class="image-container">
+            <div class="icon-medium">🛡️🔒</div>
+          </div>
+        </div>
+      </div>
+      
+      <h3>Популярні VPN-сервіси:</h3>
       <div class="tools-grid">
         <div class="tool-card">
-          <span class="tool-icon">🔒</span>
-          <h4>VPN сервіси</h4>
-          <p>NordVPN, ExpressVPN, ProtonVPN для захисту трафіку</p>
+          <h4>NordVPN</h4>
+          <div class="tool-description">
+            <p>Один з найпопулярніших VPN-сервісів з високим рівнем безпеки та великою кількістю серверів</p>
+          </div>
+          <a href="https://nordvpn.com/" class="read-more" target="_blank" rel="noopener noreferrer">Дізнатися більше</a>
         </div>
         <div class="tool-card">
-          <span class="tool-icon">📡</span>
-          <h4>Wi-Fi аналізатори</h4>
-          <p>WiFi Analyzer, NetSpot для аналізу мереж</p>
+          <h4>ExpressVPN</h4>
+          <div class="tool-description">
+            <p>Швидкий VPN-сервіс з серверами у багатьох країнах та простим інтерфейсом</p>
+          </div>
+          <a href="https://www.expressvpn.com/" class="read-more" target="_blank" rel="noopener noreferrer">Дізнатися більше</a>
         </div>
         <div class="tool-card">
-          <span class="tool-icon">🛡️</span>
-          <h4>Фаєрволи</h4>
-          <p>Вбудовані захисники Windows/macOS та сторонні рішення</p>
+          <h4>ProtonVPN</h4>
+          <div class="tool-description">
+            <p>VPN від швейцарської компанії Proton Technologies з безкоштовним тарифом та відкритим кодом</p>
+          </div>
+          <a href="https://protonvpn.com/" class="read-more" target="_blank" rel="noopener noreferrer">Дізнатися більше</a>
         </div>
         <div class="tool-card">
-          <span class="tool-icon">🔐</span>
-          <h4>Менеджери паролів</h4>
-          <p>1Password, Bitwarden для безпечного зберігання</p>
+          <h4>Surfshark</h4>
+          <div class="tool-description">
+            <p>Доступний VPN з можливістю підключення необмеженої кількості пристроїв</p>
+          </div>
+          <a href="https://surfshark.com/" class="read-more" target="_blank" rel="noopener noreferrer">Дізнатися більше</a>
         </div>
       </div>
     </section>
-
-    <section class="content-section">
-      <h2>🚨 Що робити, якщо ваша мережа зламана?</h2>
-      
-      <div class="danger-box"> <h3>Ознаки зламу мережі</h3>
+    
+    <section class="related-topics">
+      <h2>Пов'язані теми</h2>
+      <div class="links-grid">
+        <a href="passwords.html" class="quick-link-card">
+          <div class="card-icon">🔐</div>
+          <h3>Безпека паролів</h3>
+          <p>Створення та управління надійними паролями</p>
+        </a>
+        <a href="phishing.html" class="quick-link-card">
+          <div class="card-icon">🎣</div>
+          <h3>Фішинг</h3>
+          <p>Як розпізнати та уникнути шахрайських схем</p>
+        </a>
+        <a href="social-media-security.html" class="quick-link-card">
+          <div class="card-icon">📱</div>
+          <h3>Безпека в соцмережах</h3>
+          <p>Захист особистої інформації в соціальних мережах</p>
+        </a>
+      </div>
+    </section>
+  </main>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Про CyberSecure</h4>
         <p>
-          • Повільна швидкість інтернету без очевидних причин<br>
-          • Незнайомі пристрої в списку підключених<br>
-          • Підозріла активність в акаунтах<br>
-          • Неочікувані сповіщення про вхід в акаунти<br>
-          • Зміни в налаштуваннях роутера
+          Ми допомагаємо людям навчитися основам кібербезпеки та захищати
+          свої дані в цифровому світі. Наша місія - зробити інтернет безпечнішим для всіх.
         </p>
       </div>
-
-      <div class="step-by-step"> <h3>Дії при виявленні злому</h3>
-        <div class="steps">
-          <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <h4>Негайно відключіть роутер</h4>
-              <p>Фізично відключіть роутер від живлення, щоб припинити доступ зловмисників.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <h4>Змініть всі паролі</h4>
-              <p>Змініть пароль адміністратора роутера та пароль Wi-Fi мережі на складніші.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h4>Оновіть прошивку</h4>
-              <p>Встановіть останні оновлення безпеки для роутера.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">4</div>
-            <div class="step-content">
-              <h4>Скануйте пристрої</h4>
-              <p>Перевірте всі підключені пристрої антивірусом на наявність малвару.</p>
-            </div>
-          </div>
-          <div class="step">
-            <div class="step-number">5</div>
-            <div class="step-content">
-              <h4>Налаштуйте заново</h4>
-              <p>Повторно налаштуйте всі параметри безпеки мережі.</p>
-            </div>
-          </div>
-        </div>
+      <div class="footer-section">
+        <h4>Корисні посилання</h4>
+        <ul>
+          <li><a href="guides.html">Посібники</a></li>
+        </ul>
       </div>
-    </section>
-
-    <section class="safe-box"> <h3>💡 Підсумок: Золоті правила Wi-Fi безпеки</h3>
-      <p>
-        <strong>1.</strong> Завжди використовуйте WPA3 або WPA2 шифрування<br>
-        <strong>2.</strong> Створюйте складні паролі для мережі<br>
-        <strong>3.</strong> Регулярно оновлюйте прошивку роутера<br>
-        <strong>4.</strong> Уникайте публічних мереж для важливих операцій<br>
-        <strong>5.</strong> Використовуйте VPN в публічних мережах<br>
-        <strong>6.</strong> Відключайте Wi-Fi коли не користуєтеся<br>
-        <strong>7.</strong> Налаштуйте гостьову мережу<br>
-        <strong>8.</strong> Моніторьте підключені пристрої
-      </p>
-    </section>
-  </div>
-
-  <footer class="footer"> <h3>Захистіть себе в цифровому світі</h3>
-    <p>Безпека в інтернеті - це не розкіш, а необхідність. Слідкуйте за оновленнями та навчайтеся новим методам захисту.</p>
-    
-    <div class="footer-copyright">
-      <p>&copy; 2024 CyberSecure. Всі права захищені. Створено для освітніх цілей.</p>
+      <div class="footer-section">
+        <h4>Підтримка</h4>
+        <ul>
+          <li><a href="help.html">Допомога</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Слідкуйте за нами</h4>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/dot-gh" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></li>
+          <li><a href="https://t.me/dot_gh" target="_blank" rel="noopener noreferrer">📱 Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CyberSecure. Всі права захищені. | Політика конфіденційності | Умови використання</p>
     </div>
   </footer>
-
-  <script>
-    // Wi-Fi Quiz Data
-    const wifiQuizQuestions = [
-      {
-        question: "Який протокол шифрування Wi-Fi є найбезпечнішим?",
-        options: ["WEP", "WPA", "WPA2", "WPA3"],
-        correct: 3,
-        explanation: "WPA3 - це найновіший і найбезпечніший протокол шифрування Wi-Fi, який забезпечує найкращий захист."
-      },
-      {
-        question: "Що не можна робити в публічній Wi-Fi мережі?",
-        options: ["Читати новини", "Заходити в онлайн-банкінг", "Слухати музику", "Переглядати відео"],
-        correct: 1,
-        explanation: "В публічних мережах ніколи не слід заходити в онлайн-банкінг, оскільки дані можуть бути перехоплені."
-      },
-      {
-        question: "Що таке VPN і навіщо він потрібен?",
-        options: ["Програма для прискорення інтернету", "Віртуальна приватна мережа для захисту трафіку", "Антивірус", "Браузер"],
-        correct: 1,
-        explanation: "VPN (Virtual Private Network) шифрує ваш інтернет-трафік і захищає дані від перехоплення."
-      },
-      {
-        question: "Як часто потрібно оновлювати прошивку роутера?",
-        options: ["Ніколи", "Раз на рік", "При появі оновлень", "Щодня"],
-        correct: 2,
-        explanation: "Прошивку роутера потрібно оновлювати при появі нових версій для закриття вразливостей безпеки."
-      },
-      {
-        question: "Що означає відкрита Wi-Fi мережа?",
-        options: ["Мережа з паролем", "Мережа без шифрування", "Швидка мережа", "Безпечна мережа"],
-        correct: 1,
-        explanation: "Відкрита мережа не має шифрування, тому всі дані передаються у відкритому вигляді."
-      }
-    ];
-
-    let currentQuestionIndex = 0;
-    let score = 0;
-    // quizStarted змінна була тут, але вона не використовувалася глобально поза функціями тесту,
-    // тому її можна залишити локальною або видалити, якщо вона не потрібна для іншої логіки.
-    // Для чистоти коду, якщо вона не використовується поза startWifiTest, її можна ініціалізувати там.
-
-    function startWifiTest() {
-      currentQuestionIndex = 0;
-      score = 0;
-      // quizStarted = true; // Якщо потрібна ця змінна
-      document.getElementById('quizContainer').style.display = 'block';
-      document.getElementById('nextQuestion').style.display = 'none';
-      document.getElementById('restartTest').style.display = 'none';
-      // Ховаємо кнопку "Почати тест"
-      document.querySelector('.interactive-test .test-btn[onclick="startWifiTest()"]').style.display = 'none';
-      showQuestion();
-    }
-
-    function showQuestion() {
-      if (currentQuestionIndex >= wifiQuizQuestions.length) {
-        showFinalResult();
-        return;
-      }
-
-      const question = wifiQuizQuestions[currentQuestionIndex];
-      document.getElementById('quizQuestion').textContent = `Питання ${currentQuestionIndex + 1}/${wifiQuizQuestions.length}: ${question.question}`;
-      
-      const optionsContainer = document.getElementById('quizOptions');
-      optionsContainer.innerHTML = '';
-      
-      question.options.forEach((option, index) => {
-        const optionDiv = document.createElement('div');
-        optionDiv.className = 'quiz-option';
-        optionDiv.textContent = option;
-        optionDiv.onclick = () => selectAnswer(index);
-        optionsContainer.appendChild(optionDiv);
-      });
-      
-      document.getElementById('quizResult').innerHTML = '';
-      document.getElementById('nextQuestion').style.display = 'none';
-    }
-
-    function selectAnswer(selectedIndex) {
-      const question = wifiQuizQuestions[currentQuestionIndex];
-      const options = document.querySelectorAll('.quiz-option');
-      
-      options.forEach((option, index) => {
-        option.onclick = null; // Забороняємо повторні кліки
-        if (index === question.correct) {
-          option.classList.add('correct');
-        } else if (index === selectedIndex) { // Тільки якщо вибрано неправильний
-          option.classList.add('incorrect');
-        }
-      });
-      
-      const resultDiv = document.getElementById('quizResult');
-      if (selectedIndex === question.correct) {
-        score++;
-        resultDiv.innerHTML = `<div class="quiz-result correct">✅ Правильно! ${question.explanation}</div>`;
-      } else {
-        resultDiv.innerHTML = `<div class="quiz-result incorrect">❌ Неправильно. ${question.explanation}</div>`;
-      }
-      
-      if (currentQuestionIndex < wifiQuizQuestions.length - 1) {
-          document.getElementById('nextQuestion').style.display = 'block';
-      } else {
-          showFinalResult(); // Показуємо фінальний результат одразу після останнього питання
-      }
-    }
-
-    function nextQuestion() {
-      currentQuestionIndex++;
-      showQuestion();
-    }
-
-    function showFinalResult() {
-      const percentage = Math.round((score / wifiQuizQuestions.length) * 100);
-      let message, className;
-      
-      if (percentage >= 80) {
-        message = "🎉 Відмінно! Ви добре розумієтеся на Wi-Fi безпеці!";
-        className = "correct";
-      } else if (percentage >= 60) {
-        message = "👍 Непогано! Рекомендуємо повторити матеріал.";
-        className = "correct"; // Можна зробити інший клас для "непогано", якщо потрібно інше візуальне оформлення
-      } else {
-        message = "📚 Потрібно вивчити матеріал більш детально.";
-        className = "incorrect";
-      }
-      
-      // Оновлюємо контейнер питань для відображення фінального результату
-      document.getElementById('quizQuestion').innerHTML = `<div class="quiz-result ${className}" style="text-align:center; padding:1rem; font-size:1.1rem;">Ваш результат: ${score}/${wifiQuizQuestions.length} (${percentage}%)<br>${message}</div>`;
-      document.getElementById('quizOptions').innerHTML = ''; // Очищаємо опції
-      document.getElementById('quizResult').innerHTML = ''; // Очищаємо поле для пояснення окремого питання
-      document.getElementById('nextQuestion').style.display = 'none';
-      document.getElementById('restartTest').style.display = 'block';
-    }
-
-    // Додаємо обробник для кнопки "Пройти знову"
-    const restartTestButton = document.getElementById('restartTest');
-    if (restartTestButton) {
-        restartTestButton.addEventListener('click', function() {
-            // Показуємо кнопку "Почати тест"
-            const startButton = document.querySelector('.interactive-test .test-btn[onclick="startWifiTest()"]');
-            if (startButton) {
-                startButton.style.display = 'inline-block';
-            }
-            startWifiTest(); // Починаємо тест заново
-        });
-    }
-
-
-    // Network Scanner Simulation
-    function scanNetworks() {
-      const networks = [
-        { name: "HOME_WIFI_5G", security: "WPA3", strength: 5, type: "secure" },
-        { name: "Starbucks_WiFi", security: "Open", strength: 4, type: "danger" },
-        { name: "MyRouter_2.4G", security: "WPA2", strength: 3, type: "secure" },
-        { name: "FREE_INTERNET", security: "Open", strength: 2, type: "danger" },
-        { name: "Hotel_Guest", security: "WEP", strength: 3, type: "warning" },
-        { name: "Office_Network", security: "WPA2", strength: 4, type: "secure" },
-        { name: "Public_Library", security: "Open", strength: 2, type: "danger" },
-        { name: "Neighbor_WiFi", security: "WPA3", strength: 2, type: "secure" }
-      ];
-
-      const scannerResultEl = document.getElementById('scannerResult');
-      const networksListEl = document.getElementById('networksList');
-      
-      networksListEl.innerHTML = '<p style="color: #a7c5ff; text-align:center;">🔍 Сканування...</p>'; // Колір для тексту завантаження
-      scannerResultEl.style.display = 'block';
-      
-      setTimeout(() => {
-        networksListEl.innerHTML = '';
-        
-        networks.forEach(network => {
-          const networkDiv = document.createElement('div');
-          networkDiv.className = `network-item network-${network.type}`;
-          
-          const signalBars = Array.from({length: 5}, (_, i) => {
-            return `<div class="signal-bar ${i < network.strength ? 'active' : ''}"></div>`;
-          }).join('');
-          
-          const securityIcon = {
-            'WPA3': '🛡️',
-            'WPA2': '🔐',
-            'WEP': '⚠️',
-            'Open': '🚫'
-          }[network.security] || '❓';
-          
-          networkDiv.innerHTML = `
-            <div>
-              <strong>${network.name}</strong><br>
-              <small style="opacity:0.8;">${securityIcon} ${network.security}</small>
-            </div>
-            <div class="signal-strength">
-              ${signalBars}
-            </div>
-          `;
-          
-          networksListEl.appendChild(networkDiv);
-        });
-        
-        const explanation = document.createElement('div');
-        explanation.style.marginTop = '20px';
-        explanation.style.padding = '1rem';
-        explanation.style.background = 'rgba(0,0,0,0.2)';
-        explanation.style.borderRadius = '10px';
-        explanation.innerHTML = `
-          <h4 style="color: #a7c5ff; margin-bottom: 0.5rem;">Рекомендації:</h4>
-          <p style="color: #c8e6c9; margin-bottom: 0.3rem;"><span style="color: #27ae60;">🟢 Зелені мережі</span> - безпечні для підключення</p>
-          <p style="color: #ffe0b2; margin-bottom: 0.3rem;"><span style="color: #f39c12;">🟡 Жовті мережі</span> - обережно, застарілий захист</p>
-          <p style="color: #ffcdd2;"><span style="color: #e74c3c;">🔴 Червоні мережі</span> - небезпечні, уникайте</p>
-        `;
-        networksListEl.appendChild(explanation);
-      }, 2000);
-    }
-
-    // Smooth scrolling for anchor links (якщо будуть якірні посилання на сторінці)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        // Перевірка, чи це не просто "#"
-        if (targetId.length > 1) {
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-              targetElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
-            }
-        }
-      });
-    });
-
-    // Add floating back to top button
-    const backToTopButton = document.createElement('button');
-    backToTopButton.innerHTML = '↑';
-    // Стилі для кнопки "Нагору"
-    backToTopButton.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #ff416c, #ff4b2b); /* Основний акцентний градієнт сайту */
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 24px; /* Збільшив шрифт */
-      font-weight: bold;
-      cursor: pointer;
-      display: none;
-      z-index: 1000;
-      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
-      transition: all 0.3s ease;
-      opacity: 0.8;
-    `;
-    backToTopButton.onmouseenter = () => { backToTopButton.style.opacity = '1'; backToTopButton.style.transform = 'scale(1.1)'; };
-    backToTopButton.onmouseleave = () => { backToTopButton.style.opacity = '0.8'; backToTopButton.style.transform = 'scale(1)';};
-
-
-    document.body.appendChild(backToTopButton);
-
-    backToTopButton.onclick = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTopButton.style.display = 'block';
-      } else {
-        backToTopButton.style.display = 'none';
-      }
-    });
-
-    // Add hover effects to cards
-    const cards = document.querySelectorAll('.info-card, .tool-card, .security-level, .step');
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', function() {
-        // Збільшуємо ефект, робимо його більш виразним
-        this.style.transform = 'translateY(-8px) scale(1.03)';
-        this.style.boxShadow = this.style.boxShadow.replace(/rgba\([\d, .]+\)/g, color => color.replace(/([\d.]+)\)/, (match, p1) => `${parseFloat(p1) + 0.1})` )); // Трохи посилюємо тінь
-      });
-      
-      card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-        // Повертаємо тінь до початкового стану (якщо потрібно, або можна залишити посилену)
-        // Для простоти, можна просто встановити початкову тінь, якщо вона відома, або залишити як є.
-      });
-    });
-
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add loading animation
-      document.body.style.opacity = '0';
-      setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-      }, 100);
-    });
-  </script>
+  
+  <script src="js/script.js"></script>
+  <script src="js/wifi-security.js"></script>
 </body>
 </html>
