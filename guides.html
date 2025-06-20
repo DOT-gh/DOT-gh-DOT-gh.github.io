@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Посібники — CyberSecure</title>
+  <meta name="description" content="Практичні посібники з кібербезпеки: створення паролів, налаштування приватності, захист від шахрайства" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #4f46e5;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      margin-right: 10px;
+      font-size: 1.8rem;
+    }
+
+    nav a {
+      color: #333;
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #4f46e5;
+    }
+
+    .main-content {
+      padding: 3rem 0;
+    }
+
+    .page-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: white;
+    }
+
+    .page-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .page-hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .guides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .guide-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .guide-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .guide-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .guide-card h3 {
+      color: #4f46e5;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .guide-card p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .guide-difficulty {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .difficulty-beginner {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .difficulty-intermediate {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .difficulty-advanced {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .guide-steps {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .guide-steps li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .guide-steps li:last-child {
+      border-bottom: none;
+    }
+
+    .guide-steps li::before {
+      content: counter(step-counter);
+      counter-increment: step-counter;
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      background: #4f46e5;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .guide-steps {
+      counter-reset: step-counter;
+    }
+
+    .guide-time {
+      background: #f3f4f6;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .guide-expanded {
+      display: none;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid #e5e7eb;
+    }
+
+    .guide-expanded.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step-detail {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #4f46e5;
+    }
+
+    .step-detail h4 {
+      color: #4f46e5;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-detail .warning {
+      background: #fef2f2;
+      border-left-color: #ef4444;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+
+    .step-detail .warning::before {
+      content: "⚠️ ";
+    }
+
+    .step-detail .tip {
+      background: #f0fdf4;
+      border-left-color: #22c55e;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+
+    .step-detail .tip::before {
+      content: "💡 ";
+    }
+
+    .toggle-btn {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem 0;
+      margin-top: 3rem;
+      text-align: center;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .page-hero h1 {
+        font-size: 2rem;
+      }
+
+      .guides-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav a {
+        margin-left: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="#" class="logo">
+          <div class="logo-img">🔒</div>
+          <span>CyberSecure</span>
+        </a>
+        <nav>
+          <a href="#">Головна</a>
+          <a href="#">Про нас</a>
+          <a href="#">Ресурси</a>
+          <a href="#">Допомога</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="page-hero">
+        <h1>Практичні посібники</h1>
+        <p>Покрокові інструкції для захисту ваших даних</p>
+      </div>
+
+      <div class="guides-grid">
+        <!-- Посібник 1: Створення надійного паролю -->
+        <div class="guide-card" onclick="toggleGuide('guide1')">
+          <div class="guide-icon">🔐</div>
+          <h3>Створення надійного паролю</h3>
+          <div class="guide-difficulty difficulty-beginner">Для початківців</div>
+          <div class="guide-time">⏱️ Час: 10-15 хвилин</div>
+          <p>Навчіться створювати паролі, які неможливо зламати</p>
+          
+          <ol class="guide-steps">
+            <li>Використовуйте мінімум 12 символів</li>
+            <li>Комбінуйте різні типи символів</li>
+            <li>Уникайте особистої інформації</li>
+            <li>Використовуйте унікальні паролі</li>
+            <li>Увімкніть 2FA</li>
+          </ol>
+
+          <button class="toggle-btn">Показати детальну інструкцію</button>
+
+          <div class="guide-expanded" id="guide1">
+            <div class="step-detail">
+              <h4>Крок 1: Довжина паролю</h4>
+              <p>Використовуйте мінімум 12 символів, а краще 16 або більше. Кожен додатковий символ експоненційно збільшує складність злому.</p>
+              <div class="tip">
+                <strong>Порада:</strong> Фраза з 4-5 слів часто краща за короткий складний пароль.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 2: Різноманітність символів</h4>
+              <p>Включіть великі та малі літери, цифри та спеціальні символи (!@#$%^&*).</p>
+              <div class="warning">
+                <strong>Увага:</strong> Не замінюйте просто "а" на "@" - це передбачувано.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 3: Уникайте особистої інформації</h4>
+              <p>Не використовуйте імена, дати народження, адреси чи інші особисті дані.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 4: Унікальність</h4>
+              <p>Кожен аккаунт повинен мати унікальний пароль. Використовуйте менеджер паролів.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 5: Двофакторна автентифікація</h4>
+              <p>Увімкніть 2FA скрізь, де це можливо. Використовуйте додаток-автентифікатор замість SMS.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Посібник 2: Налаштування приватності Facebook -->
+        <div class="guide-card" onclick="toggleGuide('guide2')">
+          <div class="guide-icon">📱</div>
+          <h3>Налаштування приватності Facebook</h3>
+          <div class="guide-difficulty difficulty-beginner">Для початківців</div>
+          <div class="guide-time">⏱️ Час: 20-30 хвилин</div>
+          <p>Захистіть свій профіль від небажаних переглядів</p>
+          
+          <ol class="guide-steps">
+            <li>Відкрийте налаштування приватності</li>
+            <li>Обмежте видимість профілю</li>
+            <li>Налаштуйте хто може вас знайти</li>
+            <li>Керуйте тегами та публікаціями</li>
+            <li>Перевірте активні сесії</li>
+          </ol>
+
+          <button class="toggle-btn">Показати детальну інструкцію</button>
+
+          <div class="guide-expanded" id="guide2">
+            <div class="step-detail">
+              <h4>Крок 1: Відкрийте налаштування</h4>
+              <p>Натисніть на стрілку в правому верхньому куті → Налаштування та приватність → Налаштування приватності</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 2: Хто може бачити ваші публікації</h4>
+              <p>Встановіть "Друзі" замість "Всі" для майбутніх публікацій. Перевірте старі публікації.</p>
+              <div class="warning">
+                <strong>Увага:</strong> Публічні публікації можуть бачити всі користувачі інтернету.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 3: Пошук та контакти</h4>
+              <p>Обмежте можливість знаходити вас за email або номером телефону.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 4: Теги та публікації інших</h4>
+              <p>Увімкніть перевірку публікацій, де вас позначають, перш ніж вони з'являться у вашому профілі.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 5: Безпека входу</h4>
+              <p>Перевірте активні сесії та завершіть підозрілі. Увімкніть сповіщення про нові входи.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Посібник 3: Розпізнавання фішингу -->
+        <div class="guide-card" onclick="toggleGuide('guide3')">
+          <div class="guide-icon">🎣</div>
+          <h3>Розпізнавання фішингових атак</h3>
+          <div class="guide-difficulty difficulty-intermediate">Середній рівень</div>
+          <div class="guide-time">⏱️ Час: 15-20 хвилин</div>
+          <p>Навчіться розпізнавати та уникати шахрайських листів</p>
+          
+          <ol class="guide-steps">
+            <li>Перевіряйте адресу відправника</li>
+            <li>Аналізуйте зміст повідомлення</li>
+            <li>Перевіряйте посилання</li>
+            <li>Шукайте граматичні помилки</li>
+            <li>Не діяйте поспішно</li>
+          </ol>
+
+          <button class="toggle-btn">Показати детальну інструкцію</button>
+
+          <div class="guide-expanded" id="guide3">
+            <div class="step-detail">
+              <h4>Крок 1: Адреса відправника</h4>
+              <p>Перевірте, чи відправник дійсно той, за кого себе видає. Зверніть увагу на домен email.</p>
+              <div class="warning">
+                <strong>Приклад підозрілого:</strong> support@arnazon.com замість amazon.com
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 2: Аналіз змісту</h4>
+              <p>Фішингові листи часто створюють штучне відчуття терміновості: "Ваш аккаунт буде заблокований через 24 години!"</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 3: Перевірка посилань</h4>
+              <p>Наведіть курсор на посилання (не натискайте!), щоб побачити справжню адресу. Або скопіюйте та вставте в блокнот.</p>
+              <div class="tip">
+                <strong>Порада:</strong> Краще ввести адресу сайту вручну в новій вкладці.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 4: Мовні помилки</h4>
+              <p>Шахраї часто роблять граматичні помилки або використовують машинний переклад.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 5: Не поспішайте</h4>
+              <p>Навіть якщо лист виглядає терміново, знайдіть час для перевірки. Зверніться до компанії через офіційні канали.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Посібник 4: Безпека домашнього Wi-Fi -->
+        <div class="guide-card" onclick="toggleGuide('guide4')">
+          <div class="guide-icon">📶</div>
+          <h3>Захист домашнього Wi-Fi</h3>
+          <div class="guide-difficulty difficulty-intermediate">Середній рівень</div>
+          <div class="guide-time">⏱️ Час: 30-45 хвилин</div>
+          <p>Налаштуйте безпечну домашню мережу</p>
+          
+          <ol class="guide-steps">
+            <li>Змініть стандартний пароль роутера</li>
+            <li>Оновіть прошивку</li>
+            <li>Налаштуйте WPA3 шифрування</li>
+            <li>Приховайте назву мережі</li>
+            <li>Налаштуйте гостьову мережу</li>
+          </ol>
+
+          <button class="toggle-btn">Показати детальну інструкцію</button>
+
+          <div class="guide-expanded" id="guide4">
+            <div class="step-detail">
+              <h4>Крок 1: Зміна паролю адміністратора</h4>
+              <p>Зайдіть в налаштування роутера (зазвичай 192.168.1.1) та змініть стандартний пароль admin/admin.</p>
+              <div class="warning">
+                <strong>Важливо:</strong> Запишіть новий пароль у безпечному місці.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 2: Оновлення прошивки</h4>
+              <p>Регулярно оновлюйте прошивку роутера для отримання останніх патчів безпеки.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 3: WPA3 шифрування</h4>
+              <p>Використовуйте WPA3, а якщо недоступно - WPA2. Ніколи не використовуйте WEP або відкриту мережу.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 4: Приховування SSID</h4>
+              <p>Приховайте назву вашої мережі, щоб вона не відображалася у списку доступних.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 5: Гостьова мережа</h4>
+              <p>Створіть окрему мережу для гостей, щоб вони не мали доступу до ваших основних пристроїв.</p>
+              <div class="tip">
+                <strong>Порада:</strong> Обмежте швидкість гостьової мережі.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Посібник 5: Резервне копіювання даних -->
+        <div class="guide-card" onclick="toggleGuide('guide5')">
+          <div class="guide-icon">💾</div>
+          <h3>Резервне копіювання даних</h3>
+          <div class="guide-difficulty difficulty-advanced">Просунутий рівень</div>
+          <div class="guide-time">⏱️ Час: 1-2 години</div>
+          <p>Створіть надійну систему бекапів за правилом 3-2-1</p>
+          
+          <ol class="guide-steps">
+            <li>Визначте критичні дані</li>
+            <li>Виберіть методи бекапу</li>
+            <li>Налаштуйте автоматичне копіювання</li>
+            <li>Зашифруйте бекапи</li>
+            <li>Регулярно тестуйте відновлення</li>
+          </ol>
+
+          <button class="toggle-btn">Показати детальну інструкцію</button>
+
+          <div class="guide-expanded" id="guide5">
+            <div class="step-detail">
+              <h4>Крок 1: Аудит даних</h4>
+              <p>Складіть список всіх важливих файлів: документи, фото, робочі файли, налаштування програм.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 2: Правило 3-2-1</h4>
+              <p>3 копії даних, 2 різних носії, 1 копія віддалено (хмара або інше місце).</p>
+              <div class="tip">
+                <strong>Приклад:</strong> Оригінал на комп'ютері + копія на зовнішньому диску + копія в хмарі.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 3: Автоматизація</h4>
+              <p>Налаштуйте автоматичне копіювання щоденно або щотижня за допомогою вбудованих інструментів ОС.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 4: Шифрування</h4>
+              <p>Зашифруйте бекапи, особливо ті, що зберігаються в хмарі або на зовнішніх носіях.</p>
+              <div class="warning">
+                <strong>Увага:</strong> Зберігайте ключі шифрування окремо від даних.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 5: Тестування</h4>
+              <p>Щомісяця тестуйте відновлення кількох файлів, щоб переконатися, що бекапи працюють.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Посібник 6: Безпека при онлайн-покупках -->
+        <div class="guide-card" onclick="toggleGuide('guide6')">
+          <div class="guide-icon">🛒</div>
+          <h3>Безпечні онлайн покупки</h3>
+          <div class="guide-difficulty difficulty-beginner">Для початківців</div>
+          <div class="guide-time">⏱️ Час: 15-20 хвилин</div>
+          <p>Захистіть свої фінанси при покупках в інтернеті</p>
+          
+          <ol class="guide-steps">
+            <li>Перевіряйте репутацію магазину</li>
+            <li>Шукайте HTTPS та замок</li>
+            <li>Використовуйте безпечні методи оплати</li>
+            <li>Читайте відгуки покупців</li>
+            <li>Зберігайте чеки та підтвердження</li>
+          </ol>
+
+          <button class="toggle-btn">Показати детальну інструкцію</button>
+
+          <div class="guide-expanded" id="guide6">
+            <div class="step-detail">
+              <h4>Крок 1: Репутація магазину</h4>
+              <p>Перевірте, як довго існує магазин, чи є контактна інформація, адреса компанії.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 2: Безпека з'єднання</h4>
+              <p>Переконайтеся, що URL починається з https:// і є зелений замок поруч з адресою.</p>
+              <div class="warning">
+                <strong>Ніколи</strong> не вводьте дані карти на сайтах без HTTPS.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 3: Методи оплати</h4>
+              <p>Використовуйте PayPal, Apple Pay або віртуальні карти замість основної банківської карти.</p>
+              <div class="tip">
+                <strong>Порада:</strong> Багато банків пропонують віртуальні карти для онлайн-покупок.
+              </div>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 4: Відгуки покупців</h4>
+              <p>Читайте відгуки на товар і магазин на різних платформах, не тільки на сайті продавця.</p>
+            </div>
+
+            <div class="step-detail">
+              <h4>Крок 5: Документування</h4>
+              <p>Зберігайте скріншоти, email-підтвердження та чеки для вирішення можливих спорів.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 CyberSecure. Всі права захищені.</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleGuide(guideId) {
+      const guide = document.getElementById(guideId);
+      const button = guide.previousElementSibling;
+      
+      if (guide.classList.contains('show')) {
+        guide.classList.remove('show');
+        button.textContent = 'Показати детальну інструкцію';
+      } else {
+        // Закрываем все другие открытые гиды
+        document.querySelectorAll('.guide-expanded.show').forEach(openGuide => {
+          if (openGuide.id !== guideId) {
+            openGuide.classList.remove('show');
+            openGuide.previousElementSibling.textContent = 'Показати детальну інструкцію';
+          }
+        });
+        
+        guide.classList.add('show');
+        button.textContent = 'Приховати інструкцію';
+        
+        // Плавная прокрутка к развернутому гиду
+        setTimeout(() => {
+          guide.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    }
+
+    // Добавляем обработчики для кнопок
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('.toggle-btn');
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

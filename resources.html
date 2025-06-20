@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ресурси — CyberSecure</title>
+  <meta name="description" content="Корисні ресурси з кібербезпеки, веб-розробки, GitHub репозиторії та навчальні матеріали" />
+  <meta name="keywords" content="ресурси кібербезпека, GitHub репозиторії, HTML CSS, навчальні матеріали" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    header > div {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .logo-img {
+      font-size: 2rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover, nav a.active {
+      color: #667eea;
+    }
+
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #667eea;
+      border-radius: 2px;
+    }
+
+    main {
+      margin-top: 100px;
+      padding: 2rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: white;
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .resources-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .resources-section h2 {
+      color: #667eea;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .resources-section h3 {
+      color: #764ba2;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .resource-card {
+      background: linear-gradient(145deg, #f8f9ff, #e8ecff);
+      border-radius: 15px;
+      padding: 1.5rem;
+      border: 1px solid rgba(102, 126, 234, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resource-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .resource-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+    }
+
+    .resource-card h4 {
+      color: #667eea;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .resource-card p {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .resource-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resource-link:hover {
+      background: #667eea;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .resource-list {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+
+    .resource-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .resource-list li::before {
+      content: '🔗';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .resource-list a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .resource-list a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+
+    .github-repos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1rem;
+    }
+
+    .repo-card {
+      background: linear-gradient(145deg, #24292e, #1a1e22);
+      color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      border-left: 4px solid #667eea;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: block;
+    }
+
+    .repo-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .repo-card h4 {
+      color: #58a6ff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .repo-card p {
+      color: #c9d1d9;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .repo-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    .repo-stats span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .created-with {
+      background: linear-gradient(145deg, #fff3e0, #ffe0b2);
+      border-left: 4px solid #ff9800;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .tool-card {
+      background: linear-gradient(145deg, #e8f5e8, #c8e6c9);
+      border-radius: 12px;
+      padding: 1.2rem;
+      border-left: 4px solid #4caf50;
+      transition: all 0.3s ease;
+    }
+
+    .tool-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+    }
+
+    .tool-card h4 {
+      color: #2e7d32;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 2rem;
+      }
+      
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .resource-grid,
+      .github-repos,
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      main {
+        padding: 1rem;
+      }
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    .scroll-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-to-top:hover {
+      background: #764ba2;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="logo">
+        <div class="logo-img">🔒</div>
+        <span>CyberSecure</span>
+      </div>
+      <nav>
+        <a href="index.html">Головна</a>
+        <a href="about.html">Про нас</a>
+        <a href="resources.html" class="active">Ресурси</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>🔗 Корисні ресурси</h1>
+      <p>Збірка найкращих матеріалів з кібербезпеки, веб-розробки та навчальних ресурсів</p>
+    </div>
+
+    <section class="resources-section">
+      <h2>🔐 Кібербезпека та захист даних</h2>
+      
+      <div class="resource-grid">
+        <div class="resource-card">
+          <h4>🎯 Офіційні керівництва</h4>
+          <p>Офіційні документи та рекомендації від провідних організацій з кібербезпеки</p>
+          <a href="https://www.nist.gov/cyberframework" class="resource-link">NIST Cybersecurity Framework</a>
+          <a href="https://owasp.org/" class="resource-link">OWASP Foundation</a>
+          <a href="https://www.sans.org/" class="resource-link">SANS Institute</a>
+        </div>
+
+        <div class="resource-card">
+          <h4>📚 Навчальні платформи</h4>
+          <p>Безкоштовні та платні курси з кібербезпеки для початківців та професіоналів</p>
+          <a href="https://www.cybrary.it/" class="resource-link">Cybrary</a>
+          <a href="https://www.coursera.org/browse/information-technology/security" class="resource-link">Coursera Security</a>
+          <a href="https://www.edx.org/learn/cybersecurity" class="resource-link">edX Cybersecurity</a>
+        </div>
+
+        <div class="resource-card">
+          <h4>🛡️ Інструменти безпеки</h4>
+          <p>Практичні інструменти для перевірки та підвищення рівня безпеки</p>
+          <a href="https://haveibeenpwned.com/" class="resource-link">Have I Been Pwned</a>
+          <a href="https://www.virustotal.com/" class="resource-link">VirusTotal</a>
+          <a href="https://bitwarden.com/" class="resource-link">Bitwarden</a>
+        </div>
+      </div>
+
+      <h3>📖 Спеціалізовані ресурси</h3>
+      <ul class="resource-list">
+        <li><a href="https://krebsonsecurity.com/" target="_blank">Krebs on Security</a> - Новини та аналітика з кібербезпеки</li>
+        <li><a href="https://www.schneier.com/" target="_blank">Schneier on Security</a> - Блог експерта з криптографії</li>
+        <li><a href="https://www.darkreading.com/" target="_blank">Dark Reading</a> - Інформаційна безпека для бізнесу</li>
+        <li><a href="https://threatpost.com/" target="_blank">Threatpost</a> - Новини про кіберзагрози</li>
+        <li><a href="https://www.reddit.com/r/cybersecurity/" target="_blank">r/cybersecurity</a> - Спільнота на Reddit</li>
+      </ul>
+    </section>
+
+    <section class="resources-section">
+      <h2>💻 Веб-розробка (HTML, CSS, JavaScript)</h2>
+      
+      <div class="resource-grid">
+        <div class="resource-card">
+          <h4>📝 Документація та довідники</h4>
+          <p>Повна документація та керівництва по веб-технологіях</p>
+          <a href="https://developer.mozilla.org/" class="resource-link">MDN Web Docs</a>
+          <a href="https://www.w3schools.com/" class="resource-link">W3Schools</a>
+          <a href="https://css-tricks.com/" class="resource-link">CSS-Tricks</a>
+        </div>
+
+        <div class="resource-card">
+          <h4>🎨 CSS фреймворки та інструменти</h4>
+          <p>Готові рішення для стилізації та адаптивного дизайну</p>
+          <a href="https://getbootstrap.com/" class="resource-link">Bootstrap</a>
+          <a href="https://tailwindcss.com/" class="resource-link">Tailwind CSS</a>
+          <a href="https://bulma.io/" class="resource-link">Bulma</a>
+        </div>
+
+        <div class="resource-card">
+          <h4>🚀 Практика та виклики</h4>
+          <p>Інтерактивні завдання та проекти для розвитку навичок</p>
+          <a href="https://codepen.io/" class="resource-link">CodePen</a>
+          <a href="https://www.freecodecamp.org/" class="resource-link">freeCodeCamp</a>
+          <a href="https://frontend-challenges.netlify.app/" class="resource-link">Frontend Challenges</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="resources-section">
+      <h2>🐙 GitHub репозиторії</h2>
+      
+      <h3>🔒 Кібербезпека</h3>
+      <div class="github-repos">
+        <a href="https://github.com/fabacab/awesome-cybersecurity-blueteam" class="repo-card" target="_blank">
+          <h4>📋 awesome-cybersecurity</h4>
+          <p>Кураторський список ресурсів, інструментів та матеріалів з кібербезпеки</p>
+          <div class="repo-stats">
+            <span>⭐ 15.2k</span>
+            <span>🍴 2.8k</span>
+            <span>📊 Lists</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/danielmiessler/SecLists" class="repo-card" target="_blank">
+          <h4>🛡️ SecLists</h4>
+          <p>Колекція списків для тестування безпеки, включаючи паролі, користувачів, URL тощо</p>
+          <div class="repo-stats">
+            <span>⭐ 45.1k</span>
+            <span>🍴 23.2k</span>
+            <span>📊 Security Lists</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/jivoi/awesome-osint" class="repo-card" target="_blank">
+          <h4>🔍 OSINT-Tools</h4>
+          <p>Інструменти для збору відкритої розвідувальної інформації (OSINT)</p>
+          <div class="repo-stats">
+            <span>⭐ 8.7k</span>
+            <span>🍴 1.9k</span>
+            <span>📊 Python</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/swisskyrepo/PayloadsAllTheThings" class="repo-card" target="_blank">
+          <h4>⚡ PayloadsAllTheThings</h4>
+          <p>Список корисних навантажень та обходів для веб-пентестування</p>
+          <div class="repo-stats">
+            <span>⭐ 48.9k</span>
+            <span>🍴 13.4k</span>
+            <span>📊 Payloads</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/rshipp/awesome-malware-analysis" class="repo-card" target="_blank">
+          <h4>🔬 Awesome Malware Analysis</h4>
+          <p>Інструменти та ресурси для аналізу зловмисного програмного забезпечення</p>
+          <div class="repo-stats">
+            <span>⭐ 9.8k</span>
+            <span>🍴 1.8k</span>
+            <span>📊 Analysis</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/enaqx/awesome-pentest" class="repo-card" target="_blank">
+          <h4>🎯 Awesome Pentest</h4>
+          <p>Колекція інструментів, ресурсів та книг для пентестингу</p>
+          <div class="repo-stats">
+            <span>⭐ 19.4k</span>
+            <span>🍴 4.2k</span>
+            <span>📊 Penetration Testing</span>
+          </div>
+        </a>
+      </div>
+
+      <h3>🌐 Веб-розробка</h3>
+      <div class="github-repos">
+        <a href="https://github.com/awesome-css-group/awesome-css" class="repo-card" target="_blank">
+          <h4>📚 awesome-css</h4>
+          <p>Кураторський список CSS фреймворків, бібліотек та інструментів</p>
+          <div class="repo-stats">
+            <span>⭐ 4.2k</span>
+            <span>🍴 342</span>
+            <span>📊 CSS</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/chokcoco/CSS-Inspiration" class="repo-card" target="_blank">
+          <h4>🎨 CSS-Inspiration</h4>
+          <p>Колекція CSS анімацій, ефектів та дизайнерських рішень</p>
+          <div class="repo-stats">
+            <span>⭐ 2.8k</span>
+            <span>🍴 298</span>
+            <span>📊 CSS</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/30-seconds/30-seconds-of-code" class="repo-card" target="_blank">
+          <h4>🚀 30-seconds-of-code</h4>
+          <p>Короткі корисні JavaScript сніпети, які можна зрозуміти за 30 секунд</p>
+          <div class="repo-stats">
+            <span>⭐ 115k</span>
+            <span>🍴 11.8k</span>
+            <span>📊 JavaScript</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/bradtraversy/design-resources-for-developers" class="repo-card" target="_blank">
+          <h4>📱 Design Resources</h4>
+          <p>Кураторський список ресурсів дизайну та UI/UX для розробників</p>
+          <div class="repo-stats">
+            <span>⭐ 53.2k</span>
+            <span>🍴 12.1k</span>
+            <span>📊 Resources</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/sindresorhus/awesome" class="repo-card" target="_blank">
+          <h4>⭐ Awesome Lists</h4>
+          <p>Кураторський список списків про все - від веб-розробки до машинного навчання</p>
+          <div class="repo-stats">
+            <span>⭐ 223k</span>
+            <span>🍴 24.1k</span>
+            <span>📊 Lists</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/microsoft/Web-Dev-For-Beginners" class="repo-card" target="_blank">
+          <h4>🎓 Web Dev for Beginners</h4>
+          <p>24-урочний курс веб-розробки для початківців від Microsoft</p>
+          <div class="repo-stats">
+            <span>⭐ 78.2k</span>
+            <span>🍴 11.9k</span>
+            <span>📊 JavaScript</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/getify/You-Dont-Know-JS" class="repo-card" target="_blank">
+          <h4>📖 You Don't Know JS</h4>
+          <p>Серія книг для глибокого розуміння JavaScript</p>
+          <div class="repo-stats">
+            <span>⭐ 168k</span>
+            <span>🍴 32.4k</span>
+            <span>📊 JavaScript</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="resources-section created-with">
+      <h2>🛠️ Інструменти, використані для створення цього сайту</h2>
+      
+      <div class="tools-grid">
+        <div class="tool-card">
+          <h4>🎨 Google Fonts</h4>
+          <p>Безкоштовні веб-шрифти для типографіки сайту</p>
+        </div>
+
+        <div class="tool-card">
+          <h4>💻 HTML5 & CSS3</h4>
+          <p>Сучасні веб-стандарти для структури та стилізації</p>
+        </div>
+
+        <div class="tool-card">
+          <h4>⚡ Vanilla JavaScript</h4>
+          <p>Чистий JavaScript для інтерактивних функцій</p>
+        </div>
+
+        <div class="tool-card">
+          <h4>📱 Responsive Design</h4>
+          <p>Адаптивний дизайн для всіх пристроїв</p>
+        </div>
+
+        <div class="tool-card">
+          <h4>🎯 CSS Grid & Flexbox</h4>
+          <p>Сучасні технології компонування CSS</p>
+        </div>
+
+        <div class="tool-card">
+          <h4>🌈 CSS Gradients</h4>
+          <p>Градієнти для сучасного візуального дизайну</p>
+        </div>
+      </div>
+
+      <h3>📚 Додаткові ресурси, що надихнули проект</h3>
+      <ul class="resource-list">
+        <li><a href="https://cssgradient.io/" target="_blank">CSS Gradient</a> - Генератор CSS градієнтів</li>
+        <li><a href="https://fonts.google.com/" target="_blank">Google Fonts</a> - Бібліотека веб-шрифтів</li>
+        <li><a href="https://caniuse.com/" target="_blank">Can I Use</a> - Сумісність веб-технологій</li>
+        <li><a href="https://validator.w3.org/" target="_blank">W3C Validator</a> - Перевірка валідності HTML/CSS</li>
+        <li><a href="https://web.dev/" target="_blank">Web.dev</a> - Керівництва від Google з веб-розробки</li>
+      </ul>
+    </section>
+
+    <section class="resources-section">
+      <h2>📖 Додаткові навчальні матеріали</h2>
+      
+      <div class="resource-grid">
+        <div class="resource-card">
+          <h4>🎓 Безкоштовні курси</h4>
+          <p>Структуровані навчальні програми для самостійного вивчення</p>
+          <a href="https://www.khanacademy.org/computing/computer-programming" class="resource-link">Khan Academy</a>
+          <a href="https://www.codecademy.com/" class="resource-link">Codecademy</a>
+          <a href="https://www.udemy.com/topic/cyber-security/" class="resource-link">Udemy</a>
+        </div>
+
+        <div class="resource-card">
+          <h4>📺 YouTube канали</h4>
+          <p>Відеоуроки та лекції від експертів галузі</p>
+          <a href="https://www.youtube.com/@professormesser" class="resource-link">Professor Messer</a>
+          <a href="https://www.youtube.com/@NetworkChuck" class="resource-link">NetworkChuck</a>
+          <a href="https://www.youtube.com/@TraversyMedia" class="resource-link">Traversy Media</a>
+        </div>
+
+        <div class="resource-card">
+          <h4>📖 Електронні книги</h4>
+          <p>Безкоштовні посібники та керівництва у форматі PDF</p>
+          <a href="https://www.cybersecurityguide.org/" class="resource-link">Cybersecurity Guide</a>
+          <a href="https://eloquentjavascript.net/" class="resource-link">Eloquent JavaScript</a>
+          <a href="https://github.com/getify/You-Dont-Know-JS" class="resource-link">You Don't Know JS</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="scroll-to-top" onclick="scrollToTop()">↑</button>
+
+  <footer>
+    <p>&copy; 2025 CyberSecure. Всі права захищені. Створено з ❤️ для безпечного інтернету. Від DOT_GH</p>
+  </footer>
+
+  <script>
+    // Показ/приховування кнопки прокручування вгору
+    window.addEventListener('scroll', function() {
+      const scrollBtn = document.querySelector('.scroll-to-top');
+      if (window.pageYOffset > 300) {
+        scrollBtn.classList.add('visible');
+      } else {
+        scrollBtn.classList.remove('visible');
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Плавна анімація появи карток при прокручуванні
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Застосування анімації до всіх карток
+    document.addEventListener('DOMContentLoaded', function() {
+      const cards = document.querySelectorAll('.resource-card, .repo-card, .tool-card');
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+      });
+    });
+
+    // Відкриття посилань у новій вкладці для зовнішніх ресурсів
+    document.querySelectorAll('a[href^="http"]').forEach(link => {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    });
+  </script>
+</body>
+</html>

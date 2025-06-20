@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Фішинг — Розпізнавання та захист | CyberSecure</title>
+  <meta name="description" content="Навчіться розпізнавати фішингові атаки, захищатися від шахрайських листів та уникати онлайн-шахрайства" />
+  <meta name="keywords" content="фішинг, шахрайські листи, кіберзлочинність, безпека електронної пошти" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
+      /* Змінено фон тіла на основний темний фон сайту */
+      background: linear-gradient(135deg, #0a0f2b 0%, #1b1436 50%, #2a1a5a 100%);
+      min-height: 100vh;
+      /* Змінено основний колір тексту на світлий */
+      color: #eee;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      /* Змінено фон хедера на темний, напівпрозорий */
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px); /* Для Safari */
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5); /* Тінь для темного хедера */
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 65, 108, 0.2); /* Межа як на головній */
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      /* Змінено колір лого на акцентний рожевий (як на головній) або можна залишити синій, якщо бажаєте */
+      color: #ff6b68; /* Або залиште #0ea5e9 для синього акценту цієї сторінки */
+    }
+
+    .logo-img {
+      font-size: 2rem;
+      /* Можна додати градієнтний фон для іконки лого, як на головній */
+      /* background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white; */
+    }
+
+    nav { /* Навігація в хедері, зараз тільки кнопка "Назад" */
+      display: flex;
+      gap: 2rem;
+    }
+
+    /* Стилі для кнопки "Назад" залишаються синіми, або можна змінити на рожево-помаранчевий градієнт */
+    .back-btn {
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6); /* Поточний синій */
+      /* background: linear-gradient(135deg, #ff416c, #ff4b2b); // Альтернативний рожевий */
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); /* Тінь для синьої кнопки */
+      /* box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4); // Тінь для рожевої кнопки */
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+      /* box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5); // Тінь для рожевої кнопки */
+    }
+
+    .hero-section { /* Секція з заголовком "Фішинг" */
+      text-align: center;
+      padding: 4rem 0;
+      color: #eee; /* Забезпечуємо світлий текст */
+    }
+
+    .hero-section h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6); /* Синій градієнт для заголовка */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: #0ea5e9; /* Резервний колір для h1 */
+    }
+
+    .hero-section p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0.9;
+      color: #ddd; /* Світлий текст для параграфа */
+    }
+
+    .hero-icon {
+      font-size: 5rem;
+      margin-bottom: 2rem;
+      display: block;
+      /* Можна додати колір іконі, якщо вона текстова */
+       color: #0ea5e9;
+    }
+
+    .content-section { /* Основні контентні блоки */
+      /* Змінено фон на темний, напівпрозорий, як на головній */
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 3rem;
+      margin: 2rem 0;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); /* Тінь та внутрішня межа */
+      border: 1px solid rgba(255, 65, 108, 0.2); /* Межа як на головній */
+      color: #ddd; /* Світлий текст всередині */
+    }
+
+    .content-section h2 { /* Заголовки секцій */
+      color: #0ea5e9; /* Синій акцент */
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .content-section h3 { /* Підзаголовки */
+      color: #3b82f6; /* Світліший синій акцент */
+      font-size: 1.8rem;
+      margin: 2rem 0 1rem 0;
+    }
+
+    .warning-box { /* Червоний блок статистики */
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      margin: 2rem 0;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .warning-box h3 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .info-card { /* Картки з інформацією */
+      /* Змінено фон на темний, напівпрозорий */
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border-left: 5px solid #0ea5e9; /* Синя межа зліва */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+      color: #ccc; /* Світлий текст всередині */
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(14, 165, 233, 0.2); /* Тінь при наведенні */
+    }
+
+    .info-card h4 {
+      color: #0ea5e9; /* Синій акцент для заголовка картки */
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .info-card p {
+        color: #bbb; /* Трохи темніший світлий текст для параграфів в картках */
+    }
+
+    .phishing-example { /* Блок з прикладом фішингового листа */
+      background: rgba(239, 68, 68, 0.1); /* Напівпрозорий червонуватий фон */
+      border: 2px dashed #dc3545;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      position: relative;
+      color: #f0f0f0; /* Світлий текст */
+    }
+
+    .phishing-example::before {
+      content: "⚠️ ПРИКЛАД ФІШИНГУ";
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: #dc3545;
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .legitimate-example { /* Блок з прикладом легітимного листа */
+      background: rgba(34, 197, 94, 0.1); /* Напівпрозорий зеленуватий фон */
+      border: 2px dashed #28a745;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      position: relative;
+      color: #f0f0f0; /* Світлий текст */
+    }
+
+    .legitimate-example::before {
+      content: "✅ ЛЕГІТИМНИЙ ЛИСТ";
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: #28a745;
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .checklist { /* Блок "Що робити..." */
+      /* Змінено фон на напівпрозорий зелений */
+      background: rgba(34, 197, 94, 0.15);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 5px 15px rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+
+    .checklist h3 {
+      color: #16a34a; /* Зелений заголовок */
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .checklist ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d4f5dd; /* Світло-зелений текст */
+      font-weight: 500;
+    }
+
+    .checklist li:before {
+      content: "✅";
+      font-size: 1.2rem;
+       color: #16a34a; /* Зелена галочка */
+    }
+
+    .interactive-test { /* Блок з тестом (синій градієнт) */
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+      color: white;
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      margin: 3rem 0;
+      box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+    }
+
+    .interactive-test h3 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    .interactive-test p {
+      color: #e0f2fe;
+    }
+
+    .test-btn { /* Кнопка "Почати тест" */
+      background: white;
+      color: #0ea5e9; /* Синій текст на білій кнопці */
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .test-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .quiz-container { /* Контейнер для питань тесту */
+      display: none;
+      /* Змінено фон на темний, напівпрозорий */
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      color: #eee; /* Світлий текст */
+      border-radius: 15px;
+      padding: 2rem;
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    .quiz-question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #a7c5ff; /* Світло-синій для питання */
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .quiz-option { /* Варіанти відповідей */
+      /* Змінено фон на темний, ледь помітний */
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(255,255,255,0.1); /* Ледь помітна межа */
+      color: #ccc; /* Світло-сірий текст */
+      border-radius: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quiz-option:hover {
+      border-color: #0ea5e9; /* Синя межа при наведенні */
+      background: rgba(14, 165, 233, 0.1); /* Ледь синюватий фон при наведенні */
+      color: #e0f2fe; /* Світліший текст при наведенні */
+    }
+
+    .quiz-option.correct {
+      background: rgba(22, 163, 74, 0.2); /* Напівпрозорий зелений */
+      border-color: #16a34a;
+      color: #dcfce7; /* Світло-зелений текст */
+    }
+
+    .quiz-option.incorrect {
+      background: rgba(239, 68, 68, 0.2); /* Напівпрозорий червоний */
+      border-color: #ef4444;
+      color: #fef2f2; /* Дуже світлий червонуватий текст */
+    }
+
+    .quiz-result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .quiz-result.correct {
+      background: rgba(22, 163, 74, 0.3);
+      color: #dcfce7;
+    }
+
+    .quiz-result.incorrect {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fef2f2;
+    }
+
+    .tips-section { /* Блок з порадами (синій градієнт) */
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+      border-radius: 20px;
+      padding: 3rem;
+      margin: 3rem 0;
+      color: white;
+      box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+    }
+
+    .tips-section h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tip-card { /* Картки з порадами всередині синього блоку */
+      /* Змінено фон на темний, напівпрозорий, щоб контрастувати з синім фоном секції */
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #eee; /* Світлий текст */
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .tip-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .tip-card h4 {
+      color: #a7c5ff; /* Світло-синій для заголовка, щоб читалося на темному фоні картки */
+      margin-bottom: 0.5rem;
+    }
+    .tip-card p {
+        color: #ccc;
+    }
+
+    .tip-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      color: #a7c5ff; /* Світло-синій для іконки */
+    }
+
+    .footer { /* Секція футера */
+      /* Змінено фон на темний, напівпрозорий */
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 3rem;
+      margin: 3rem 0 2rem 0; /* Додав відступ знизу */
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,65,108,0.15);
+      color: #bbb; /* Світло-сірий текст */
+    }
+
+    .footer h3 {
+      color: #0ea5e9; /* Синій заголовок */
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #3b82f6; /* Світло-сині посилання */
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #0ea5e9; /* Темніший синій при наведенні */
+    }
+
+    .footer-copyright {
+      color: #888; /* Ще темніший сірий для копірайту */
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1); /* Світла межа */
+    }
+
+    /* Адаптивність */
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2.5rem;
+      }
+      
+      .content-section {
+        padding: 2rem 1.5rem; /* Трохи збільшив відступи для мобільних */
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      /* Навігація в хедері на мобільних (зараз тільки кнопка "Назад") */
+      /* Якщо буде більше елементів, можна додати стилі для випадаючого меню */
+      /*
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      */
+
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      /* Виправлення для iOS Safari для градієнтного тексту h1 */
+      .hero-section h1 {
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: unset !important;
+        color: #0ea5e9 !important; /* Залишаємо синій акцент для цього заголовка */
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-img">🎣</div> <span>CyberSecure</span>
+      </div>
+      <nav>
+        <a href="index.html" class="back-btn">← Назад на головну</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero-section">
+      <span class="hero-icon">🎣</span>
+      <h1>Фішинг</h1>
+      <p>Розпізнавання та уникнення шахрайських листів і веб-сайтів</p>
+    </section>
+
+    <section class="content-section">
+      <h2>Що таке фішинг?</h2>
+      <p>
+        <strong>Фішинг</strong> — це вид кіберзлочинності, при якому зловмисники видають себе за довірені організації 
+        (банки, соціальні мережі, державні установи) з метою крадіжки особистих даних, паролів, 
+        фінансової інформації або встановлення шкідливого програмного забезпечення.
+      </p>
+
+      <div class="warning-box">
+        <h3>⚠️ Статистика фішингу</h3>
+        <p>
+          <strong>90%</strong> всіх кібератак починаються з фішингового листа<br>
+          <strong>1 з 4000</strong> листів є фішинговими<br>
+          <strong>32%</strong> користувачів клікають на підозрілі посилання
+        </p>
+      </div>
+
+      <h3>Основні види фішингу</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>📧 Email фішинг</h4>
+          <p>Масові розсилки з підробленими листами від банків, сервісів або компаній з вимогою надати особисту інформацію.</p>
+        </div>
+        <div class="info-card">
+          <h4>📱 SMS фішинг (Smishing)</h4>
+          <p>Шахрайські SMS повідомлення з посиланнями на фальшиві сайти або з вимогою надіслати особисті дані.</p>
+        </div>
+        <div class="info-card">
+          <h4>☎️ Голосовий фішинг (Vishing)</h4>
+          <p>Телефонні дзвінки від осіб, що видають себе за представників банків або сервісів і просять надати дані.</p>
+        </div>
+        <div class="info-card">
+          <h4>🎯 Спір фішинг</h4>
+          <p>Цільові атаки на конкретних людей або організації з використанням персональної інформації.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Як розпізнати фішинговий лист</h2>
+      
+      <h3>🚩 Основні ознаки підозрілого листа:</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>📧 Адреса відправника</h4>
+          <p>Перевіряйте домен. Замість "bank.com" може бути "bank-security.com" або "bank.net"</p>
+        </div>
+        <div class="info-card">
+          <h4>⚡ Терміновість</h4>
+          <p>Фразі типу "Негайно!", "Терміново!", "Ваш рахунок буде заблокований" створюють панику</p>
+        </div>
+        <div class="info-card">
+          <h4>🔗 Підозрілі посилання</h4>
+          <p>Наведіть курсор на посилання — справжня адреса відобразиться внизу. Не клікайте одразу!</p>
+        </div>
+        <div class="info-card">
+          <h4>📎 Вкладення</h4>
+          <p>Не відкривайте .exe, .zip, .rar файли від невідомих відправників</p>
+        </div>
+      </div>
+
+      <h3>Приклади фішингових листів</h3>
+      
+      <div class="phishing-example">
+        <strong>Від:</strong> security@privetbank-ua.org<br>
+        <strong>Тема:</strong> ТЕРМІНОВО! Ваш рахунок буде заблокований!<br><br>
+        
+        Шановний клієнте!<br><br>
+        
+        Ми виявили підозрілу активність на вашому рахунку. Для збереження безпеки ваших коштів 
+        <u>натисніть тут</u> та підтвердіть ваші дані протягом 24 годин, інакше рахунок буде заблокований назавжди!<br><br>
+        
+        З повагою,<br>
+        Служба безпеки ПриватБанку
+      </div>
+
+      <div class="legitimate-example">
+        <strong>Від:</strong> no-reply@privatbank.ua<br>
+        <strong>Тема:</strong> Сповіщення про операцію по карті<br><br>
+        
+        Добрий день!<br><br>
+        
+        Інформуємо про операцію по вашій картці:<br>
+        • Дата: 29.05.2025 14:23<br>
+        • Сума: 250.00 грн<br>
+        • Місце: АТБ-МАРКЕТ<br><br>
+        
+        Якщо операція була здійснена не вами, зверніться до служби підтримки: 3700<br><br>
+        
+        ПриватБанк
+      </div>
+    </section>
+
+    <section class="interactive-test">
+      <h3>🧠 Тест: Чи зможете ви розпізнати фішинг?</h3>
+      <p>Перевірте свої навички розпізнавання фішингових листів</p>
+      <button class="test-btn" onclick="startPhishingTest()">Почати тест</button>
+      
+      <div class="quiz-container" id="quizContainer">
+        <div class="quiz-question" id="quizQuestion"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-result" id="quizResult"></div>
+        <button class="test-btn" id="nextQuestion" onclick="nextQuestion()" style="display: none;">Наступне питання</button>
+        <button class="test-btn" id="restartTest" onclick="startPhishingTest()" style="display: none;">Пройти знову</button>
+      </div>
+    </section>
+
+    <section class="checklist">
+      <h3>✅ Що робити, якщо ви отримали підозрілий лист</h3>
+      <ul>
+        <li>Не клікайте на посилання та не відкривайте вкладення</li>
+        <li>Перевірте адресу відправника на наявність помилок</li>
+        <li>Зв'яжіться з організацією напряму через офіційний сайт</li>
+        <li>Повідомте про фішинг провайдера електронної пошти</li>
+        <li>Видаліть підозрілий лист</li>
+        <li>Розкажіть про це друзям та родичам</li>
+        <li>Якщо ви вже ввели дані — негайно змініть паролі</li>
+      </ul>
+    </section>
+
+    <section class="tips-section">
+      <h3>💡 Поради для захисту від фішингу</h3>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-icon">🔍</span>
+          <h4>Перевіряйте все</h4>
+          <p>Завжди перевіряйте адреси відправників, посилання та орфографію в листах</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🌐</span>
+          <h4>Користуйтеся офіційними сайтами</h4>
+          <p>Завжди заходьте на сайти банків та сервісів напряму, а не через посилання</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🛡️</span>
+          <h4>Двофакторна автентифікація</h4>
+          <p>Увімкніть 2FA для всіх важливих акаунтів</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🔄</span>
+          <h4>Регулярно оновлюйте ПЗ</h4>
+          <p>Тримайте браузер та антивірус завжди оновленими</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">📚</span>
+          <h4>Навчайтеся</h4>
+          <p>Слідкуйте за новинами кібербезпеки та новими методами шахрайства</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">👥</span>
+          <h4>Навчіть інших</h4>
+          <p>Поділіться знаннями з родиною та друзями</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>🛡️ Додаткові інструменти захисту</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>🔒 Антифішингові фільтри</h4>
+          <p>Використовуйте браузери з вбудованими фільтрами (Chrome, Firefox, Edge) та спеціальні розширення для блокування підозрілих сайтів</p>
+        </div>
+        <div class="info-card">
+          <h4>📧 Налаштування пошти</h4>
+          <p>Увімкніть спам-фільтри, налаштуйте правила фільтрації та використовуйте різні адреси для різних цілей</p>
+        </div>
+        <div class="info-card">
+          <h4>🔐 Менеджери паролів</h4>
+          <p>Використовуйте LastPass, 1Password або Bitwarden для генерації та зберігання унікальних паролів</p>
+        </div>
+        <div class="info-card">
+          <h4>📱 Мобільна безпека</h4>
+          <p>Будьте особливо обережні з SMS та повідомленнями в месенджерах - встановлюйте додатки тільки з офіційних магазинів</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <h3>📞 Куди звертатися за допомогою</h3>
+      <p>
+        Якщо ви стали жертвою фішингу або маєте підозри щодо шахрайських дій:
+      </p>
+      
+      <div class="footer-links">
+        <a href="tel:102">🚔 Поліція: 102</a>
+        <a href="https://cyberpolice.gov.ua" target="_blank" rel="noopener noreferrer">🌐 Кіберполіція України</a>
+        <a href="https://cert.gov.ua" target="_blank" rel="noopener noreferrer">🛡️ CERT-UA</a>
+        <a href="https://bank.gov.ua" target="_blank" rel="noopener noreferrer">🏦 НБУ</a>
+      </div>
+
+      <div class="info-grid" style="margin-top: 2rem;">
+        <div class="info-card">
+          <h4>📞 Гаряча лінія НБУ</h4>
+          <p><strong>0 800 505 240</strong> - повідомлення про фінансові шахрайства</p>
+        </div>
+        <div class="info-card">
+          <h4>💳 Заблокувати картку</h4>
+          <p>ПриватБанк: <strong>3700</strong><br>
+          Ощадбанк: <strong>0 800 300 300</strong><br>
+          ПУМБ: <strong>0 800 500 000</strong></p>
+        </div>
+      </div>
+
+      <div class="footer-copyright">
+        <p>
+          © 2025 CyberSecure. Освітній проект з кібербезпеки.<br>
+          Матеріали надаються виключно в інформаційних цілях.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Ваш JavaScript код залишається без змін
+    const phishingQuestions = [
+      {
+        question: "Ви отримали лист від 'apple-security@appleinc.org' з вимогою підтвердити Apple ID. Що це?",
+        options: [
+          "Легітимний лист від Apple",
+          "Фішинговий лист - неправильний домен",
+          "Спам, але не небезпечний",
+          "Потрібно перевірити в технічній підтримці"
+        ],
+        correct: 1,
+        explanation: "Правильний домен Apple - apple.com, а не appleinc.org. Це класичний приклад фішингу з підробленим доменом."
+      },
+      {
+        question: "У листі написано: 'Ваш PayPal аккаунт буде заблокований через 2 години!'. Що робити?",
+        options: [
+          "Негайно клікнути на посилання",
+          "Проігнорувати лист",
+          "Зайти на офіційний сайт PayPal та перевірити статус акаунту",
+          "Відповісти на лист з проханням про подробиці"
+        ],
+        correct: 2,
+        explanation: "Завжди перевіряйте такі повідомлення через офіційний сайт сервісу. Створення паніки - основний прийом фішерів."
+      },
+      {
+        question: "Які з цих адрес електронної пошти виглядають підозріло?",
+        options: [
+          "noreply@privatbank.ua",
+          "security@gmail-team.support.net",
+          "notifications@facebook.com",
+          "Усі виглядають нормально"
+        ],
+        correct: 1,
+        explanation: "Gmail використовує домен gmail.com, а не gmail-team.support.net. Це підроблений домен для фішингу."
+      },
+      {
+        question: "Ви отримали SMS: 'Ваша картка заблокована. Перейдіть за посиланням для розблокування'. Що робити?",
+        options: [
+          "Одразу перейти за посиланням",
+          "Подзвонити в банк за номером на зворотній стороні картки",
+          "Відповісти на SMS з питанням про деталі",
+          "Перейти за посиланням, але обережно"
+        ],
+        correct: 1,
+        explanation: "Банки ніколи не просять розблоковувати картки через SMS-посилання. Завжди дзвоніть у банк напряму."
+      },
+      {
+        question: "У листі є граматичні помилки та дивні формулювання. Це означає:",
+        options: [
+          "Лист написаний не носієм мови",
+          "Це, ймовірно, фішинг",
+          "Потрібно бути обережним",
+          "Усі варіанти правильні"
+        ],
+        correct: 3,
+        explanation: "Граматичні помилки - одна з основних ознак фішингових листів, оскільки вони часто створюються зловмисниками з інших країн."
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let quizStarted = false;
+
+    function startPhishingTest() {
+      currentQuestion = 0;
+      score = 0;
+      quizStarted = true;
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('restartTest').style.display = 'none';
+      document.querySelector('.interactive-test .test-btn[onclick="startPhishingTest()"]').style.display = 'none'; // Ховаємо кнопку "Почати тест"
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const question = phishingQuestions[currentQuestion];
+      document.getElementById('quizQuestion').textContent = `Питання ${currentQuestion + 1}/${phishingQuestions.length}: ${question.question}`;
+      
+      const optionsContainer = document.getElementById('quizOptions');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'quiz-option';
+        optionDiv.textContent = option;
+        optionDiv.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(optionDiv);
+      });
+
+      document.getElementById('quizResult').innerHTML = '';
+      document.getElementById('nextQuestion').style.display = 'none';
+    }
+
+    function selectAnswer(selectedIndex) {
+      const question = phishingQuestions[currentQuestion];
+      const options = document.querySelectorAll('.quiz-option');
+      
+      options.forEach((option, index) => {
+        option.onclick = null; // Disable further clicks on options
+        if (index === question.correct) {
+          option.classList.add('correct');
+        } else if (index === selectedIndex && index !== question.correct) {
+          option.classList.add('incorrect');
+        }
+      });
+
+      const resultDiv = document.getElementById('quizResult');
+      if (selectedIndex === question.correct) {
+        score++;
+        resultDiv.innerHTML = `<div class="quiz-result correct">✅ Правильно! ${question.explanation}</div>`;
+      } else {
+        resultDiv.innerHTML = `<div class="quiz-result incorrect">❌ Неправильно. ${question.explanation}</div>`;
+      }
+
+      if (currentQuestion < phishingQuestions.length - 1) {
+        document.getElementById('nextQuestion').style.display = 'inline-block';
+      } else {
+        document.getElementById('nextQuestion').style.display = 'none';
+        showFinalResult();
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showFinalResult() {
+      const percentage = Math.round((score / phishingQuestions.length) * 100);
+      let message = '';
+      let messageClass = '';
+
+      if (percentage >= 80) {
+        message = `🏆 Відмінно! Ви набрали ${score}/${phishingQuestions.length} (${percentage}%). Ви добре розумієте, як розпізнати фішинг!`;
+        messageClass = 'correct';
+      } else if (percentage >= 60) {
+        message = `👍 Добре! Ви набрали ${score}/${phishingQuestions.length} (${percentage}%). Варто ще трохи попрактикуватися.`;
+        messageClass = 'correct'; // Можна змінити клас, якщо потрібно інше візуальне оформлення
+      } else {
+        message = `⚠️ Потрібно вчитися! Ви набрали ${score}/${phishingQuestions.length} (${percentage}%). Рекомендуємо перечитати матеріал та пройти тест знову.`;
+        messageClass = 'incorrect';
+      }
+      // Показуємо результат в контейнері питань
+      document.getElementById('quizQuestion').innerHTML = `<div class="quiz-result ${messageClass}" style="text-align:center; padding:1rem;">${message}</div>`;
+      document.getElementById('quizOptions').innerHTML = ''; // Очищаємо опції
+      document.getElementById('quizResult').innerHTML = ''; // Очищаємо попередній результат окремого питання
+      document.getElementById('restartTest').style.display = 'inline-block';
+      document.getElementById('nextQuestion').style.display = 'none';
+    }
+    
+    // Модифіковано функцію startPhishingTest для кнопки "Пройти знову"
+    document.getElementById('restartTest').addEventListener('click', function() {
+        document.querySelector('.interactive-test .test-btn[onclick="startPhishingTest()"]').style.display = 'inline-block'; // Показуємо кнопку "Почати тест"
+        startPhishingTest();
+    });
+
+
+    // Додаємо функцію для демонстрації прикладу фішингового посилання
+    function checkSuspiciousLink() {
+      const links = [
+        { url: "https://paypal-verification.secure-update.net", safe: false, reason: "Підроблений домен PayPal" },
+        { url: "https://www.paypal.com/signin", safe: true, reason: "Офіційний сайт PayPal" },
+        { url: "http://privatbank-ukraine.org/login", safe: false, reason: "Неправильний домен та HTTP замість HTTPS" },
+        { url: "https://privatbank.ua", safe: true, reason: "Офіційний сайт ПриватБанку" }
+      ];
+      
+      const randomLink = links[Math.floor(Math.random() * links.length)];
+      const safetyText = randomLink.safe ? "✅ БЕЗПЕЧНЕ" : "⚠️ НЕБЕЗПЕЧНЕ";
+      const safetyColor = randomLink.safe ? "#16a34a" : "#dc2626";
+      
+      alert(`Посилання: ${randomLink.url}\n\nСтатус: ${safetyText}\nПричина: ${randomLink.reason}`);
+    }
+
+    // Додаємо обробник для перевірки посилань
+    document.addEventListener('DOMContentLoaded', function() {
+      // Додаємо кнопку для демонстрації перевірки посилань
+      const demoSection = document.createElement('section');
+      demoSection.className = 'content-section'; // Використовуємо існуючий клас для узгодження стилів
+      demoSection.innerHTML = `
+        <h2 style="color: #0ea5e9;">🔗 Інтерактивна демонстрація</h2>
+        <div class="interactive-test" style="margin: 2rem 0; background: linear-gradient(135deg, #3b82f6, #0ea5e9);"> <h3>Перевірка підозрілих посилань</h3>
+          <p style="color: #e0f2fe;">Натисніть кнопку, щоб побачити приклад аналізу підозрілого посилання</p>
+          <button class="test-btn" onclick="checkSuspiciousLink()">Перевірити посилання</button>
+        </div>
+        
+        <div class="warning-box" style="background: linear-gradient(135deg, #eab308, #d97706); box-shadow: 0 5px 15px rgba(234, 179, 8, 0.3);"> <h3 style="color:white;">💡 Пам'ятайте</h3>
+          <p style="color:white;">
+            <strong>Ніколи не вводьте особисті дані на сайтах, на які ви потрапили через посилання в листах!</strong><br>
+            Завжди заходьте на офіційні сайти напряму через адресний рядок браузера.
+          </p>
+        </div>
+      `;
+      
+      // Вставляємо секцію перед секцією .checklist
+      const checklistSection = document.querySelector('.checklist');
+      if (checklistSection) {
+        checklistSection.parentNode.insertBefore(demoSection, checklistSection);
+      } else {
+        // Якщо .checklist немає, додаємо в кінець .container
+        document.querySelector('.container').appendChild(demoSection);
+      }
+    });
+
+    // Функція для показу додаткових порад при скролі
+    function showScrollTips() {
+      // Перевіряємо, чи вже існує підказка
+      if (document.querySelector('.scroll-tip-phishing')) {
+        return;
+      }
+
+      const scrollTip = document.createElement('div');
+      scrollTip.className = 'scroll-tip-phishing'; // Додаємо клас для унікальності
+      scrollTip.style.position = 'fixed';
+      scrollTip.style.bottom = '20px';
+      scrollTip.style.right = '20px';
+      scrollTip.style.maxWidth = '300px';
+      scrollTip.style.zIndex = '1000';
+      // Використовуємо темний фон, як на головній сторінці
+      scrollTip.style.background = 'rgba(0,0,0,0.8)';
+      scrollTip.style.backdropFilter = 'blur(10px)';
+      scrollTip.style.webkitBackdropFilter = 'blur(10px)';
+      scrollTip.style.color = '#eee';
+      scrollTip.style.padding = '1rem';
+      scrollTip.style.borderRadius = '15px';
+      scrollTip.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+      scrollTip.style.transform = 'translateX(350px)'; // Початкове положення за екраном
+      scrollTip.style.transition = 'transform 0.5s ease-in-out';
+      scrollTip.style.border = '1px solid rgba(255, 65, 108, 0.2)';
+      
+      const tips = [
+        "💡 Завжди перевіряйте URL перед введенням даних!",
+        "🔒 Шукайте значок замка (HTTPS) в адресному рядку.",
+        "📞 Зверніться в банк напряму при сумнівах, не за номерами з листа.",
+        "🚫 Не завантажуйте та не відкривайте несподівані файли.",
+        "⏰ Не поспішайте - фішери створюють штучну терміновість."
+      ];
+      
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+      scrollTip.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div style="flex-grow: 1;">
+            <strong style="color: #ff6b68;">Порада безпеки:</strong><br>
+            <small>${randomTip}</small>
+          </div>
+          <button onclick="this.parentElement.parentElement.style.transform = 'translateX(350px)'; setTimeout(() => { this.parentElement.parentElement.remove(); }, 500);" 
+                  style="background: none; border: none; color: #aaa; font-size: 1.5rem; cursor: pointer; padding: 0 0 0 0.5rem; line-height: 1;">×</button>
+        </div>
+      `;
+      
+      document.body.appendChild(scrollTip);
+      
+      // Плавний виїзд
+      setTimeout(() => {
+        scrollTip.style.transform = 'translateX(0)';
+      }, 100); // Невелика затримка перед анімацією
+      
+      // Плавне зникнення через деякий час
+      setTimeout(() => {
+        if (scrollTip.parentNode) { // Перевіряємо, чи елемент ще існує
+          scrollTip.style.transform = 'translateX(350px)';
+          setTimeout(() => { // Видаляємо елемент після завершення анімації зникнення
+            if (scrollTip.parentNode) {
+              scrollTip.remove();
+            }
+          }, 500);
+        }
+      }, 7000); // Час відображення поради - 7 секунд
+    }
+
+    // Показуємо поради при скролі
+    let scrollTimeout;
+    let lastScrollTipTime = 0;
+    const scrollTipInterval = 15000; // Показувати підказку не частіше ніж раз на 15 секунд
+
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const currentTime = Date.now();
+        if (Math.random() < 0.2 && (currentTime - lastScrollTipTime > scrollTipInterval)) { // 20% шанс показати пораду
+          showScrollTips();
+          lastScrollTipTime = currentTime;
+        }
+      }, 500); // Затримка після зупинки скролу
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Про мене - CyberSecure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+    <style>
+        /* Специфічні стилі для about.html, якщо потрібні, або їх можна перенести в style.css */
+        body.about-page-body { /* Унікальний клас для body цієї сторінки, щоб не конфліктувати з style.css */
+            /* Фон тіла вже заданий в style.css, якщо він підключений */
+            padding-top: 80px; /* Відступ для фіксованого хедера */
+            padding-bottom: 2rem;
+        }
+
+        .about-section-container { /* Новий контейнер для центрування контенту */
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            /* Колір заголовка буде успадкований або заданий в style.css */
+            font-size: 2.8rem; /* Трохи зменшив */
+            font-weight: 700;
+            margin-bottom: 3rem;
+            /* Тінь можна залишити або прибрати, якщо вже є в style.css */
+            /* text-shadow: 0 4px 8px rgba(0,0,0,0.3); */
+             /* Використовуємо градієнт як на інших заголовках */
+            background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #ff6b68; /* Резервний колір */
+        }
+
+        .profile-card {
+            background: var(--glass-bg, rgba(255, 255, 255, 0.08)); /* Використовуємо CSS змінну або дефолт */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.15));
+            border-radius: 25px;
+            padding: 2.5rem; /* Трохи зменшив */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem; /* Збільшив відступ */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .profile-card::before { /* Анімація обертання фону */
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.05), transparent 40%);
+            animation: rotate 10s linear infinite;
+            z-index: 0;
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .photo-container {
+            position: relative;
+            width: 180px; /* Трохи зменшив */
+            height: 180px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255,255,255,0.2); /* Зробив межу менш яскравою */
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+            border-color: var(--secondary-accent-color, #ff6b68); /* Акцентний колір при наведенні */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        /* Видаляємо .photo-placeholder та .upload-text, оскільки фото буде статичним */
+
+        .name {
+            color: var(--text-light, #eee);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .status {
+            color: var(--text-medium, #ccc);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .university {
+            color: var(--text-dark-placeholder, #999);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .bio {
+            color: var(--text-medium, #ccc);
+            line-height: 1.7; /* Збільшив міжрядковий інтервал */
+            margin-bottom: 2rem;
+            text-align: justify; /* Вирівнювання по ширині */
+            font-size: 1.05rem;
+        }
+
+        .info-block { /* Загальний клас для блоків project-info, skill-category, contact-info */
+            background: var(--glass-bg, rgba(255, 255, 255, 0.05)); /* Ще темніший фон для вкладених карток */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+        .info-block-title { /* Загальний клас для заголовків в .info-block */
+            color: var(--secondary-accent-color, #ff6b68);
+            font-size: 1.5rem; /* Збільшив */
+            font-weight: 700; /* Зробив жирнішим */
+            margin-bottom: 1.5rem; /* Збільшив відступ */
+            text-align: center;
+        }
+        .info-block-description { /* Загальний клас для опису в .info-block */
+            color: var(--text-medium, #ccc);
+            line-height: 1.7;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* .skill-category успадковує стилі від .info-block */
+        /* .skill-title успадковує стилі від .info-block-title */
+        .skill-title {
+            font-size: 1.3rem; /* Трохи менший, ніж .info-block-title */
+        }
+
+
+        .skill-list {
+            list-style: none;
+            padding: 0; /* Забрав відступи */
+        }
+
+        .skill-list li {
+            color: var(--text-medium, #ccc);
+            padding: 0.4rem 0; /* Збільшив вертикальні відступи */
+            position: relative;
+            padding-left: 1.8rem; /* Збільшив відступ для іконки */
+            font-size: 0.95rem;
+        }
+
+        .skill-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-accent-color, #ff6b68); /* Акцентний колір */
+            font-size: 1.2em; /* Зробив іконку трохи більшою */
+        }
+
+        /* .contact-info успадковує стилі від .info-block */
+        /* .contact-title успадковує стилі від .info-block-title */
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem; /* Додав відступ зверху */
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.7rem 1.3rem; /* Зменшив відступи */
+            background: rgba(255,255,255,0.1); /* Темніший фон */
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--text-light, #eee);
+            font-weight: 600; /* Зробив жирнішим */
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border, rgba(255,255,255,0.2));
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .social-link:hover {
+            background: var(--primary-accent-gradient, linear-gradient(135deg, #ff416c, #ff4b2b)); /* Акцентний градієнт при наведенні */
+            color: white;
+            transform: translateY(-3px) scale(1.05); /* Збільшив ефект */
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+            border-color: transparent;
+        }
+        
+        /* Футер вже має бути в style.css, якщо ні, його потрібно додати */
+        /* Приклад простого футера для цієї сторінки, якщо немає глобального */
+        .about-footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            color: var(--text-dark-placeholder, #999);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--glass-border, rgba(255,255,255,0.1));
+        }
+
+
+        @media (max-width: 768px) {
+
+            .section-title {
+                font-size: 2.2rem; /* Адаптація розміру */
+            }
+            
+            .profile-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .name {
+                font-size: 1.8rem;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            .info-block {
+                padding: 1.5rem;
+            }
+            .social-link {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<header>
+    <div class="logo">
+      <div class="logo-img">🔒</div>
+      <span>CyberSecure</span>
+    </div>
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+    </div>
+  <nav id="nav">
+          <a href="index.html">Головна</a>
+          <a href="about.html">Про нас</a>
+          <a href="resources.html">Ресурси</a>
+    </nav> 
+</header>
+
+    <div class="about-section-container"> <section class="about-section">
+            <h2 class="section-title">Про мене</h2>
+            
+            <div class="profile-card">
+                <div class="profile-content">
+                    <div class="photo-container">
+                        <img src="photo_resume.png" alt="Фото Дмитра Турчина" class="profile-photo">
+                    </div>
+                    
+                    <div class="name">Турчин Дмитро Олександрович</div>
+                    <div class="status">Студент</div>
+                    <div class="university">СумДПУ, спеціальність "Інформатика", 3 курс, 433 група</div>
+                    
+                    <div class="bio">
+                        Привіт! Я, Турчин Дмитро Олександрович, студент 3-го курсу 433-ї групи Сумського державного педагогічного університету імені А.С. Макаренка, навчаюся за спеціальністю "Інформатика". Цей веб-сайт є моєю практичною роботою з дисципліни "Поліграфічний дизайн та айдентика". Мої інтереси охоплюють сфери кібербезпеки та інформаційних технологій. Я прагну досліджувати, як можна зробити цифровий простір безпечнішим та допомогти людям свідомо та захищено користуватися перевагами інтернету.
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block project-info"> <div class="info-block-title project-title">📚 Про цей проект</div>
+                <div class="info-block-description project-description">
+                    Веб-сайт "CyberSecure" створений як практична робота для демонстрації навичок веб-розробки та розуміння принципів подання інформації з кібербезпеки. Мета проекту — створити інформативний та зручний ресурс, який допоможе користувачам ознайомитися з основами захисту в цифровому середовищі. Під час розробки були застосовані знання HTML, CSS та JavaScript, а також принципи адаптивного дизайну для коректного відображення на різних пристроях. Особлива увага приділялася структуруванню інформації та створенню інтуїтивно зрозумілого інтерфейсу.
+                </div>
+            </div>
+
+            <div class="skills-grid">
+                <div class="info-block skill-category"> <div class="info-block-title skill-title">🖥️ Технології</div>
+                    <ul class="skill-list">
+                        <li>HTML5 & CSS3 (Flexbox, Grid)</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Адаптивний дизайн (Responsive Design)</li>
+                        <li>Основи UI/UX</li>
+                        <li>Git & GitHub</li>
+                    </ul>
+                </div>
+                
+                <div class="info-block skill-category"> <div class="info-block-title skill-title">🔐 Сфери інтересу в кібербезпеці</div>
+                    <ul class="skill-list">
+                        <li>Захист персональних даних</li>
+                        <li>Безпека веб-додатків</li>
+                        <li>Розпізнавання та протидія фішингу</li>
+                        <li>Безпека бездротових мереж</li>
+                        <li>Соціальна інженерія</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-block contact-info"> <div class="info-block-title contact-title">📬 Як зі мною зв'язатися</div>
+                <div class="social-links">
+                    <a href="mailto:turchindimaua@gmail.com" class="social-link">
+                        📧 Email
+                    </a>
+                    <a href="https://t.me/dot_gh" class="social-link" target="_blank" rel="noopener noreferrer">
+                        📱 Telegram
+                    </a>
+                    <a href="https://github.com/DOT-gh" class="social-link" target="_blank" rel="noopener noreferrer">
+                        💻 GitHub
+                    </a>
+                    <a href="https://www.linkedin.com/in/dot-gh" class="social-link" target="_blank" rel="noopener noreferrer">
+                        💼 LinkedIn
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div> 
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Про CyberSecure</h4>
+        <p>
+          Ми допомагаємо людям навчитися основам кібербезпеки та захищати
+          свої дані в цифровому світі. Наша місія - зробити інтернет безпечнішим для всіх.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>Корисні посилання</h4>
+        <ul>
+          <li><a href="guides.html">Посібники</a></li>
+          </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Підтримка</h4>
+        <ul>
+          <li><a href="help.html">Допомога</a></li>
+          </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Слідкуйте за нами</h4>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/dot-gh" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></li>
+          <li><a href="https://t.me/dot_gh" target="_blank" rel="noopener noreferrer">📱 Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CyberSecure. Всі права захищені. | Політика конфіденційності | Умови використання</p>
+    </div>
+  </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const nav = document.getElementById('nav');
+
+        if (menuToggle && nav) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('open');
+                nav.classList.toggle('show');
+            });
+
+            // Закриття меню при кліку на посилання, якщо навігація видима
+             nav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A' && nav.classList.contains('show')) {
+                    menuToggle.classList.remove('open');
+                    nav.classList.remove('show');
+                }
+            });
+        }
+        // Функціонал завантаження фото видалено, оскільки фото тепер статичне
+    </script>
+</body>
+</html>
