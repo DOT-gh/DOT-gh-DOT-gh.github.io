@@ -187,178 +187,265 @@ document.addEventListener('DOMContentLoaded', function() {
         question: 'Який з наступних паролів є найбільш надійним?',
         answers: [
           { text: 'password123', correct: false },
-          { text: 'Qwerty2023', correct: false },
-          { text: 'P@ssw0rd!', correct: false },
-          { text: 'k8L#7pR$2vX9!mB', correct: true }
+          { text: 'P@$$w0rd2025!', correct: true },
+          { text: '12345678', correct: false },
+          { text: 'mybirthday1990', correct: false }
         ]
       },
       {
         question: 'Що таке фішинг?',
         answers: [
-          { text: 'Вид спорту, пов\'язаний з риболовлею', correct: false },
-          { text: 'Метод шахрайства для крадіжки особистих даних', correct: true },
-          { text: 'Тип комп\'ютерного вірусу', correct: false },
-          { text: 'Процес відновлення видалених файлів', correct: false }
+          { text: 'Вид спортивної риболовлі', correct: false },
+          { text: 'Вірус, який шифрує файли на комп\'ютері', correct: false },
+          { text: 'Техніка обману для отримання конфіденційної інформації', correct: true },
+          { text: 'Програма для блокування реклами', correct: false }
         ]
       },
       {
-        question: 'Яка з наступних дій є найбезпечнішою при користуванні публічною Wi-Fi мережею?',
+        question: 'Яка з цих дій підвищує безпеку вашого облікового запису?',
         answers: [
-          { text: 'Вхід в інтернет-банкінг без додаткового захисту', correct: false },
-          { text: 'Використання VPN для шифрування трафіку', correct: true },
-          { text: 'Відправка конфіденційних документів через електронну пошту', correct: false },
-          { text: 'Зберігання паролів у браузері', correct: false }
+          { text: 'Використання однакового пароля для всіх акаунтів', correct: false },
+          { text: 'Зберігання пароля в текстовому документі на робочому столі', correct: false },
+          { text: 'Встановлення двофакторної автентифікації', correct: true },
+          { text: 'Повідомлення пароля друзям для допомоги у надзвичайних ситуаціях', correct: false }
+        ]
+      },
+      {
+        question: 'Що означає абревіатура VPN?',
+        answers: [
+          { text: 'Viral Protection Network', correct: false },
+          { text: 'Virtual Private Network', correct: true },
+          { text: 'Verified Personal Navigator', correct: false },
+          { text: 'Visual Processing Node', correct: false }
+        ]
+      },
+      {
+        question: 'Як найкраще захистити свою домашню Wi-Fi мережу?',
+        answers: [
+          { text: 'Використовувати шифрування WEP', correct: false },
+          { text: 'Залишити мережу відкритою для швидкого доступу', correct: false },
+          { text: 'Використовувати шифрування WPA3 і складний пароль', correct: true },
+          { text: 'Вимикати маршрутизатор, коли не користуєтесь інтернетом', correct: false }
         ]
       }
     ];
-    
+
     let currentQuestionIndex = 0;
     let score = 0;
     
-    // Початок тесту
+    // Запуск тесту
     startTestBtn.addEventListener('click', function() {
-      currentQuestionIndex = 0;
-      score = 0;
+      this.style.display = 'none';
       testContainer.style.display = 'block';
-      startTestBtn.style.display = 'none';
-      showQuestion();
+      showQuestion(currentQuestionIndex);
+      window.scrollTo({
+        top: testContainer.offsetTop - 50,
+        behavior: 'smooth'
+      });
     });
     
-    // Показати питання
-    function showQuestion() {
-      const question = questions[currentQuestionIndex];
-      questionElement.querySelector('h3').textContent = question.question;
+    // Відображення питання
+    function showQuestion(index) {
+      const question = questions[index];
+      questionElement.innerHTML = `<h3>${question.question}</h3>`;
       answersElement.innerHTML = '';
-      testResultElement.style.display = 'none';
       
-      question.answers.forEach(answer => {
+      question.answers.forEach((answer, i) => {
         const button = document.createElement('button');
         button.className = 'answer-btn';
         button.textContent = answer.text;
-        button.dataset.correct = answer.correct;
-        button.addEventListener('click', selectAnswer);
+        
+        button.addEventListener('click', function() {
+          selectAnswer(answer, button);
+        });
+        
         answersElement.appendChild(button);
       });
       
       nextQuestionBtn.style.display = 'none';
+      testResultElement.style.display = 'none';
     }
     
     // Вибір відповіді
-    function selectAnswer(e) {
-      const selectedButton = e.target;
-      const isCorrect = selectedButton.dataset.correct === 'true';
+    function selectAnswer(answer, selectedButton) {
+      const answerButtons = document.querySelectorAll('.answer-btn');
       
-      // Додаємо відповідний клас до обраної відповіді
-      if (isCorrect) {
+      // Блокуємо всі кнопки
+      answerButtons.forEach(button => {
+        button.disabled = true;
+      });
+      
+      // Показуємо правильну відповідь
+      answerButtons.forEach(button => {
+        const answerIndex = Array.from(answerButtons).indexOf(button);
+        const currentAnswer = questions[currentQuestionIndex].answers[answerIndex];
+        
+        if (currentAnswer.correct) {
+          button.classList.add('correct-answer');
+        }
+      });
+      
+      // Показуємо результат відповіді
+      if (answer.correct) {
         selectedButton.classList.add('correct-answer');
-        testResultElement.textContent = 'Правильно! 👍';
         testResultElement.className = 'test-result correct';
+        testResultElement.textContent = 'Правильно! Чудова робота!';
         score++;
       } else {
         selectedButton.classList.add('wrong-answer');
-        testResultElement.textContent = 'Неправильно! ❌';
         testResultElement.className = 'test-result incorrect';
-        
-        // Показуємо правильну відповідь
-        document.querySelectorAll('.answer-btn').forEach(btn => {
-          if (btn.dataset.correct === 'true') {
-            btn.classList.add('correct-answer');
-          }
-        });
+        testResultElement.textContent = 'На жаль, це неправильна відповідь.';
       }
-      
-      // Вимикаємо всі кнопки
-      document.querySelectorAll('.answer-btn').forEach(btn => {
-        btn.disabled = true;
-        btn.removeEventListener('click', selectAnswer);
-      });
       
       testResultElement.style.display = 'block';
       
+      // Перевіряємо, чи є ще питання
       if (currentQuestionIndex < questions.length - 1) {
         nextQuestionBtn.textContent = 'Наступне питання';
         nextQuestionBtn.style.display = 'inline-block';
       } else {
-        nextQuestionBtn.textContent = 'Показати результат';
+        nextQuestionBtn.textContent = 'Завершити тест';
         nextQuestionBtn.style.display = 'inline-block';
       }
     }
     
-    // Наступне питання або показ результатів
+    // Перехід до наступного питання
     nextQuestionBtn.addEventListener('click', function() {
       currentQuestionIndex++;
       
       if (currentQuestionIndex < questions.length) {
-        showQuestion();
+        showQuestion(currentQuestionIndex);
       } else {
-        showResult();
+        // Показуємо фінальний результат
+        questionElement.innerHTML = `<h3>Ваш результат: ${score} з ${questions.length}</h3>`;
+        answersElement.innerHTML = '';
+        
+        const percentage = (score / questions.length) * 100;
+        let message;
+        
+        if (percentage === 100) {
+          message = 'Відмінно! Ви справжній експерт з кібербезпеки!';
+          testResultElement.className = 'test-result success';
+        } else if (percentage >= 70) {
+          message = 'Добре! Ви маєте хороші знання з кібербезпеки.';
+          testResultElement.className = 'test-result success';
+        } else if (percentage >= 50) {
+          message = 'Непогано, але варто дізнатися більше про кібербезпеку.';
+          testResultElement.className = 'test-result success';
+        } else {
+          message = 'Рекомендуємо приділити більше уваги вивченню основ кібербезпеки.';
+          testResultElement.className = 'test-result error';
+        }
+        
+        testResultElement.textContent = message;
+        testResultElement.style.display = 'block';
+        
+        // Кнопка "Спробувати ще раз"
+        nextQuestionBtn.textContent = 'Спробувати ще раз';
+        nextQuestionBtn.style.display = 'inline-block';
+        
+        // Починаємо тест заново при натисканні "Спробувати ще раз"
+        nextQuestionBtn.onclick = function() {
+          currentQuestionIndex = 0;
+          score = 0;
+          showQuestion(0);
+          this.onclick = null; // Скидаємо обробник
+        };
       }
+      
+      // Прокручуємо до верхньої частини контейнера тесту
+      window.scrollTo({
+        top: testContainer.offsetTop - 50,
+        behavior: 'smooth'
+      });
     });
-    
-    // Показати результат тесту
-    function showResult() {
-      answersElement.innerHTML = '';
-      questionElement.querySelector('h3').textContent = `Ваш результат: ${score} з ${questions.length}`;
-      
-      let resultMessage = '';
-      let resultClass = '';
-      
-      if (score === questions.length) {
-        resultMessage = 'Відмінно! Ви чудово знаєте основи кібербезпеки! 🏆';
-        resultClass = 'correct';
-      } else if (score >= questions.length / 2) {
-        resultMessage = 'Непогано! Але є над чим попрацювати. 👍';
-        resultClass = 'correct';
-      } else {
-        resultMessage = 'Варто більше дізнатися про кібербезпеку. Перегляньте наші ресурси! 📚';
-        resultClass = 'incorrect';
-      }
-      
-      testResultElement.textContent = resultMessage;
-      testResultElement.className = `test-result ${resultClass}`;
-      testResultElement.style.display = 'block';
-      
-      nextQuestionBtn.style.display = 'none';
-      startTestBtn.textContent = 'Пройти тест ще раз';
-      startTestBtn.style.display = 'inline-block';
-    }
   }
   
-  // Плавна прокрутка для якірних посилань
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Плавна прокрутка для всіх внутрішніх посилань
+  document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
+      e.preventDefault();
       const targetId = this.getAttribute('href');
-      if (targetId !== '#') {
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          e.preventDefault();
-          
-          const headerHeight = document.querySelector('header').offsetHeight;
-          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-          
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
+      const targetElement = document.querySelector(targetId);
+      
+      if (targetElement) {
+        // Закриваємо мобільне меню, якщо воно відкрите
+        if (nav.classList.contains('show')) {
+          menuToggle.classList.remove('open');
+          nav.classList.remove('show');
+          unlockBodyScroll();
         }
+        
+        // Прокручуємо до елемента
+        window.scrollTo({
+          top: targetElement.offsetTop - 60,
+          behavior: 'smooth'
+        });
       }
     });
   });
   
-  // Додаткові оптимізації для iOS
-  if (isIOS) {
-    // Виправлення для 100vh на iOS
-    function setVhVariable() {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
+  // Відстеження активного розділу при прокручуванні
+  window.addEventListener('scroll', function() {
+    // Реалізація за необхідності
+  });
+  
+  // Індикатор прогресу прокрутки сторінки
+  function updateScrollProgress() {
+    const scrollProgress = document.querySelector('.scroll-progress');
+    if (!scrollProgress) return;
     
-    setVhVariable();
-    window.addEventListener('resize', setVhVariable);
+    const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (window.pageYOffset / totalScroll) * 100;
+    scrollProgress.style.width = `${scrolled}%`;
+  }
+  
+  window.addEventListener('scroll', updateScrollProgress);
+  
+  // Анімація появи елементів при прокручуванні
+  function handleScrollAnimations() {
+    const animElements = document.querySelectorAll('.anim-fade-in, .anim-slide-up');
     
-    // Покращення обробки дотиків для iOS
-    document.querySelectorAll('button, a, .quick-link-card, .news-card').forEach(element => {
-      element.addEventListener('touchstart', function() {}, {passive: true});
+    animElements.forEach(elem => {
+      const elemTop = elem.getBoundingClientRect().top;
+      const elemBottom = elem.getBoundingClientRect().bottom;
+      const windowHeight = window.innerHeight;
+      
+      if (elemTop < windowHeight * 0.9 && elemBottom > 0) {
+        elem.classList.add('visible');
+      } else {
+        // Якщо вимкнути цей рядок, елементи будуть залишатися видимими після першої появи
+        // elem.classList.remove('visible');
+      }
     });
   }
+  
+  window.addEventListener('scroll', handleScrollAnimations);
+  window.addEventListener('resize', handleScrollAnimations);
+  
+  // Викликаємо функцію для початкового відображення анімацій
+  setTimeout(handleScrollAnimations, 100);
+  
+  // Обробка помилок для зображень
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('error', function() {
+      this.src = 'images/fallback-image.svg'; // Запасне зображення
+      this.alt = 'Зображення недоступне';
+    });
+  });
+  
+  // Додамо tracker для подій аналітики
+  function trackEvent(category, action, label) {
+    // Тут можна підключити реальну аналітику, наприклад Google Analytics
+    console.log(`Analytics event: ${category} - ${action} - ${label}`);
+  }
+  
+  // Відстеження кліків на основних елементах
+  document.querySelectorAll('a, button').forEach(element => {
+    element.addEventListener('click', function() {
+      const label = this.textContent.trim() || this.getAttribute('aria-label') || 'Нерозпізнаний елемент';
+      const category = this.closest('section') ? this.closest('section').className : 'Загальне';
+      trackEvent(category, 'Клік', label);
+    });
+  });
 });
