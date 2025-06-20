@@ -1,19 +1,64 @@
+/* Основні змінні */
+:root {
+  --gradient-primary: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
+  --gradient-background: linear-gradient(135deg, #0a0f2b 0%, #1b1436 50%, #2a1a5a 100%);
+  --color-primary: #ff416c;
+  --color-primary-hover: #ff6b68;
+  --color-secondary: #ff4b2b;
+  --color-text: #eee;
+  --color-text-light: #ddd;
+  --color-text-muted: #ccc;
+  --color-text-dark: #999;
+  --color-success: #00e676;
+  --color-error: #ff3d00;
+  --shadow-small: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-medium: 0 10px 40px rgba(255, 65, 108, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-large: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-button: 0 8px 25px rgba(255, 65, 108, 0.6), 0 2px 10px rgba(255, 65, 108, 0.3);
+  --shadow-button-hover: 0 12px 35px rgba(255, 65, 108, 0.8), 0 4px 15px rgba(255, 65, 108, 0.4);
+  --border-glow: 1px solid rgba(255, 65, 108, 0.2);
+  --backdrop-blur: blur(15px);
+  --radius-small: 15px;
+  --radius-medium: 20px;
+  --radius-large: 25px;
+  --radius-button: 35px;
+  --font-main: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --spacing-small: 15px;
+  --spacing-medium: 30px;
+  --spacing-large: 50px;
+  --transition-fast: 0.3s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  --z-header: 10000;
+  --z-modal: 9000;
+  --max-width: 1200px;
+}
+
 /* Основні стилі та скидання */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background: linear-gradient(135deg, #0a0f2b 0%, #1b1436 50%, #2a1a5a 100%);
-  color: #eee;
+  font-family: var(--font-main);
+  background: var(--gradient-background);
+  color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Анімований фон */
@@ -32,31 +77,50 @@ body::before {
   z-index: -1;
 }
 
-a {
-  color: #ff416c;
-  text-decoration: none;
-  transition: color 0.3s ease;
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
-a:hover {
-  color: #ff6b68;
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover, a:focus {
+  color: var(--color-primary-hover);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+  font-size: inherit;
+}
+
+ul, ol {
+  list-style: none;
 }
 
 /* Хедер та навігація */
 header {
   background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 40px;
+  padding: var(--spacing-small) 40px;
   position: sticky;
   top: 0;
-  z-index: 10000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: var(--z-header);
+  box-shadow: var(--shadow-small);
   user-select: none;
-  border-bottom: 1px solid rgba(255, 65, 108, 0.2);
+  border-bottom: var(--border-glow);
 }
 
 .logo {
@@ -65,13 +129,13 @@ header {
   gap: 12px;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #ff6b68;
+  color: var(--color-primary-hover);
 }
 
 .logo-img {
   width: 40px;
   height: 40px;
-  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -87,18 +151,19 @@ header {
   cursor: pointer;
   position: relative;
   user-select: none;
+  z-index: 100;
 }
 
 .menu-toggle span,
 .menu-toggle span::before,
 .menu-toggle span::after {
   display: block;
-  background-color: #ff416c;
+  background-color: var(--color-primary);
   height: 3px;
   border-radius: 2px;
   position: absolute;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
 }
 
 .menu-toggle span {
@@ -138,12 +203,13 @@ nav {
 nav a {
   font-weight: 600;
   padding: 10px 16px;
-  border-radius: 25px;
-  color: #ccc;
+  border-radius: var(--radius-button);
+  color: var(--color-text-muted);
   user-select: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 nav a::before {
@@ -153,8 +219,8 @@ nav a::before {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, #ff416c, #ff4b2b);
-  transition: left 0.3s ease;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: left var(--transition-fast);
   z-index: -1;
 }
 
@@ -171,7 +237,7 @@ nav a.active {
 
 /* Основні секції */
 main {
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto;
   padding: 20px 30px 80px;
 }
@@ -179,17 +245,15 @@ main {
 /* Секція героя */
 .hero-section {
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  padding: 50px 40px;
-  border-radius: 20px;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  padding: var(--spacing-large) 40px;
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-large);
   text-align: center;
   margin-bottom: 80px;
   user-select: text;
-  border: 1px solid rgba(255, 65, 108, 0.2);
+  border: var(--border-glow);
   position: relative;
   overflow: hidden;
 }
@@ -214,7 +278,7 @@ main {
   font-size: 3.5rem;
   font-weight: 700;
   color: #25020a; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -226,7 +290,7 @@ main {
 
 .hero-subtitle {
   font-size: 1.4rem;
-  color: #ddd;
+  color: var(--color-text-light);
   max-width: 750px;
   margin: 0 auto 40px auto;
   position: relative;
@@ -240,27 +304,25 @@ main {
 
 .hero-actions button {
   cursor: pointer;
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   border: none;
-  border-radius: 35px;
+  border-radius: var(--radius-button);
   color: #fff;
   font-weight: 700;
   font-size: 1.2rem;
   padding: 16px 40px;
-  box-shadow:
-    0 8px 25px rgba(255, 65, 108, 0.6),
-    0 2px 10px rgba(255, 65, 108, 0.3);
+  box-shadow: var(--shadow-button);
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.hero-actions button:hover {
-  box-shadow:
-    0 12px 35px rgba(255, 65, 108, 0.8),
-    0 4px 15px rgba(255, 65, 108, 0.4);
+.hero-actions button:hover, 
+.hero-actions button:focus {
+  box-shadow: var(--shadow-button-hover);
   transform: translateY(-3px) scale(1.05);
 }
 
@@ -271,22 +333,28 @@ main {
 /* Блок деталей */
 .details {
   background: rgba(30, 30, 50, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
   border: 2px solid rgba(255, 65, 108, 0.3);
-  box-shadow:
-    0 20px 60px rgba(255, 65, 108, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(255, 65, 108, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-medium);
   padding: 40px 45px;
   max-width: 950px;
   margin: 0 auto 80px;
-  color: #eee;
+  color: var(--color-text);
   opacity: 0;
   transform: translateY(40px);
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all var(--transition-smooth);
   display: none;
   user-select: text;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-modal);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .details.show {
@@ -295,12 +363,21 @@ main {
   display: block;
 }
 
+.details-content {
+  max-width: 950px;
+  margin: auto;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .details-content h3 {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 30px;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68);
+  color: var(--color-primary); /* Резервний колір */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -322,31 +399,27 @@ main {
 
 .stat-item {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--radius-medium);
   padding: 35px 25px;
   text-align: center;
-  box-shadow:
-    0 8px 30px rgba(255, 65, 108, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 65, 108, 0.2);
+  box-shadow: 0 8px 30px rgba(255, 65, 108, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-fast);
+  border: var(--border-glow);
 }
 
 .stat-item:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-5px);
-  box-shadow:
-    0 15px 40px rgba(255, 65, 108, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 40px rgba(255, 65, 108, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .stat-number {
   font-size: 3.5rem;
   font-weight: 700;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: var(--color-primary); /* Резервний колір */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -356,7 +429,7 @@ main {
 
 .stat-label {
   font-size: 1.1rem;
-  color: #ddd;
+  color: var(--color-text-light);
   font-weight: 600;
 }
 
@@ -365,7 +438,7 @@ main {
   list-style: none;
   padding: 0;
   font-size: 1.2rem;
-  color: #ccc;
+  color: var(--color-text-muted);
   line-height: 1.8;
   margin-bottom: 35px;
   user-select: text;
@@ -389,21 +462,23 @@ main {
 #closeDetails {
   cursor: pointer;
   padding: 14px 32px;
-  border-radius: 35px;
-  border: 2px solid #ff416c;
+  border-radius: var(--radius-button);
+  border: 2px solid var(--color-primary);
   background: transparent;
-  color: #ff416c;
+  color: var(--color-primary);
   font-weight: 700;
   font-size: 1.1rem;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-#closeDetails:hover {
-  background: #ff416c;
+#closeDetails:hover, 
+#closeDetails:focus {
+  background: var(--color-primary);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
@@ -418,12 +493,12 @@ main {
 .quick-links h2 {
   font-size: 3rem;
   font-weight: 700;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
+  color: var(--color-primary); /* Резервний колір */
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 50px;
+  margin-bottom: var(--spacing-large);
 }
 
 .links-grid {
@@ -435,26 +510,25 @@ main {
 
 .quick-link-card {
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-radius: 20px;
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--radius-medium);
   padding: 30px 25px;
   width: 100%;
   max-width: 300px;
   color: white;
   font-weight: 600;
   text-decoration: none;
-  box-shadow:
-    0 10px 40px rgba(255, 65, 108, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: var(--shadow-medium);
+  transition: all var(--transition-smooth);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  border: 1px solid rgba(255, 65, 108, 0.2);
+  border: var(--border-glow);
   position: relative;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .quick-link-card::before {
@@ -468,32 +542,35 @@ main {
   transition: left 0.6s ease;
 }
 
-.quick-link-card:hover::before {
+.quick-link-card:hover::before,
+.quick-link-card:focus::before {
   left: 100%;
 }
 
-.quick-link-card:hover {
+.quick-link-card:hover,
+.quick-link-card:focus {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-8px) scale(1.02);
-  box-shadow:
-    0 20px 60px rgba(255, 65, 108, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(255, 65, 108, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: white;
+  text-decoration: none;
 }
 
 .card-icon {
   font-size: 4rem;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-fast);
 }
 
-.quick-link-card:hover .card-icon {
+.quick-link-card:hover .card-icon,
+.quick-link-card:focus .card-icon {
   transform: scale(1.1) rotate(5deg);
 }
 
 .quick-link-card h3 {
   font-size: 1.6rem;
   margin: 0;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68);
+  color: var(--color-primary); /* Резервний колір */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -502,7 +579,7 @@ main {
 
 .quick-link-card p {
   font-size: 1.1rem;
-  color: #ddd;
+  color: var(--color-text-light);
   user-select: text;
   text-align: center;
 }
@@ -515,12 +592,12 @@ main {
 .news-section h2 {
   font-size: 3rem;
   font-weight: 700;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
+  color: var(--color-primary); /* Резервний колір */
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 50px;
+  margin-bottom: var(--spacing-large);
   text-align: center;
 }
 
@@ -532,22 +609,21 @@ main {
 
 .news-card {
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
   padding: 35px 30px;
-  border-radius: 20px;
-  box-shadow:
-    0 10px 40px rgba(255, 65, 108, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-medium);
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all var(--transition-smooth);
   user-select: text;
-  border: 1px solid rgba(255, 65, 108, 0.2);
+  border: var(--border-glow);
   position: relative;
   overflow: hidden;
+  height: 100%;
 }
 
 .news-card::before {
@@ -557,7 +633,7 @@ main {
   left: -100%;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
   transition: left 0.6s ease;
 }
 
@@ -567,10 +643,8 @@ main {
 
 .news-card:hover {
   background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-5px) scale(1.02); /* Змінив, щоб був однаковий ефект з .quick-link-card */
-  box-shadow: 
-    0 20px 60px rgba(255, 65, 108, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(255, 65, 108, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .news-date {
@@ -585,8 +659,8 @@ main {
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68);
+  color: var(--color-primary); /* Резервний колір */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -596,7 +670,7 @@ main {
 .news-card p {
   flex-grow: 1;
   font-size: 1.1rem;
-  color: #ddd;
+  color: var(--color-text-light);
   line-height: 1.6;
   margin-bottom: 25px;
   user-select: text;
@@ -605,17 +679,19 @@ main {
 .read-more {
   align-self: flex-start;
   font-weight: 600;
-  color: #ff416c;
+  color: var(--color-primary);
   font-size: 1.1rem;
   user-select: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   padding: 8px 16px;
   border-radius: 20px;
-  border: 1px solid #ff416c;
+  border: 1px solid var(--color-primary);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.read-more:hover {
-  background: #ff416c;
+.read-more:hover,
+.read-more:focus {
+  background: var(--color-primary);
   color: white;
   transform: translateX(5px);
 }
@@ -626,23 +702,21 @@ main {
   margin: 0 auto 120px;
   padding: 40px 35px;
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-radius: 25px;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow-large);
   text-align: center;
   user-select: none;
-  border: 1px solid rgba(255, 65, 108, 0.2);
+  border: var(--border-glow);
 }
 
 .security-test h2 {
   font-size: 2.8rem;
   font-weight: 700;
   margin-bottom: 25px;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68, #ff4b2b);
+  color: var(--color-primary); /* Резервний колір */
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -650,7 +724,7 @@ main {
 
 .security-test p {
   font-size: 1.3rem;
-  color: #ccc;
+  color: var(--color-text-muted);
   margin-bottom: 40px;
   user-select: text;
 }
@@ -658,39 +732,37 @@ main {
 .security-test .btn.primary {
   padding: 18px 45px;
   font-size: 1.3rem;
-  border-radius: 40px;
+  border-radius: var(--radius-button);
   font-weight: 700;
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   border: none;
   color: white;
   cursor: pointer;
-  box-shadow:
-    0 8px 30px rgba(255, 65, 108, 0.6),
-    0 2px 10px rgba(255, 65, 108, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-button);
+  transition: all var(--transition-fast);
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.security-test .btn.primary:hover {
-  box-shadow:
-    0 15px 45px rgba(255, 65, 108, 0.8),
-    0 4px 15px rgba(255, 65, 108, 0.4);
+.security-test .btn.primary:hover,
+.security-test .btn.primary:focus {
+  box-shadow: var(--shadow-button-hover);
   transform: translateY(-3px) scale(1.05);
 }
 
 .test-container {
-  margin-top: 50px;
+  margin-top: var(--spacing-large);
   user-select: text;
   font-weight: 600;
-  color: #eee;
+  color: var(--color-text);
 }
 
 .question h3 {
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 25px;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68);
+  color: var(--color-primary); /* Резервний колір */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -709,14 +781,15 @@ main {
   font-size: 1.2rem;
   cursor: pointer;
   user-select: text;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   padding: 12px 20px;
-  border-radius: 15px;
+  border-radius: var(--radius-small);
   border: 1px solid rgba(255, 65, 108, 0.2);
   background: rgba(255, 255, 255, 0.05);
 }
 
-.answers label:hover {
+.answers label:hover,
+.answers label:focus {
   background: rgba(255, 65, 108, 0.1);
   border-color: rgba(255, 65, 108, 0.4);
   transform: translateX(5px);
@@ -725,7 +798,44 @@ main {
 .answers input[type="radio"] {
   margin-right: 12px;
   transform: scale(1.2);
-  accent-color: #ff416c;
+  accent-color: var(--color-primary);
+}
+
+.answer-btn {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 18px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  user-select: text;
+  transition: all var(--transition-fast);
+  padding: 12px 20px;
+  border-radius: var(--radius-small);
+  border: 1px solid rgba(255, 65, 108, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
+}
+
+.answer-btn:hover,
+.answer-btn:focus {
+  background: rgba(255, 65, 108, 0.1);
+  border-color: rgba(255, 65, 108, 0.4);
+  transform: translateX(5px);
+}
+
+.answer-btn.correct-answer {
+  background: rgba(0, 230, 118, 0.1);
+  border-color: rgba(0, 230, 118, 0.4);
+}
+
+.answer-btn.wrong-answer {
+  background: rgba(255, 61, 0, 0.1);
+  border-color: rgba(255, 61, 0, 0.4);
+}
+
+.answer-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
 }
 
 .test-result {
@@ -734,39 +844,43 @@ main {
   font-weight: 700;
   user-select: text;
   padding: 20px;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-small);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
 }
 
-.test-result.correct {
-  color: #00e676;
+.test-result.correct,
+.test-result.success {
+  color: var(--color-success);
   background: rgba(0, 230, 118, 0.1);
   border: 1px solid rgba(0, 230, 118, 0.3);
 }
 
-.test-result.incorrect {
-  color: #ff3d00;
+.test-result.incorrect,
+.test-result.error {
+  color: var(--color-error);
   background: rgba(255, 61, 0, 0.1);
   border: 1px solid rgba(255, 61, 0, 0.3);
 }
 
 .btn.secondary {
   background: transparent;
-  border: 2px solid #ff416c;
-  color: #ff416c;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
   margin-top: 15px;
   font-weight: 700;
   cursor: pointer;
   padding: 14px 32px;
-  border-radius: 35px;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-button);
+  transition: all var(--transition-fast);
   user-select: none;
   font-size: 1.1rem;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.btn.secondary:hover {
-  background-color: #ff416c;
+.btn.secondary:hover,
+.btn.secondary:focus {
+  background-color: var(--color-primary);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
@@ -775,17 +889,17 @@ main {
 /* Футер */
 footer {
   background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  color: #999;
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  color: var(--color-text-dark);
   user-select: none;
-  border-top: 1px solid rgba(255, 65, 108, 0.2);
+  border-top: var(--border-glow);
 }
 
 footer .footer-content {
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 50px 30px 30px;
+  padding: var(--spacing-large) 30px 30px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -800,8 +914,8 @@ footer .footer-section {
 footer .footer-section h4 {
   font-weight: 700;
   font-size: 1.2rem;
-  color: #ff416c; /* Резервний колір */
-  background: linear-gradient(135deg, #ff416c, #ff6b68);
+  color: var(--color-primary); /* Резервний колір */
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -813,7 +927,7 @@ footer .footer-section p,
 footer .footer-section ul {
   font-size: 1rem;
   line-height: 1.8;
-  color: #ccc;
+  color: var(--color-text-muted);
   user-select: text;
 }
 
@@ -827,20 +941,22 @@ footer .footer-section ul li {
 }
 
 footer .footer-section ul li a {
-  color: #ccc;
+  color: var(--color-text-muted);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   padding: 5px 0;
   border-bottom: 1px solid transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
-footer .footer-section ul li a:hover {
-  color: #ff416c;
-  border-bottom-color: #ff416c;
+footer .footer-section ul li a:hover,
+footer .footer-section ul li a:focus {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
 }
 
 footer .footer-bottom {
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto 40px;
   padding: 20px 20px 0;
   text-align: center;
@@ -857,7 +973,7 @@ footer .footer-bottom {
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: #ff416c;
+  border-top-color: var(--color-primary);
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -876,13 +992,44 @@ footer .footer-bottom {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
   border-radius: 3px;
   transition: width 0.3s ease;
 }
 
+.news-loading {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+}
+
+.news-error {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.2rem;
+  color: var(--color-error);
+}
+
+/* Стилі для мобільних пристроїв */
+@media (hover: hover) {
+  /* Стилі тільки для пристроїв з підтримкою hover */
+  nav a:hover::before,
+  .quick-link-card:hover::before,
+  .hero-actions button:hover,
+  .btn.primary:hover,
+  .btn.secondary:hover,
+  #closeDetails:hover {
+    /* Стилі для hover вже визначені вище */
+  }
+}
+
 /* Адаптивність */
 @media (max-width: 1024px) {
+  :root {
+    --spacing-large: 40px;
+  }
+  
   header {
     padding: 15px 25px;
   }
@@ -904,48 +1051,61 @@ footer .footer-bottom {
   }
 
   .news-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 
-  .quick-links h2 {
+  .quick-links h2,
+  .news-section h2 {
     font-size: 2.5rem;
+  }
+  
+  .hero-section,
+  .details,
+  .security-test {
+    padding: 35px 30px;
   }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --spacing-large: 30px;
+  }
+  
   .menu-toggle {
     display: block;
   }
 
   nav {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
     flex-direction: column;
     gap: 0;
-    padding: 20px 0;
+    padding: 80px 0 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(255, 65, 108, 0.2);
+    transition: right var(--transition-fast);
+    z-index: 99;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-left: var(--border-glow);
   }
 
   nav.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    right: 0;
   }
 
   nav a {
     padding: 15px 30px;
     border-radius: 0;
     border-bottom: 1px solid rgba(255, 65, 108, 0.1);
+    width: 100%;
+    text-align: left;
   }
 
   nav a:last-child {
@@ -967,7 +1127,11 @@ footer .footer-bottom {
 
   .details {
     padding: 30px 25px;
-    margin-bottom: 60px;
+  }
+  
+  .details-content {
+    padding: 30px 20px;
+    max-height: 85vh;
   }
 
   .stats-grid {
@@ -985,7 +1149,7 @@ footer .footer-bottom {
   }
 
   .news-grid {
-    grid-template-columns: 1fr; /* Вже було, але залишаю для повноти */
+    grid-template-columns: 1fr;
   }
 
   .security-test {
@@ -996,63 +1160,25 @@ footer .footer-bottom {
   .security-test h2 {
     font-size: 2.2rem;
   }
-
-  .answers {
-    text-align: left;
-  }
-
-  footer .footer-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-  }
-  /* Виправлення для градієнтного тексту на мобільних пристроях (iOS Safari) */
-  /* Застосовуємо до всіх елементів, що використовують градієнтний текст */
-  .hero-section h1,
-  .details-content h3,
+  
   .quick-links h2,
-  .news-section h2,
-  .security-test h2,
-  .quick-link-card h3,
-  .news-card h3,
-  .question h3,
-  .stat-number,
-  footer .footer-section h4 {
-    /* Важливо: якщо ви використовуєте різні градієнти, можливо,
-       вам доведеться встановити різні резервні кольори для кожного елемента.
-       Тут встановлено загальний резервний колір #ff416c. */
-    color: #ff416c !important; /* Резервний колір */
-    background: none !important;  
-    -webkit-background-clip: unset !important;
-    background-clip: unset !important;
-    -webkit-text-fill-color: unset !important;
-    text-shadow: none !important; /* Прибираємо тінь, якщо вона не потрібна з суцільним кольором */
+  .news-section h2 {
+    font-size: 2.2rem;
   }
 }
 
 @media (max-width: 480px) {
-  footer .footer-content {
-    padding: 20px 15px 15px;
-    gap: 15px;
+  :root {
+    --spacing-large: 25px;
+    --spacing-medium: 20px;
+  }
+  
+  html {
+    font-size: 14px;
   }
 
-  footer .footer-section {
-    min-width: auto; /* чтобы не было слишком широких блоков */
-    flex: 1 1 100%;
-  }
-
-  footer .footer-bottom {
-    margin-bottom: 20px;
-    padding: 10px 10px 0;
-    font-size: 0.9rem;
-  }
-}
   header {
     padding: 12px 20px;
-  }
-
-  .logo {
-    font-size: 1.3rem;
   }
 
   .logo-img {
@@ -1060,18 +1186,13 @@ footer .footer-bottom {
     height: 35px;
   }
 
-  main {
-    padding: 15px 20px 50px;
-  }
-
   .hero-section {
     padding: 30px 20px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 
   .hero-section h1 {
-    font-size: 1.8rem; /* Розмір шрифту вже адаптується, колір виправлено вище */
-    line-height: 1.2;
+    font-size: 1.8rem;
   }
 
   .hero-subtitle {
@@ -1079,25 +1200,31 @@ footer .footer-bottom {
   }
 
   .hero-actions button {
-    font-size: 1rem;
-    padding: 14px 28px;
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1.1rem;
+    justify-content: center;
   }
 
   .details {
-    padding: 25px 20px;
-    margin-bottom: 50px;
+    padding: 25px 15px;
+  }
+  
+  .details-content {
+    padding: 20px 15px;
   }
 
   .details-content h3 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 
   .details-content p {
     font-size: 1.1rem;
   }
 
-  .benefits-list {
-    font-size: 1.1rem;
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .stat-number {
@@ -1108,19 +1235,27 @@ footer .footer-bottom {
     font-size: 1rem;
   }
 
-  .quick-links h2 {
-    font-size: 2rem;
+  .quick-links {
+    margin-bottom: 60px;
   }
 
+  .quick-links h2,
   .news-section h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+
+  .quick-link-card {
+    padding: 25px 20px;
+  }
+
+  .news-section {
+    margin-bottom: 60px;
   }
 
   .news-card {
     padding: 25px 20px;
   }
-
-  /* .news-card h3 - колір вже виправлено */
 
   .security-test {
     padding: 25px 15px;
@@ -1135,110 +1270,66 @@ footer .footer-bottom {
     font-size: 1.1rem;
   }
 
-  .question h3 {
-    font-size: 1.3rem;
-  }
-
-  .answers label {
+  .security-test .btn.primary {
+    width: 100%;
+    padding: 14px 20px;
     font-size: 1.1rem;
-    padding: 10px 15px;
-  }
-
-  .test-result {
-    font-size: 1.1rem;
-    padding: 15px;
   }
 
   footer .footer-content {
-    padding: 30px 20px 20px;
+    padding: 40px 20px 20px;
+    gap: 25px;
   }
 
-  footer .footer-section h4 {
-    font-size: 1.1rem;
+  footer .footer-section {
+    flex: 1 1 100%;
   }
+}
 
-  footer .footer-section p,
-  footer .footer-section ul {
-    font-size: 0.9rem;
+/* Додаткові оптимізації для iOS */
+@supports (-webkit-touch-callout: none) {
+  /* Стилі тільки для iOS-пристроїв */
+  
+  /* Запобігання масштабуванню при фокусі на iOS */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
   }
-
-/* === Додаткові стилі для динамічного розділу новин === */
-.news-refresh-info {
-  margin-bottom: 1.5rem;
-  text-align: right;
-  font-size: 0.9em;
-  color: #bbb;
-}
-
-.news-refresh-info p {
-    margin: 0.5em 0;
-}
-
-.news-refresh-info button {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b); 
-  color: white;
-  border: none;
-  border-radius: 20px; 
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 6px 12px; 
-  font-size: 0.9em; 
-  font-weight: 600;
-  margin-left: 10px;
-  box-shadow: 0 2px 8px rgba(255, 65, 108, 0.3);
-}
-
-.news-refresh-info button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 65, 108, 0.4);
-}
-
-.news-source {
-  font-size: 0.85em; 
-  color: #a0a0a0;  
-  margin: 0.7em 0 1em; 
-  font-style: italic;
-  display: block; 
-}
-
-.news-card.loading-placeholder { 
-  opacity: 0.7;
-  border: 1px dashed rgba(255, 65, 108, 0.3); 
-  animation: pulse-placeholder 1.5s infinite ease-in-out;
-}
-
-@keyframes pulse-placeholder {
-  0% { background-color: rgba(255, 255, 255, 0.08); }
-  50% { background-color: rgba(255, 255, 255, 0.12); }
-  100% { background-color: rgba(255, 255, 255, 0.08); }
-}
-
-.news-card:hover { 
-  transform: translateY(-5px) scale(1.02); 
-  box-shadow: 
-    0 15px 45px rgba(255, 65, 108, 0.4), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.news-grid .news-loading { 
-  grid-column: 1 / -1; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem 1rem; 
-  color: #ccc; 
-  font-size: 1.1em;
-  font-weight: 600;
-  min-height: 200px; 
-}
-
-.news-grid .news-loading::after {
-  content: "";
-  width: 24px; 
-  height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.2); 
-  border-top: 3px solid #ff6b68; /* Акцентний колір #ff6b68 */
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite; 
-  margin-left: 15px; 
+  
+  /* Прибирання синього підсвічування на iOS */
+  a, button, input, select, textarea, label {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Покращення прокрутки для iOS */
+  .details,
+  .details-content,
+  nav,
+  .test-container {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Запобігання появі прозорого виділення при натисканні на елементи */
+  * {
+    -webkit-touch-callout: none;
+  }
+  
+  /* Виправлення проблем з fixed-позиціонуванням */
+  .details {
+    position: absolute;
+  }
+  
+  /* Запобігання проблемам з клавіатурою на iOS */
+  input, textarea {
+    -webkit-appearance: none;
+    border-radius: var(--radius-small);
+  }
+  
+  /* Виправлення для Safari на iOS */
+  @supports (-webkit-overflow-scrolling: touch) {
+    body {
+      cursor: pointer; /* Це змушує Safari правильно реагувати на дотики */
+    }
+  }
 }
