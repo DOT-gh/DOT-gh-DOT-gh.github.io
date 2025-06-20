@@ -4,220 +4,194 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Кібербезпека — Головна</title>
+  <title>CyberSecure - Ваша безпека в цифровому світі</title>
   
-  <!-- Основные мета-теги -->
+  <!-- Основні мета-теги -->
   <meta name="description" content="Дізнайтесь основи кібербезпеки, навчіться захищати свої дані і бути в безпеці в мережі">
   <meta name="keywords" content="кібербезпека, захист даних, інформаційна безпека, інтернет безпека">
   <meta name="author" content="CyberSecure">
   
   <!-- Мета-теги для социальных сетей -->
-  <meta property="og:title" content="Кібербезпека — Головна">
+  <meta property="og:title" content="CyberSecure - Ваша безпека в цифровому світі">
   <meta property="og:description" content="Дізнайтесь основи кібербезпеки, навчіться захищати свої дані і бути в безпеці в мережі">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dot-gh.github.io/">
   <meta property="og:image" content="images/cybersecurity-og-image.jpg">
   
-  <!-- Иконки и фавиконы -->
+  <!-- Іконки та фавіконки -->
   <link rel="icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   
-  <!-- Шрифты -->
+  <!-- Шрифти -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic-ext,latin-ext" rel="stylesheet">
   
-  <!-- Стили -->
+  <!-- Стилі -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="container header__container">
-      <div class="logo">
-        <div class="logo__img" aria-hidden="true">🔒</div>
-        <span class="logo__text">CyberSecure</span>
-      </div>
-      
-      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="nav" aria-label="Відкрити меню">
-        <span class="menu-toggle__line"></span>
-        <span class="menu-toggle__line"></span>
-        <span class="menu-toggle__line"></span>
-      </button>
-      
-      <nav class="nav" id="nav">
-        <ul class="nav__list">
-          <li class="nav__item"><a href="index.html" class="nav__link nav__link--active">Головна</a></li>
-          <li class="nav__item"><a href="about.html" class="nav__link">Про нас</a></li>
-          <li class="nav__item"><a href="resources.html" class="nav__link">Ресурси</a></li>
-        </ul>
-      </nav>
+  <header>
+    <div class="logo">
+      <div class="logo-img">🔒</div>
+      <span>CyberSecure</span>
     </div>
+    
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+    </div>
+    
+    <nav id="nav">
+      <a href="index.html" class="active">Головна</a>
+      <a href="about.html">Про нас</a>
+      <a href="resources.html">Ресурси</a>
+    </nav>
   </header>
   
   <main>
     <section class="hero-section">
-      <div class="container">
-        <h1 class="hero-section__title">Ваша безпека в цифровому світі</h1>
-        <p class="hero-section__subtitle">
-          Навчіться захищати свої персональні дані, розпізнавати кіберзагрози та користуватися інтернетом безпечно.
-          Ми надаємо практичні поради, інструменти та знання для захисту від хакерів, шахрайства та витоку даних.
-        </p>
-        <div class="hero-section__actions">
-          <button id="learnMoreBtn" class="btn btn--primary">
-            <span class="btn__icon" aria-hidden="true">🛡️</span>
-            <span class="btn__text">Дізнатися більше</span>
-          </button>
-        </div>
+      <h1>Ваша безпека в цифровому світі</h1>
+      <p class="hero-subtitle">
+        Навчіться захищати свої персональні дані, розпізнавати кіберзагрози та користуватися інтернетом безпечно.
+        Ми надаємо практичні поради, інструменти та знання для захисту від хакерів, шахрайства та витоку даних.
+      </p>
+      <div class="hero-actions">
+        <button id="learnMoreBtn" class="btn btn--primary">
+          <span class="btn__icon">🛡️</span>
+          <span class="btn__text">Дізнатися більше</span>
+        </button>
       </div>
     </section>
 
     <section class="details" id="detailsSection">
-      <div class="container">
-        <div class="details__content">
-          <h2 class="details__title">Чому кібербезпека важлива?</h2>
-          <p class="details__text">
-            У сучасному світі ми щодня користуємося інтернетом для роботи, навчання, спілкування та розваг.
-            Однак разом з можливостями приходять і ризики: хакерські атаки, крадіжка особистих даних,
-            фінансові шахрайства та вірусні програми загрожують нашій безпеці.
-          </p>
+      <div class="details-content">
+        <h3>Чому кібербезпека важлива?</h3>
+        <p>
+          У сучасному світі ми щодня користуємося інтернетом для роботи, навчання, спілкування та розваг.
+          Однак разом з можливостями приходять і ризики: хакерські атаки, крадіжка особистих даних,
+          фінансові шахрайства та вірусні програми загрожують нашій безпеці.
+        </p>
 
-          <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-item__number">4.1М</div>
-              <div class="stat-item__label">Кібератак щороку</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-item__number">75%</div>
-              <div class="stat-item__label">Компаній під загрозою</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-item__number">$4.5М</div>
-              <div class="stat-item__label">Середня вартість витоку</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-item__number">200%</div>
-              <div class="stat-item__label">Зростання атак</div>
-            </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">4.1М</div>
+            <div class="stat-label">Кібератак щороку</div>
           </div>
-
-          <p class="details__text">
-            Наш сайт допоможе вам навчитися основам кібербезпеки, створювати надійні паролі,
-            безпечно користуватися соціальними мережами та захищати свої фінансові дані онлайн.
-          </p>
-
-          <ul class="benefits-list">
-            <li class="benefits-list__item">Захист персональних даних від крадіжки</li>
-            <li class="benefits-list__item">Безпечне користування банківськими послугами онлайн</li>
-            <li class="benefits-list__item">Розпізнавання шахрайських схем та фішингу</li>
-            <li class="benefits-list__item">Створення надійних паролів та двофакторна автентифікація</li>
-            <li class="benefits-list__item">Захист домашньої мережі Wi-Fi</li>
-            <li class="benefits-list__item">Безпечне використання громадських мереж</li>
-          </ul>
-
-          <button id="closeDetails" class="btn btn--secondary">
-            <span class="btn__icon" aria-hidden="true">❌</span>
-            <span class="btn__text">Закрити</span>
-          </button>
+          <div class="stat-item">
+            <div class="stat-number">75%</div>
+            <div class="stat-label">Компаній під загрозою</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">$4.5М</div>
+            <div class="stat-label">Середня вартість витоку</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">200%</div>
+            <div class="stat-label">Зростання атак</div>
+          </div>
         </div>
+
+        <p>
+          Наш сайт допоможе вам навчитися основам кібербезпеки, створювати надійні паролі,
+          безпечно користуватися соціальними мережами та захищати свої фінансові дані онлайн.
+        </p>
+
+        <ul class="benefits-list">
+          <li>Захист персональних даних від крадіжки</li>
+          <li>Безпечне користування банківськими послугами онлайн</li>
+          <li>Розпізнавання шахрайських схем та фішингу</li>
+          <li>Створення надійних паролів та двофакторна автентифікація</li>
+          <li>Захист домашньої мережі Wi-Fi</li>
+          <li>Безпечне використання громадських мереж</li>
+        </ul>
+
+        <button id="closeDetails" class="btn btn--secondary">
+          <span class="btn__icon">❌</span>
+          <span class="btn__text">Закрити</span>
+        </button>
       </div>
     </section>
 
     <section class="quick-links">
-      <div class="container">
-        <h2 class="section-title">Основні напрямки</h2>
-        <div class="links-grid">
-          <a href="passwords.html" class="quick-link-card">
-            <div class="quick-link-card__icon" aria-hidden="true">🔐</div>
-            <h3 class="quick-link-card__title">Паролі</h3>
-            <p class="quick-link-card__text">Створення та управління надійними паролями</p>
-          </a>
-          <a href="phishing.html" class="quick-link-card">
-            <div class="quick-link-card__icon" aria-hidden="true">🎣</div>
-            <h3 class="quick-link-card__title">Фішинг</h3>
-            <p class="quick-link-card__text">Розпізнавання та уникнення шахрайських листів</p>
-          </a>
-          <a href="wifi-security.html" class="quick-link-card">
-            <div class="quick-link-card__icon" aria-hidden="true">📶</div>
-            <h3 class="quick-link-card__title">Wi-Fi</h3>
-            <p class="quick-link-card__text">Безпечне підключення до мереж</p>
-          </a>
-          <a href="social-media-security.html" class="quick-link-card">
-            <div class="quick-link-card__icon" aria-hidden="true">📱</div>
-            <h3 class="quick-link-card__title">Соцмережі</h3>
-            <p class="quick-link-card__text">Налаштування приватності в соціальних мережах</p>
-          </a>
-        </div>
+      <h2>Основні напрямки</h2>
+      <div class="links-grid">
+        <a href="passwords.html" class="quick-link-card">
+          <div class="card-icon">🔐</div>
+          <h3>Паролі</h3>
+          <p>Створення та управління надійними паролями</p>
+        </a>
+        <a href="phishing.html" class="quick-link-card">
+          <div class="card-icon">🎣</div>
+          <h3>Фішинг</h3>
+          <p>Розпізнавання та уникнення шахрайських листів</p>
+        </a>
+        <a href="wifi-security.html" class="quick-link-card">
+          <div class="card-icon">📶</div>
+          <h3>Wi-Fi</h3>
+          <p>Безпечне підключення до мереж</p>
+        </a>
+        <a href="social-media-security.html" class="quick-link-card">
+          <div class="card-icon">📱</div>
+          <h3>Соцмережі</h3>
+          <p>Налаштування приватності в соціальних мережах</p>
+        </a>
       </div>
     </section>
 
     <section class="news-section">
-      <div class="container">
-        <h2 class="section-title">Останні новини кібербезпеки</h2>
-        <div class="news-grid">
-          <div class="news-loading" style="display: none;">Завантаження новин...</div>
-        </div>
+      <h2>Останні новини кібербезпеки</h2>
+      <div class="news-grid">
+        <div class="news-loading" style="display: none;">Завантаження новин...</div>
       </div>
     </section>
 
     <section class="security-test">
-      <div class="container">
-        <h2 class="section-title">Тест знань кібербезпеки</h2>
-        <p class="section-description">Перевірте свої знання основ безпеки в інтернеті</p>
+      <h2>Тест знань кібербезпеки</h2>
+      <p>Перевірте свої знання основ безпеки в інтернеті</p>
 
-        <button class="btn btn--primary" id="startTest">Почати тест</button>
+      <button class="btn primary" id="startTest">Почати тест</button>
 
-        <div class="test-container" id="testContainer" style="display: none;">
-          <div class="question" id="question">
-            <h3 class="question__title">Питання завантажується...</h3>
-            <div class="answers" id="answers"></div>
-          </div>
-          <div class="test-result" id="testResult" style="display: none;"></div>
-          <button class="btn btn--secondary" id="nextQuestion" style="display: none;">Наступне питання</button>
+      <div class="test-container" id="testContainer" style="display: none;">
+        <div class="question" id="question">
+          <h3>Питання завантажується...</h3>
+          <div class="answers" id="answers"></div>
         </div>
+        <div class="test-result" id="testResult" style="display: none;"></div>
+        <button class="btn secondary" id="nextQuestion" style="display: none;">Наступне питання</button>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__content">
-        <div class="footer__section">
-          <h4 class="footer__title">Про CyberSecure</h4>
-          <p class="footer__text">
-            Ми допомагаємо людям навчитися основам кібербезпеки та захищати
-            свої дані в цифровому світі. Наша місія - зробити інтернет безпечнішим для всіх.
-          </p>
-        </div>
-        <div class="footer__section">
-          <h4 class="footer__title">Корисні посилання</h4>
-          <ul class="footer__list">
-            <li class="footer__item"><a href="guides.html" class="footer__link">Посібники</a></li>
-          </ul>
-        </div>
-        <div class="footer__section">
-          <h4 class="footer__title">Підтримка</h4>
-          <ul class="footer__list">
-            <li class="footer__item"><a href="help.html" class="footer__link">Допомога</a></li>
-          </ul>
-        </div>
-        <div class="footer__section">
-          <h4 class="footer__title">Слідкуйте за нами</h4>
-          <ul class="footer__list footer__list--social">
-            <li class="footer__item">
-              <a href="https://www.linkedin.com/in/dot-gh" target="_blank" rel="noopener noreferrer" class="footer__link">
-                <span aria-hidden="true">💼</span> LinkedIn
-              </a>
-            </li>
-            <li class="footer__item">
-              <a href="https://t.me/dot_gh" target="_blank" rel="noopener noreferrer" class="footer__link">
-                <span aria-hidden="true">📱</span> Telegram
-              </a>
-            </li>
-          </ul>
-        </div>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Про CyberSecure</h4>
+        <p>
+          Ми допомагаємо людям навчитися основам кібербезпеки та захищати
+          свої дані в цифровому світі. Наша місія - зробити інтернет безпечнішим для всіх.
+        </p>
       </div>
-      <div class="footer__bottom">
-        <p class="footer__copyright">&copy; 2025 CyberSecure. Всі права захищені. | <a href="privacy.html" class="footer__bottom-link">Політика конфіденційності</a> | <a href="terms.html" class="footer__bottom-link">Умови використання</a></p>
+      <div class="footer-section">
+        <h4>Корисні посилання</h4>
+        <ul>
+          <li><a href="guides.html">Посібники</a></li>
+        </ul>
       </div>
+      <div class="footer-section">
+        <h4>Підтримка</h4>
+        <ul>
+          <li><a href="help.html">Допомога</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Слідкуйте за нами</h4>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/dot-gh" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></li>
+          <li><a href="https://t.me/dot_gh" target="_blank" rel="noopener noreferrer">📱 Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CyberSecure. Всі права захищені. | Політика конфіденційності | Умови використання</p>
     </div>
   </footer>
 
