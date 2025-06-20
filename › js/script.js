@@ -119,61 +119,61 @@ document.addEventListener('DOMContentLoaded', function() {
   // Завантаження новин з кібербезпеки
   function loadNews() {
     const newsGrid = document.querySelector('.news-grid');
+    if (!newsGrid) return;
+
     const loadingElement = document.createElement('div');
     loadingElement.className = 'news-loading';
     loadingElement.innerHTML = 'Завантаження новин... <div class="loading-spinner"></div>';
     
-    if (newsGrid) {
-      newsGrid.innerHTML = '';
-      newsGrid.appendChild(loadingElement);
-      
-      // Імітація завантаження даних з API
-      setTimeout(function() {
-        const newsData = [
-          {
-            title: 'Нова кібератака на критичну інфраструктуру',
-            date: '10 червня 2025',
-            description: 'Експерти виявили нову хвилю атак на системи водопостачання та електромережі в кількох країнах. Хакери використовують вразливості у застарілому програмному забезпеченні.',
-            link: '#'
-          },
-          {
-            title: 'Уряд посилює законодавство про кіберзахист',
-            date: '5 червня 2025',
-            description: 'Парламент ухвалив новий закон, що збільшує відповідальність за кіберзлочини та посилює захист персональних даних громадян від несанкціонованого доступу.',
-            link: '#'
-          },
-          {
-            title: 'Масштабний витік даних у популярному сервісі',
-            date: '1 червня 2025',
-            description: 'Більше 10 мільйонів користувачів постраждали від витоку особистої інформації через вразливість у системі безпеки. Компанія вже розпочала внутрішнє розслідування.',
-            link: '#'
-          }
-        ];
-        
-        newsGrid.innerHTML = '';
-        
-        if (newsData.length === 0) {
-          const noNewsElement = document.createElement('div');
-          noNewsElement.className = 'news-error';
-          noNewsElement.textContent = 'На жаль, новини відсутні. Спробуйте пізніше.';
-          newsGrid.appendChild(noNewsElement);
-        } else {
-          newsData.forEach(news => {
-            const newsCard = document.createElement('div');
-            newsCard.className = 'news-card';
-            
-            newsCard.innerHTML = `
-              <div class="news-date">${news.date}</div>
-              <h3>${news.title}</h3>
-              <p>${news.description}</p>
-              <a href="${news.link}" class="read-more">Читати далі</a>
-            `;
-            
-            newsGrid.appendChild(newsCard);
-          });
+    newsGrid.innerHTML = '';
+    newsGrid.appendChild(loadingElement);
+    
+    // Імітація завантаження даних з API
+    setTimeout(function() {
+      const newsData = [
+        {
+          title: 'Нова кібератака на критичну інфраструктуру',
+          date: '10 червня 2025',
+          description: 'Експерти виявили нову хвилю атак на системи водопостачання та електромережі в кількох країнах. Хакери використовують вразливості у застарілому програмному забезпеченні.',
+          link: '#'
+        },
+        {
+          title: 'Уряд посилює законодавство про кіберзахист',
+          date: '5 червня 2025',
+          description: 'Парламент ухвалив новий закон, що збільшує відповідальність за кіберзлочини та посилює захист персональних даних громадян від несанкціонованого доступу.',
+          link: '#'
+        },
+        {
+          title: 'Масштабний витік даних у популярному сервісі',
+          date: '1 червня 2025',
+          description: 'Більше 10 мільйонів користувачів постраждали від витоку особистої інформації через вразливість у системі безпеки. Компанія вже розпочала внутрішнє розслідування.',
+          link: '#'
         }
-      }, 1500);
-    }
+      ];
+      
+      newsGrid.innerHTML = '';
+      
+      if (newsData.length === 0) {
+        const noNewsElement = document.createElement('div');
+        noNewsElement.className = 'news-error';
+        noNewsElement.textContent = 'На жаль, новини відсутні. Спробуйте пізніше.';
+        newsGrid.appendChild(noNewsElement);
+      } else {
+        newsData.forEach(news => {
+          const newsCard = document.createElement('div');
+          newsCard.className = 'news-card';
+          
+          newsCard.innerHTML = `
+            <div class="news-date">${news.date}</div>
+            <h3>${news.title}</h3>
+            <p>${news.description}</p>
+            <a href="${news.link}" class="read-more">Читати далі</a>
+          `;
+          
+          newsGrid.appendChild(newsCard);
+        });
+      }
+    }, 1500);
   }
   
   // Викликаємо функцію завантаження новин
