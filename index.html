@@ -3,639 +3,396 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ДотКит.ме - универсальный помощник</title>
+    <title>ДотКит.ме - помощник для пожилых людей</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <meta name="description" content="ДотКит - удобный сайт-помощник для пожилых людей с функциями просмотра фильмов, погоды и рецептов">
-    <meta name="author" content="dot_gh">
-    <meta property="og:title" content="ДотКит - универсальный помощник">
-    <meta property="og:description" content="Удобный сайт-помощник для пожилых людей с функциями просмотра фильмов, погоды и рецептов">
-    <meta property="og:image" content="https://dotkit.me/og-image.jpg">
+    <meta name="description" content="ДотКит - удобный сайт-помощник для пожилых людей с функциями просмотра фильмов, погоды, рецептов и игр">
+    <meta name="author" content="DOT-gh">
+    <!-- Мета-теги для соц.сетей -->
+    <meta property="og:title" content="ДотКит.ме - универсальный помощник">
+    <meta property="og:description" content="Погода, фильмы, рецепты и другая полезная информация в одном месте">
+    <meta property="og:image" content="https://dotkit.me/images/preview.jpg">
     <meta property="og:url" content="https://dotkit.me">
-    <meta name="theme-color" content="#1a1a1a">
+    <meta name="theme-color" content="#2c3e50">
 </head>
 <body>
-    <!-- Прелоадер -->
-    <div class="preloader" id="preloader">
-        <div class="loader-container">
-            <div class="loader"></div>
-            <div class="loader-text">Загрузка...</div>
+    <!-- Прелоадер для первоначальной загрузки -->
+    <div id="preloader" class="preloader">
+        <div class="loader-content">
+            <div class="weather-icon">⛅</div>
+            <h2 class="loading-text">Загрузка...</h2>
+            <p class="loading-detail">Обновление информации о погоде</p>
         </div>
     </div>
 
-    <!-- Основной контейнер для всех страниц -->
-    <div class="page-container">
-        <!-- Главная страница -->
-        <section id="main-page" class="page active">
-            <!-- Заголовок сайта (первый вариант) -->
-            <div class="main-header gradient-bg">
-                <div class="header-content">
-                    <h1 class="site-title">ДотКит.ме</h1>
-                    <div class="site-subtitle">Универсальный помощник для вас</div>
-                </div>
+    <!-- Главная страница -->
+    <div id="main-section" class="section active">
+        <!-- Шапка сайта с градиентом -->
+        <header class="main-header">
+            <h1 class="site-title">ДотКит.ме</h1>
+            <p class="site-tagline">Универсальный помощник для вас</p>
+        </header>
+
+        <!-- Погодный виджет на главной -->
+        <div class="weather-widget" id="main-weather-widget">
+            <!-- Содержимое будет добавлено через JavaScript -->
+        </div>
+
+        <!-- Основные кнопки навигации -->
+        <div class="main-buttons">
+            <button class="main-button movies-button" onclick="showSection('movies-section')">
+                <span class="button-icon">🎬</span>
+                <span class="button-text">Фильмы</span>
+            </button>
+            
+            <button class="main-button weather-button" onclick="showSection('weather-section')">
+                <span class="button-icon">☁️</span>
+                <span class="button-text">Погода</span>
+            </button>
+            
+            <button class="main-button recipes-button" onclick="showSection('recipes-section')">
+                <span class="button-icon">🍳</span>
+                <span class="button-text">Рецепты</span>
+            </button>
+            
+            <button class="main-button games-button" onclick="showSection('games-section')">
+                <span class="button-icon">🎮</span>
+                <span class="button-text">Игры</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Раздел с фильмами -->
+    <div id="movies-section" class="section">
+        <div class="section-header">
+            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
+            <h2 class="section-title">Фильмы</h2>
+        </div>
+
+        <!-- Фильтр по жанрам (минималистичный) -->
+        <div class="movie-filters">
+            <select id="genre-filter" class="movie-filter" onchange="filterMovies()">
+                <option value="all">Все жанры</option>
+                <option value="comedy">Комедии</option>
+                <option value="drama">Драмы</option>
+                <option value="adventure">Приключения</option>
+                <option value="documentary">Документальные</option>
+            </select>
+
+            <button class="random-movie-btn" onclick="showRandomMovie()">
+                <span class="button-icon">🎲</span>
+                <span>Случайный фильм</span>
+            </button>
+        </div>
+
+        <!-- Сетка с фильмами -->
+        <div class="movies-grid" id="movies-grid">
+            <!-- Фильмы будут добавлены через JavaScript -->
+        </div>
+
+        <!-- YouTube плеер для фильмов -->
+        <div id="movie-player-container" class="movie-player-container hidden">
+            <div class="player-header">
+                <h3 id="current-movie-title" class="movie-title">Название фильма</h3>
+                <button class="close-player-btn" onclick="closeMoviePlayer()">✖</button>
             </div>
-
-            <!-- Заголовок сайта (второй вариант - темный) -->
-            <div class="main-header dark-header" style="display: none;">
-                <div class="header-container">
-                    <div class="theme-indicator">Персональный помічник для літніх людей</div>
-                    <div class="logo-container">
-                        <h1 class="site-title-dark">dotkit<span class="dot-accent">.</span>me</h1>
-                    </div>
-                    <div class="site-subtitle-dark">Універсальний інструмент для допомоги</div>
-                    <div class="for-you-button-container">
-                        <button class="for-you-button" onclick="showUserPanel()">Для вас</button>
-                    </div>
-                </div>
+            <div class="youtube-player-wrapper">
+                <div id="youtube-player"></div>
             </div>
-
-            <!-- Погодный виджет на главной странице -->
-            <div class="weather-widget" id="main-weather">
-                <div class="weather-icon" id="main-weather-icon">⛅</div>
-                <div class="weather-loading">
-                    <div class="loading-title">Загрузка...</div>
-                    <div class="loading-text">Обновление информации о погоде</div>
-                </div>
+            <div class="movie-description" id="current-movie-description">
+                <!-- Описание фильма будет добавлено через JavaScript -->
             </div>
+        </div>
 
-            <!-- Основные кнопки навигации -->
-            <div class="main-buttons">
-                <button class="main-button movies" onclick="switchPage('movies-page')">
-                    <span class="button-icon">🎬</span>
-                    <span class="button-text">Фильмы</span>
-                </button>
-                <button class="main-button weather" onclick="switchPage('weather-page')">
-                    <span class="button-icon">☁️</span>
-                    <span class="button-text">Погода</span>
-                </button>
-                <button class="main-button recipes" onclick="switchPage('recipes-page')">
-                    <span class="button-icon">🍳</span>
-                    <span class="button-text">Рецепты</span>
-                </button>
-                <button class="main-button games" onclick="switchPage('games-page')">
-                    <span class="button-icon">🎮</span>
-                    <span class="button-text">Игры</span>
-                </button>
+        <!-- Недавно просмотренные -->
+        <div class="recently-viewed">
+            <h3 class="section-subtitle">Недавно просмотренные</h3>
+            <div class="recently-viewed-list" id="recently-viewed-list">
+                <!-- История будет добавлена через JavaScript -->
             </div>
+        </div>
+    </div>
 
-            <!-- Информация для пользователя (опционально) -->
-            <div class="user-section">
-                <div class="recently-viewed-section" id="recently-viewed-section" style="display: none;">
-                    <h2 class="section-title">Недавно просмотренное</h2>
-                    <div class="recently-viewed-items" id="recently-viewed-items">
-                        <!-- Будет заполнено динамически -->
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Раздел с погодой -->
+    <div id="weather-section" class="section">
+        <div class="section-header">
+            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
+            <h2 class="section-title">Погода</h2>
+        </div>
 
-        <!-- Страница с фильмами -->
-        <section id="movies-page" class="page">
-            <div class="page-header">
-                <button class="back-button" onclick="switchPage('main-page')">
-                    <span class="back-icon">←</span> 
-                    <span class="back-text">Назад</span>
-                </button>
-                <h2 class="page-title">Фильмы</h2>
-            </div>
-
-            <!-- Основной контент страницы с фильмами -->
-            <div class="movies-container">
-                <!-- Фильтры для фильмов (с возможностью скрыть по умолчанию) -->
-                <div class="movies-filters">
-                    <button class="filter-button" id="filter-toggle">
-                        <span class="filter-icon">🔍</span>
-                        <span class="filter-text">Фильтры</span>
-                    </button>
-                    
-                    <div class="filter-container" id="filters-container" style="display: none;">
-                        <div class="filter-row">
-                            <label class="filter-label">Жанр:</label>
-                            <select id="genre-filter" class="filter-select">
-                                <option value="all">Все жанры</option>
-                                <option value="comedy">Комедии</option>
-                                <option value="drama">Драмы</option>
-                                <option value="military">Военные</option>
-                                <option value="adventure">Приключения</option>
-                            </select>
-                        </div>
-                        <div class="filter-row">
-                            <label class="filter-label">Год:</label>
-                            <select id="year-filter" class="filter-select">
-                                <option value="all">Все годы</option>
-                                <option value="old">До 1980</option>
-                                <option value="80s">1980-1990</option>
-                                <option value="90s">1990-2000</option>
-                                <option value="modern">После 2000</option>
-                            </select>
-                        </div>
-                        <button class="random-movie-button" onclick="showRandomMovie()">
-                            <span class="random-icon">🎲</span>
-                            <span class="random-text">Случайный фильм</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Сетка с фильмами -->
-                <div class="movies-grid" id="movies-grid">
-                    <!-- Будет заполнено динамически -->
-                </div>
-
-                <!-- Секция для YouTube видео -->
-                <div class="featured-movies">
-                    <h3 class="section-title">Рекомендуемые фильмы</h3>
-                    <div class="featured-movies-grid">
-                        <div class="featured-movie">
-                            <h4 class="movie-title">Операция «Ы» и другие приключения Шурика</h4>
-                            <div class="youtube-container">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/1oFanenFGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                        </div>
-                        <div class="featured-movie">
-                            <h4 class="movie-title">Москва слезам не верит</h4>
-                            <div class="youtube-container">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/snoPxPTnTNw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                        </div>
-                        <div class="featured-movie">
-                            <h4 class="movie-title">Любовь и голуби</h4>
-                            <div class="youtube-container">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/GPJ8X5E0x2c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Детальная информация о фильме -->
-            <div class="movie-details" id="movie-details">
-                <button class="close-button" onclick="closeMovieDetails()">×</button>
-                <div class="movie-details-content">
-                    <img id="movie-poster" class="movie-poster" src="" alt="">
-                    <div class="movie-info">
-                        <h3 id="movie-title" class="detail-title"></h3>
-                        <div class="movie-meta">
-                            <span id="movie-year" class="movie-year"></span>
-                            <span id="movie-genre" class="movie-genre"></span>
-                            <span id="movie-duration" class="movie-duration"></span>
-                        </div>
-                        <p id="movie-description" class="movie-description"></p>
-                        <div class="movie-actions">
-                            <button id="play-movie" class="play-button" onclick="playSelectedMovie()">
-                                <span class="play-icon">▶</span> Смотреть
-                            </button>
-                            <button id="favorite-movie" class="favorite-button" onclick="addToFavorites()">
-                                <span class="favorite-icon">❤</span> В избранное
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Видеоплеер для фильма -->
-            <div class="movie-player" id="movie-player">
-                <button class="close-button" onclick="closeMoviePlayer()">×</button>
-                <video id="video-element" controls>
-                    <source id="video-source" src="" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-        </section>
-
-        <!-- Страница с погодой -->
-        <section id="weather-page" class="page">
-            <div class="page-header">
-                <button class="back-button" onclick="switchPage('main-page')">
-                    <span class="back-icon">←</span> 
-                    <span class="back-text">Назад</span>
-                </button>
-                <h2 class="page-title">Погода</h2>
-            </div>
-
-            <!-- Основной контент страницы с погодой -->
-            <div class="weather-container">
-                <!-- Верхняя плашка с текущей информацией -->
-                <div class="weather-now-container">
-                    <div class="weather-summary">
-                        <div class="weather-location" id="weather-location">
-                            <span class="location-icon">📍</span>
-                            <span id="city-name">Определение местоположения...</span>
-                        </div>
-                        <div class="weather-now" id="weather-now">
-                            <div class="weather-icon-large" id="weather-icon-large">⛅</div>
-                            <div class="weather-temp-large" id="weather-temp-large">-- °C</div>
-                            <div class="weather-condition" id="weather-condition">Загрузка данных...</div>
-                        </div>
-                        <div class="weather-details" id="weather-details">
-                            <div class="weather-detail">
-                                <span class="detail-icon">💧</span>
-                                <span class="detail-label">Влажность:</span>
-                                <span class="detail-value" id="humidity-value">--</span>
-                            </div>
-                            <div class="weather-detail">
-                                <span class="detail-icon">💨</span>
-                                <span class="detail-label">Ветер:</span>
-                                <span class="detail-value" id="wind-value">-- м/с</span>
-                            </div>
-                            <div class="weather-detail">
-                                <span class="detail-icon">🌡️</span>
-                                <span class="detail-label">Ощущается как:</span>
-                                <span class="detail-value" id="feels-like-value">-- °C</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Почасовой прогноз -->
-                <div class="hourly-forecast-container">
-                    <h3 class="section-title">Прогноз по часам</h3>
-                    <div class="hourly-forecast" id="hourly-forecast">
-                        <!-- Будет заполнено динамически -->
-                    </div>
-                </div>
-
-                <!-- Прогноз на несколько дней -->
-                <div class="daily-forecast-container">
-                    <h3 class="section-title">Прогноз на неделю</h3>
-                    <div class="daily-forecast" id="daily-forecast">
-                        <!-- Будет заполнено динамически -->
-                    </div>
-                </div>
-
-                <!-- Погодная карта -->
-                <div class="weather-map-container">
-                    <h3 class="section-title">Карта осадков</h3>
-                    <div class="weather-map" id="weather-map">
-                        <!-- Здесь будет встроена карта погоды -->
-                    </div>
-                </div>
-
-                <!-- Погодные предупреждения -->
-                <div class="weather-alerts-container" id="weather-alerts-container" style="display: none;">
-                    <h3 class="section-title alert-title">⚠️ Предупреждения</h3>
-                    <div class="weather-alerts" id="weather-alerts">
-                        <!-- Будет заполнено динамически при наличии предупреждений -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Страница с рецептами -->
-        <section id="recipes-page" class="page">
-            <div class="page-header">
-                <button class="back-button" onclick="switchPage('main-page')">
-                    <span class="back-icon">←</span> 
-                    <span class="back-text">Назад</span>
-                </button>
-                <h2 class="page-title">Рецепты</h2>
-            </div>
-
-            <!-- Основной контент страницы с рецептами -->
-            <div class="recipes-container">
-                <!-- Поиск рецептов -->
-                <div class="recipes-search">
-                    <input type="text" id="recipe-search" class="search-input" placeholder="Поиск рецептов...">
-                    <button class="search-button" onclick="searchRecipes()">
-                        <span class="search-icon">🔍</span>
-                    </button>
-                </div>
-
-                <!-- Фильтры для рецептов -->
-                <div class="recipes-filters">
-                    <div class="filter-buttons">
-                        <button class="filter-pill active" data-category="all" onclick="filterRecipes('all')">Все</button>
-                        <button class="filter-pill" data-category="breakfast" onclick="filterRecipes('breakfast')">Завтраки</button>
-                        <button class="filter-pill" data-category="soups" onclick="filterRecipes('soups')">Супы</button>
-                        <button class="filter-pill" data-category="main" onclick="filterRecipes('main')">Основные</button>
-                        <button class="filter-pill" data-category="dessert" onclick="filterRecipes('dessert')">Десерты</button>
-                    </div>
-                </div>
-
-                <!-- Сетка с рецептами -->
-                <div class="recipes-grid" id="recipes-grid">
-                    <!-- Будет заполнено динамически -->
-                </div>
-            </div>
-
-            <!-- Детальная информация о рецепте -->
-            <div class="recipe-details" id="recipe-details">
-                <button class="close-button" onclick="closeRecipeDetails()">×</button>
-                <div class="recipe-details-content">
-                    <img id="recipe-image" class="recipe-image" src="" alt="">
-                    <h3 id="recipe-title" class="detail-title"></h3>
-                    <div class="recipe-meta">
-                        <span id="recipe-time" class="recipe-time">
-                            <span class="meta-icon">🕒</span>
-                            <span id="recipe-time-value"></span>
-                        </span>
-                        <span id="recipe-complexity" class="recipe-complexity">
-                            <span class="meta-icon">🔥</span>
-                            <span id="recipe-complexity-value"></span>
-                        </span>
-                        <span id="recipe-portions" class="recipe-portions">
-                            <span class="meta-icon">🍽️</span>
-                            <span id="recipe-portions-value"></span>
-                        </span>
-                    </div>
-                    <div class="recipe-sections">
-                        <div class="ingredients-section">
-                            <h4 class="section-subtitle">Ингредиенты:</h4>
-                            <ul id="recipe-ingredients" class="ingredients-list">
-                                <!-- Будет заполнено динамически -->
-                            </ul>
-                        </div>
-                        <div class="steps-section">
-                            <h4 class="section-subtitle">Приготовление:</h4>
-                            <ol id="recipe-steps" class="steps-list">
-                                <!-- Будет заполнено динамически -->
-                            </ol>
-                        </div>
-                    </div>
-                    <div class="recipe-actions">
-                        <button class="print-button" onclick="printRecipe()">
-                            <span class="print-icon">🖨️</span> Распечатать
-                        </button>
-                        <button class="favorite-button" onclick="addRecipeToFavorites()">
-                            <span class="favorite-icon">❤</span> В избранное
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Страница с играми -->
-        <section id="games-page" class="page">
-            <div class="page-header">
-                <button class="back-button" onclick="switchPage('main-page')">
-                    <span class="back-icon">←</span> 
-                    <span class="back-text">Назад</span>
-                </button>
-                <h2 class="page-title">Игры</h2>
-            </div>
-
-            <!-- Основной контент страницы с играми -->
-            <div class="games-container">
-                <div class="games-intro">
-                    <p>Тренируйте память и внимание с помощью этих простых игр:</p>
-                </div>
-
-                <!-- Сетка с играми -->
-                <div class="games-grid" id="games-grid">
-                    <div class="game-card" onclick="startMemoryGame()">
-                        <div class="game-icon">🃏</div>
-                        <div class="game-info">
-                            <h3 class="game-title">Найди пару</h3>
-                            <p class="game-description">Тренирует память и концентрацию</p>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="startPuzzleGame()">
-                        <div class="game-icon">🧩</div>
-                        <div class="game-info">
-                            <h3 class="game-title">Пазл</h3>
-                            <p class="game-description">Развивает внимательность</p>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="startQuizGame()">
-                        <div class="game-icon">❓</div>
-                        <div class="game-info">
-                            <h3 class="game-title">Викторина</h3>
-                            <p class="game-description">Проверьте свои знания</p>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="startWordGame()">
-                        <div class="game-icon">📝</div>
-                        <div class="game-info">
-                            <h3 class="game-title">Составь слово</h3>
-                            <p class="game-description">Тренировка мышления</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Игра "Найди пару" -->
-            <div id="memory-game-container" class="game-container" style="display: none;">
-                <div class="game-header">
-                    <h3 class="game-container-title">Найди пару</h3>
-                    <div class="game-stats">
-                        <div class="game-stat">
-                            <span class="stat-label">Ходы:</span>
-                            <span class="stat-value" id="memory-moves">0</span>
-                        </div>
-                        <div class="game-stat">
-                            <span class="stat-label">Пары:</span>
-                            <span class="stat-value"><span id="memory-pairs-found">0</span>/<span id="memory-total-pairs">8</span></span>
-                        </div>
-                    </div>
-                    <button class="close-game-button" onclick="closeMemoryGame()">×</button>
-                </div>
-                <div class="memory-board" id="memory-board">
-                    <!-- Карточки будут добавлены динамически -->
-                </div>
-                <div class="game-controls">
-                    <button class="game-button" onclick="restartMemoryGame()">Начать заново</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Страница "Для вас" (персональная страница) -->
-        <section id="user-page" class="page">
-            <div class="page-header">
-                <button class="back-button" onclick="switchPage('main-page')">
-                    <span class="back-icon">←</span> 
-                    <span class="back-text">Назад</span>
-                </button>
-                <h2 class="page-title">Для вас</h2>
+        <!-- Текущая погода (детально) -->
+        <div class="weather-card" id="current-weather">
+            <div class="weather-main">
+                <div class="weather-icon-large" id="weather-icon-large">⛅</div>
+                <div class="weather-temp" id="weather-temp-large">+22°C</div>
+                <div class="weather-condition" id="weather-condition">Переменная облачность</div>
             </div>
             
-            <!-- Панель пользователя -->
-            <div class="user-panel">
-                <div class="user-info">
-                    <div class="user-avatar">👤</div>
-                    <div class="user-welcome">
-                        <h3 class="welcome-message">Здравствуйте, <span id="user-name-display">Гость</span>!</h3>
-                        <button class="change-name-button" onclick="showNamePrompt()">Изменить имя</button>
-                    </div>
+            <div class="weather-details">
+                <div class="weather-detail-item">
+                    <span class="detail-icon">💧</span>
+                    <span class="detail-label">Влажность:</span>
+                    <span class="detail-value" id="weather-humidity">60%</span>
                 </div>
-
-                <div class="user-stats">
-                    <div class="stats-card">
-                        <div class="stats-icon">🎬</div>
-                        <div class="stats-info">
-                            <div class="stats-value" id="movies-watched">0</div>
-                            <div class="stats-label">Просмотрено фильмов</div>
-                        </div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-icon">🍳</div>
-                        <div class="stats-info">
-                            <div class="stats-value" id="recipes-viewed">0</div>
-                            <div class="stats-label">Просмотрено рецептов</div>
-                        </div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-icon">🎮</div>
-                        <div class="stats-info">
-                            <div class="stats-value" id="games-played">0</div>
-                            <div class="stats-label">Сыграно игр</div>
-                        </div>
-                    </div>
+                <div class="weather-detail-item">
+                    <span class="detail-icon">💨</span>
+                    <span class="detail-label">Ветер:</span>
+                    <span class="detail-value" id="weather-wind">5 м/с</span>
                 </div>
-
-                <div class="favorites-section">
-                    <h3 class="section-title">Избранное</h3>
-                    <div class="favorites-tabs">
-                        <button class="favorites-tab active" data-tab="favorite-movies">Фильмы</button>
-                        <button class="favorites-tab" data-tab="favorite-recipes">Рецепты</button>
-                    </div>
-                    <div class="favorites-content">
-                        <div id="favorite-movies" class="favorites-tab-content active">
-                            <!-- Будет заполнено динамически -->
-                            <div class="empty-favorites">У вас пока нет избранных фильмов</div>
-                        </div>
-                        <div id="favorite-recipes" class="favorites-tab-content">
-                            <!-- Будет заполнено динамически -->
-                            <div class="empty-favorites">У вас пока нет избранных рецептов</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="history-section">
-                    <h3 class="section-title">История просмотров</h3>
-                    <div class="history-tabs">
-                        <button class="history-tab active" data-tab="movies-history">Фильмы</button>
-                        <button class="history-tab" data-tab="recipes-history">Рецепты</button>
-                    </div>
-                    <div class="history-content">
-                        <div id="movies-history" class="history-tab-content active">
-                            <!-- Будет заполнено динамически -->
-                            <div class="empty-history">Вы пока не просматривали фильмы</div>
-                        </div>
-                        <div id="recipes-history" class="history-tab-content">
-                            <!-- Будет заполнено динамически -->
-                            <div class="empty-history">Вы пока не просматривали рецепты</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <h3 class="section-title">Настройки</h3>
-                    <div class="settings-form">
-                        <div class="settings-group">
-                            <label class="settings-label">Город для погоды:</label>
-                            <div class="settings-input-group">
-                                <input type="text" id="default-city" class="settings-input" placeholder="Автоматически">
-                                <button class="location-button" onclick="resetLocation()">Автоматически</button>
-                            </div>
-                        </div>
-                        <div class="settings-group">
-                            <label class="settings-label">Размер шрифта:</label>
-                            <div class="font-size-buttons">
-                                <button class="font-size-button" data-size="small">A</button>
-                                <button class="font-size-button active" data-size="medium">A</button>
-                                <button class="font-size-button" data-size="large">A</button>
-                            </div>
-                        </div>
-                        <div class="settings-group">
-                            <label class="settings-label">Тема:</label>
-                            <div class="theme-buttons">
-                                <button class="theme-button" data-theme="light">Светлая</button>
-                                <button class="theme-button active" data-theme="dark">Темная</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="weather-detail-item">
+                    <span class="detail-icon">🌡️</span>
+                    <span class="detail-label">Давление:</span>
+                    <span class="detail-value" id="weather-pressure">750 мм рт.ст.</span>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Секция администратора (скрытая, доступна только через точку в футере) -->
-        <section id="admin-page" class="page">
-            <div class="page-header">
-                <button class="back-button" onclick="switchPage('main-page')">
-                    <span class="back-icon">←</span> 
-                    <span class="back-text">Назад</span>
-                </button>
-                <h2 class="page-title">Администрирование</h2>
-            </div>
+        <!-- Прогноз на 5 дней -->
+        <h3 class="section-subtitle">Прогноз на 5 дней</h3>
+        <div class="forecast-container" id="forecast-container">
+            <!-- Прогноз погоды будет добавлен через JavaScript -->
+        </div>
 
-            <!-- Панель администратора -->
-            <div class="admin-panel">
-                <h3 class="section-title">Пользователи</h3>
-                <div class="users-list" id="users-list">
-                    <!-- Будет заполнено динамически -->
-                    <div class="admin-user-card">
-                        <div class="user-details">
-                            <div class="user-initial">Г</div>
-                            <div class="user-info">
-                                <div class="user-name">Гость</div>
-                                <div class="user-ip" id="current-ip">IP: ---.---.---.---</div>
-                            </div>
-                        </div>
-                        <div class="user-edit">
-                            <button class="edit-user-button" onclick="editUser('guest')">
-                                <span class="edit-icon">✏️</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <h3 class="section-title">Статистика использования</h3>
-                <div class="admin-stats">
-                    <div class="admin-stat-card">
-                        <div class="stat-number" id="total-views">0</div>
-                        <div class="stat-label">Общее число просмотров</div>
-                    </div>
-                    <div class="admin-stat-card">
-                        <div class="stat-number" id="unique-users">0</div>
-                        <div class="stat-label">Уникальных пользователей</div>
-                    </div>
-                    <div class="admin-stat-card">
-                        <div class="stat-number" id="most-popular">--</div>
-                        <div class="stat-label">Самый популярный раздел</div>
-                    </div>
-                </div>
+        <!-- Почасовой прогноз -->
+        <h3 class="section-subtitle">Прогноз по часам</h3>
+        <div class="hourly-forecast" id="hourly-forecast">
+            <!-- Почасовой прогноз будет добавлен через JavaScript -->
+        </div>
 
-                <h3 class="section-title">Логи активности</h3>
-                <div class="activity-logs" id="activity-logs">
-                    <!-- Будет заполнено динамически -->
-                    <div class="empty-logs">Нет данных об активности</div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Модальные окна -->
-    <div class="modal" id="name-modal">
-        <div class="modal-content">
-            <h3 class="modal-title">Как вас зовут?</h3>
-            <p class="modal-description">Введите ваше имя, чтобы мы могли обращаться к вам лично</p>
-            <input type="text" id="user-name-input" class="modal-input" placeholder="Ваше имя">
-            <div class="modal-buttons">
-                <button class="modal-button cancel" onclick="closeModal()">Отмена</button>
-                <button class="modal-button confirm" onclick="saveUserName()">Сохранить</button>
+        <!-- Погодные рекомендации -->
+        <div class="weather-recommendations" id="weather-recommendations">
+            <h3 class="section-subtitle">Рекомендации</h3>
+            <div class="recommendation" id="clothing-recommendation">
+                <!-- Рекомендации будут добавлены через JavaScript -->
             </div>
         </div>
     </div>
 
-    <!-- Уведомления -->
-    <div class="notification" id="notification">
+    <!-- Раздел с рецептами -->
+    <div id="recipes-section" class="section">
+        <div class="section-header">
+            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
+            <h2 class="section-title">Рецепты</h2>
+        </div>
+
+        <!-- Поиск рецептов -->
+        <div class="recipe-search">
+            <input type="text" id="recipe-search-input" placeholder="Поиск рецептов..." class="search-input">
+            <button class="search-button" onclick="searchRecipes()">Найти</button>
+        </div>
+
+        <!-- Фильтр по категориям -->
+        <div class="recipe-categories">
+            <button class="category-btn active" data-category="all">Все</button>
+            <button class="category-btn" data-category="breakfast">Завтраки</button>
+            <button class="category-btn" data-category="soups">Супы</button>
+            <button class="category-btn" data-category="main">Основные</button>
+            <button class="category-btn" data-category="dessert">Десерты</button>
+        </div>
+
+        <!-- Сетка с рецептами -->
+        <div class="recipes-grid" id="recipes-grid">
+            <!-- Рецепты будут добавлены через JavaScript -->
+        </div>
+
+        <!-- Детальная информация о рецепте -->
+        <div id="recipe-details" class="recipe-details hidden">
+            <button class="close-details" onclick="closeRecipeDetails()">✖</button>
+            <div class="recipe-details-content">
+                <h3 id="recipe-detail-title" class="recipe-title"></h3>
+                <img id="recipe-detail-image" class="recipe-image" src="" alt="">
+                
+                <div class="recipe-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">⏱️</span>
+                        <span id="recipe-detail-time"></span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🍽️</span>
+                        <span id="recipe-detail-servings"></span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">⭐</span>
+                        <span id="recipe-detail-difficulty"></span>
+                    </div>
+                </div>
+
+                <h4 class="ingredients-title">Ингредиенты:</h4>
+                <ul id="recipe-detail-ingredients" class="ingredients-list">
+                    <!-- Ингредиенты будут добавлены через JavaScript -->
+                </ul>
+
+                <h4 class="steps-title">Приготовление:</h4>
+                <ol id="recipe-detail-steps" class="steps-list">
+                    <!-- Шаги приготовления будут добавлены через JavaScript -->
+                </ol>
+
+                <div class="recipe-actions">
+                    <button class="print-recipe-btn" onclick="printRecipe()">
+                        <span class="button-icon">🖨️</span>
+                        <span>Распечатать</span>
+                    </button>
+                    <button class="favorite-recipe-btn" onclick="toggleFavoriteRecipe()">
+                        <span class="button-icon">❤️</span>
+                        <span>В избранное</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Раздел с играми -->
+    <div id="games-section" class="section">
+        <div class="section-header">
+            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
+            <h2 class="section-title">Игры</h2>
+        </div>
+
+        <!-- Список игр -->
+        <div class="games-grid">
+            <div class="game-card" onclick="startMemoryGame()">
+                <div class="game-icon">🎴</div>
+                <h3 class="game-title">Найди пару</h3>
+                <p class="game-description">Игра для тренировки памяти: найдите одинаковые карточки</p>
+            </div>
+            <div class="game-card" onclick="startPuzzleGame()">
+                <div class="game-icon">🧩</div>
+                <h3 class="game-title">Пазл</h3>
+                <p class="game-description">Соберите картинку из кусочков</p>
+            </div>
+            <div class="game-card" onclick="startWordGame()">
+                <div class="game-icon">📝</div>
+                <h3 class="game-title">Слова</h3>
+                <p class="game-description">Составьте слова из букв</p>
+            </div>
+        </div>
+
+        <!-- Зона для игры "Найди пару" -->
+        <div id="memory-game-container" class="game-container hidden">
+            <div class="game-header">
+                <h3>Игра "Найди пару"</h3>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Ходы:</span>
+                        <span id="memory-moves" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Время:</span>
+                        <span id="memory-timer" class="stat-value">00:00</span>
+                    </div>
+                </div>
+                <button class="close-game" onclick="closeMemoryGame()">✖</button>
+            </div>
+            <div id="memory-board" class="memory-board">
+                <!-- Карточки будут добавлены через JavaScript -->
+            </div>
+            <div class="game-controls">
+                <button class="restart-btn" onclick="restartMemoryGame()">Начать заново</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция "Для вас" (админка) -->
+    <div id="admin-section" class="section">
+        <div class="section-header">
+            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
+            <h2 class="section-title">Для вас</h2>
+        </div>
+
+        <!-- Панель с информацией о текущем пользователе -->
+        <div class="user-panel">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span class="avatar-placeholder">👤</span>
+                </div>
+                <div class="user-details">
+                    <h3 id="user-display-name">Гость</h3>
+                    <p id="user-ip">IP: определяется...</p>
+                </div>
+            </div>
+            <button class="edit-user-btn" onclick="showNameModal()">Изменить имя</button>
+        </div>
+
+        <!-- Статистика использования -->
+        <div class="usage-stats">
+            <h3 class="section-subtitle">Статистика использования</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="movies-watched">0</div>
+                    <div class="stat-label">Фильмов просмотрено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="weather-checks">0</div>
+                    <div class="stat-label">Проверок погоды</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="recipes-viewed">0</div>
+                    <div class="stat-label">Рецептов просмотрено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="games-played">0</div>
+                    <div class="stat-label">Игр сыграно</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- История просмотров -->
+        <div class="view-history">
+            <h3 class="section-subtitle">История просмотров</h3>
+            <div id="history-list" class="history-list">
+                <!-- История будет добавлена через JavaScript -->
+            </div>
+            <button class="clear-history-btn" onclick="clearHistory()">Очистить историю</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно для ввода имени -->
+    <div id="name-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Как к вам обращаться?</h3>
+            <input type="text" id="user-name-input" class="modal-input" placeholder="Введите ваше имя">
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="saveName()">Сохранить</button>
+                <button class="modal-btn cancel" onclick="closeModal()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div id="notification" class="notification">
         <div class="notification-content">
             <span id="notification-message"></span>
         </div>
     </div>
 
-    <!-- Футер с секретной точкой для доступа к админ-панели -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <p>© 2025 <span class="admin-dot" onclick="showAdminPanel()">.</span>dotkit.me | dot_gh</p>
+    <!-- Панель с информацией о погоде и времени (всегда видна) -->
+    <div id="status-bar" class="status-bar hidden">
+        <div class="time-display" id="time-display">
+            <span class="time-icon">🕒</span>
+            <span id="current-time">00:00</span>
         </div>
+        <div class="temp-display" id="temp-display">
+            <span class="temp-icon">🌡️</span>
+            <span id="current-temp">+20°C</span>
+        </div>
+        <div class="weather-status" id="weather-status">
+            <span class="status-icon" id="status-icon">☀️</span>
+            <span id="status-text">Солнечно</span>
+        </div>
+    </div>
+
+    <!-- Подвал с секретной кнопкой для админки -->
+    <footer class="main-footer">
+        <p>© 2025 dotkit.me | <span class="admin-link" onclick="showSection('admin-section')">dot_gh</span></p>
     </footer>
 
-    <!-- Подключение скриптов -->
-    <script src="data.js"></script>
-    <script src="weather.js"></script>
-    <script src="script.js"></script>
+    <!-- Подключение YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <!-- Подключение JavaScript -->
+    <script src="data.js"></script> <!-- Данные для сайта -->
+    <script src="script.js"></script> <!-- Основные функции -->
 </body>
 </html>
