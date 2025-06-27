@@ -1,51 +1,1912 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dotkit.me - Універсальний інструмент для допомоги</title>
-    
-    <!-- Подключаем шрифт Inter - хороший выбор для читаемости -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Устанавливаем цвет темы для мобильных устройств -->
-    <meta name="theme-color" content="#0d1117">
-    
-    <!-- Подключаем наш CSS файл -->
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>ДотКит - универсальный помощник для пожилых людей</title>
+    <style>
+        /* === ОСНОВНЫЕ СТИЛИ === */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333333;
+            --text-light: #7f8c8d;
+            --shadow-small: 0 2px 5px rgba(0,0,0,0.1);
+            --shadow-medium: 0 4px 8px rgba(0,0,0,0.15);
+            --shadow-large: 0 8px 16px rgba(0,0,0,0.2);
+            --border-radius-small: 8px;
+            --border-radius-medium: 12px;
+            --border-radius-large: 20px;
+            --transition-fast: all 0.2s ease;
+            --transition-medium: all 0.3s ease;
+            --transition-slow: all 0.5s ease;
+            --font-size-small: 14px;
+            --font-size-medium: 18px;
+            --font-size-large: 24px;
+            --font-size-xlarge: 32px;
+            --spacing-small: 8px;
+            --spacing-medium: 16px;
+            --spacing-large: 24px;
+            --spacing-xlarge: 32px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f5f5f5;
+            line-height: 1.6;
+            font-size: var(--font-size-medium); /* Увеличенный базовый размер шрифта для пожилых людей */
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: var(--spacing-medium);
+            color: var(--dark-color);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        a:hover {
+            color: #217dbb;
+            text-decoration: underline;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        button, .button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: var(--primary-color);
+            color: white;
+            font-size: var(--font-size-medium);
+            padding: 12px 24px;
+            border-radius: var(--border-radius-small);
+            transition: var(--transition-medium);
+            font-weight: 500;
+            text-align: center;
+            box-shadow: var(--shadow-small);
+        }
+
+        button:hover, .button:hover {
+            background-color: #217dbb;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        button:active, .button:active {
+            transform: translateY(0);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: var(--font-size-medium);
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius-small);
+            margin-bottom: var(--spacing-medium);
+            font-family: inherit;
+        }
+
+        /* === КОНТЕЙНЕРЫ И СЕКЦИИ === */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-medium);
+        }
+
+        .section {
+            display: none;
+            padding: var(--spacing-large) 0;
+        }
+        
+        #main-section {
+            display: block;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            padding: var(--spacing-large);
+            box-shadow: var(--shadow-small);
+            margin-bottom: var(--spacing-large);
+            transition: var(--transition-medium);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* === ШАПКА САЙТА === */
+        header {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            color: white;
+            text-align: center;
+            padding: var(--spacing-large) 0;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .site-title {
+            font-size: var(--font-size-xlarge);
+            margin-bottom: var(--spacing-small);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .site-tagline {
+            font-size: var(--font-size-medium);
+            margin-bottom: var(--spacing-medium);
+            opacity: 0.9;
+        }
+
+        .welcome-name {
+            font-size: var(--font-size-large);
+            font-weight: bold;
+            margin-top: var(--spacing-medium);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .date-time {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-large);
+            margin-top: var(--spacing-medium);
+        }
+
+        .date-time div {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: var(--border-radius-small);
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === НАВИГАЦИЯ === */
+        .main-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-large);
+            max-width: 500px;
+            margin: var(--spacing-xlarge) auto;
+        }
+
+        .big-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-large);
+            padding: var(--spacing-large);
+            font-size: var(--font-size-large);
+            cursor: pointer;
+            box-shadow: var(--shadow-medium);
+            transition: var(--transition-medium);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-medium);
+            min-height: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .big-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+            transform: translateY(-100%);
+            transition: var(--transition-medium);
+        }
+
+        .big-button:hover::before {
+            transform: translateY(0);
+        }
+
+        .big-button:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-large);
+        }
+
+        .big-button:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-small);
+        }
+
+        .big-button .icon {
+            font-size: 1.5em;
+        }
+
+        .big-button.movies {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .big-button.weather {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .big-button.recipes {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .big-button.games {
+            background: linear-gradient(135deg, #f39c12, #d35400);
+        }
+
+        .big-button.health {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .back-button {
+            background-color: var(--text-light);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-medium);
+            padding: 12px 20px;
+            font-size: var(--font-size-medium);
+            cursor: pointer;
+            margin-bottom: var(--spacing-large);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background-color: #6c7a89;
+        }
+
+        /* === ПОГОДНЫЙ ВИДЖЕТ === */
+        .weather-widget {
+            background: linear-gradient(135deg, #3498db, #1abc9c);
+            color: white;
+            border-radius: var(--border-radius-large);
+            padding: var(--spacing-large);
+            box-shadow: var(--shadow-medium);
+            margin: var(--spacing-large) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1561484930-998b6a7b22e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .weather-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .weather-icon {
+            font-size: 60px;
+            margin: 10px 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .temperature {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .weather-details {
+            margin: 15px 0;
+            font-size: 22px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .weather-alerts {
+            background-color: rgba(231, 76, 60, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--border-radius-small);
+            margin-top: var(--spacing-medium);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-forecast {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-medium);
+            justify-content: center;
+            margin-top: var(--spacing-large);
+        }
+
+        .forecast-day {
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            padding: var(--spacing-medium);
+            width: 160px;
+            text-align: center;
+            box-shadow: var(--shadow-small);
+            transition: var(--transition-medium);
+            color: var(--text-color);
+        }
+
+        .forecast-day:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .forecast-date {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: var(--font-size-medium);
+        }
+
+        .forecast-icon {
+            font-size: 36px;
+            margin: 10px 0;
+        }
+
+        .forecast-temp {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .forecast-condition {
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        /* === РАЗДЕЛ ФИЛЬМОВ === */
+        .movies-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+            align-items: center;
+        }
+
+        .movies-controls .filter-label {
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .random-movie-button {
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-medium);
+            padding: 12px 20px;
+            font-size: var(--font-size-medium);
+            cursor: pointer;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .random-movie-button:hover {
+            background-color: #8e44ad;
+        }
+
+        .movies-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .movies-filter select {
+            width: auto;
+            margin-bottom: 0;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: var(--spacing-large);
+            margin-top: var(--spacing-large);
+        }
+
+        .movie-card {
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            overflow: hidden;
+            box-shadow: var(--shadow-small);
+            cursor: pointer;
+            transition: var(--transition-medium);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-large);
+        }
+
+        .movie-image-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 150%; /* Соотношение сторон 2:3 для постеров фильмов */
+        }
+
+        .movie-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+
+        .movie-card:hover .movie-image {
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: var(--spacing-medium);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .movie-title {
+            font-weight: bold;
+            font-size: var(--font-size-medium);
+            margin-bottom: 5px;
+            color: var(--dark-color);
+            line-height: 1.4;
+        }
+
+        .movie-genre {
+            color: var(--text-light);
+            font-size: var(--font-size-small);
+            margin-bottom: 10px;
+        }
+
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: auto;
+        }
+
+        .movie-rating .star {
+            color: #f39c12;
+        }
+
+        .movie-year {
+            margin-left: auto;
+            color: var(--text-light);
+        }
+
+        .movie-details {
+            display: none;
+            background-color: white;
+            border-radius: var(--border-radius-large);
+            padding: var(--spacing-large);
+            margin-top: var(--spacing-large);
+            box-shadow: var(--shadow-medium);
+            position: relative;
+        }
+
+        .movie-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .movie-details-content {
+            display: flex;
+            gap: var(--spacing-large);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .movie-details-poster {
+            width: 220px;
+            border-radius: var(--border-radius-medium);
+            box-shadow: var(--shadow-small);
+        }
+
+        .movie-details-info {
+            flex: 1;
+        }
+
+        .movie-details-title {
+            font-size: var(--font-size-large);
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        .movie-details-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: var(--spacing-medium);
+            color: var(--text-light);
+        }
+
+        .movie-details-description {
+            margin-bottom: var(--spacing-large);
+            font-size: var(--font-size-medium);
+            line-height: 1.6;
+        }
+
+        .movie-cast {
+            margin-bottom: var(--spacing-large);
+        }
+
+        .cast-title {
+            font-size: var(--font-size-medium);
+            margin-bottom: var(--spacing-medium);
+            color: var(--dark-color);
+        }
+
+        .cast-list {
+            display: flex;
+            gap: var(--spacing-medium);
+            overflow-x: auto;
+            padding-bottom: var(--spacing-medium);
+        }
+
+        .cast-item {
+            width: 100px;
+            text-align: center;
+        }
+
+        .cast-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 8px;
+        }
+
+        .cast-name {
+            font-size: var(--font-size-small);
+            font-weight: 500;
+        }
+
+        .cast-role {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: var(--spacing-medium);
+            margin-top: var(--spacing-large);
+        }
+
+        .play-button {
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            font-size: var(--font-size-medium);
+            border-radius: var(--border-radius-medium);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .play-button:hover {
+            background-color: #c0392b;
+        }
+
+        .close-details {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-light);
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .close-details:hover {
+            color: var(--dark-color);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .movie-player {
+            display: none;
+            margin-top: var(--spacing-large);
+        }
+
+        .movie-player.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .movie-player video {
+            width: 100%;
+            border-radius: var(--border-radius-medium);
+            box-shadow: var(--shadow-large);
+        }
+
+        /* === РЕЦЕПТЫ === */
+        .recipes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-large);
+            flex-wrap: wrap;
+            gap: var(--spacing-medium);
+        }
+
+        .recipes-search {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .recipes-search input {
+            margin-bottom: 0;
+        }
+
+        .recipes-filters {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .recipes-filters select {
+            width: auto;
+            margin-bottom: 0;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--spacing-large);
+            margin-top: var(--spacing-large);
+        }
+
+        .recipe-card {
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            overflow: hidden;
+            box-shadow: var(--shadow-small);
+            cursor: pointer;
+            transition: var(--transition-medium);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .recipe-image-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 65%;
+        }
+
+        .recipe-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+
+        .recipe-card:hover .recipe-image {
+            transform: scale(1.05);
+        }
+
+        .recipe-time {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: var(--border-radius-small);
+            font-size: var(--font-size-small);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recipe-info {
+            padding: var(--spacing-medium);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .recipe-title {
+            font-weight: bold;
+            font-size: var(--font-size-medium);
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            line-height: 1.4;
+        }
+
+        .recipe-description {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: var(--font-size-small);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            color: var(--text-light);
+            font-size: var(--font-size-small);
+        }
+
+        .recipe-difficulty {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recipe-calories {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* === СЕКЦИЯ ДЛЯ АДМИНИСТРАТОРА === */
+        .admin-panel {
+            background-color: white;
+            border-radius: var(--border-radius-large);
+            padding: var(--spacing-large);
+            margin-top: var(--spacing-large);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-large);
+            padding-bottom: var(--spacing-medium);
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+            border-bottom: 1px solid #eee;
+            overflow-x: auto;
+            padding-bottom: 1px;
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--text-light);
+            border-bottom: 2px solid transparent;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .admin-tab:hover {
+            color: var(--dark-color);
+        }
+
+        .admin-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .admin-content {
+            min-height: 300px;
+        }
+
+        .user-list {
+            display: grid;
+            gap: var(--spacing-medium);
+        }
+
+        .user-card {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius-medium);
+            padding: var(--spacing-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-fast);
+        }
+
+        .user-card:hover {
+            background-color: #e9ecef;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-medium);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .user-ip {
+            color: var(--text-light);
+            font-size: var(--font-size-small);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .user-actions button {
+            padding: 8px 12px;
+            font-size: var(--font-size-small);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius-medium);
+            padding: var(--spacing-medium);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--font-size-large);
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: var(--font-size-small);
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-medium) 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-date {
+            color: var(--text-light);
+            font-size: var(--font-size-small);
+        }
+
+        /* === МОДАЛЬНЫЕ ОКНА === */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: var(--spacing-large);
+            border-radius: var(--border-radius-large);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-large);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: var(--font-size-large);
+            margin-bottom: var(--spacing-large);
+            text-align: center;
+            color: var(--dark-color);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-light);
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .modal-close:hover {
+            color: var(--dark-color);
+        }
+
+        .modal input {
+            margin-bottom: var(--spacing-large);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-medium);
+        }
+
+        /* === УВЕДОМЛЕНИЯ === */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            padding: 15px 20px;
+            box-shadow: var(--shadow-large);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            max-width: 350px;
+        }
+
+        .notification.active {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            font-size: 24px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: var(--font-size-small);
+            color: var(--text-light);
+        }
+
+        .notification-close {
+            color: var(--text-light);
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            box-shadow: none;
+        }
+
+        .notification-success .notification-icon {
+            color: var(--secondary-color);
+        }
+
+        .notification-error .notification-icon {
+            color: var(--accent-color);
+        }
+
+        .notification-info .notification-icon {
+            color: var(--primary-color);
+        }
+
+        /* === СЕКЦИЯ ИГРЫ === */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-large);
+            margin-top: var(--spacing-large);
+        }
+
+        .game-card {
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            overflow: hidden;
+            box-shadow: var(--shadow-small);
+            cursor: pointer;
+            transition: var(--transition-medium);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .game-image-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 70%;
+        }
+
+        .game-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+
+        .game-card:hover .game-image {
+            transform: scale(1.05);
+        }
+
+        .game-info {
+            padding: var(--spacing-medium);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .game-title {
+            font-weight: bold;
+            font-size: var(--font-size-medium);
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            line-height: 1.4;
+        }
+
+        .game-description {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: var(--font-size-small);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .memory-game {
+            display: none;
+            margin-top: var(--spacing-large);
+        }
+
+        .memory-game.active {
+            display: block;
+        }
+
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            height: 120px;
+            background-color: #3498db;
+            border-radius: var(--border-radius-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .memory-card.flipped {
+            background-color: white;
+            font-size: 40px;
+        }
+
+        .memory-card.matched {
+            background-color: #2ecc71;
+            cursor: default;
+        }
+
+        .memory-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-medium);
+            margin-top: var(--spacing-large);
+        }
+
+        /* === СЕКЦИЯ ЗДОРОВЬЯ === */
+        .health-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-large);
+            margin-top: var(--spacing-large);
+        }
+
+        .health-card {
+            background-color: white;
+            border-radius: var(--border-radius-medium);
+            overflow: hidden;
+            box-shadow: var(--shadow-small);
+            transition: var(--transition-medium);
+        }
+
+        .health-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .health-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: var(--spacing-medium);
+            font-weight: 500;
+            font-size: var(--font-size-medium);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .health-content {
+            padding: var(--spacing-medium);
+        }
+
+        .health-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .health-item:last-child {
+            border-bottom: none;
+        }
+
+        .health-item-icon {
+            color: var(--primary-color);
+            font-size: 20px;
+        }
+
+        .health-item-time {
+            margin-left: auto;
+            color: var(--text-light);
+            font-size: var(--font-size-small);
+        }
+
+        /* === ПОДВАЛ САЙТА === */
+        footer {
+            text-align: center;
+            padding: var(--spacing-large) 0;
+            margin-top: var(--spacing-xlarge);
+            border-top: 1px solid #eee;
+            color: var(--text-light);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-medium);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-medium);
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            transition: var(--transition-fast);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .dot-secret {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--text-light);
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: var(--transition-fast);
+        }
+
+        .dot-secret:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* === ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ === */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-1 {
+            margin-bottom: var(--spacing-small);
+        }
+
+        .mb-2 {
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .mb-3 {
+            margin-bottom: var(--spacing-large);
+        }
+
+        .mb-4 {
+            margin-bottom: var(--spacing-xlarge);
+        }
+
+        .mt-1 {
+            margin-top: var(--spacing-small);
+        }
+
+        .mt-2 {
+            margin-top: var(--spacing-medium);
+        }
+
+        .mt-3 {
+            margin-top: var(--spacing-large);
+        }
+
+        .mt-4 {
+            margin-top: var(--spacing-xlarge);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-1 {
+            gap: var(--spacing-small);
+        }
+
+        .gap-2 {
+            gap: var(--spacing-medium);
+        }
+
+        .gap-3 {
+            gap: var(--spacing-large);
+        }
+
+        /* === АНИМАЦИИ === */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* === АДАПТИВНЫЙ ДИЗАЙН === */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 var(--spacing-large);
+            }
+        }
+
+        @media (max-width: 992px) {
+            :root {
+                --spacing-xlarge: 24px;
+            }
+
+            .movie-details-content {
+                flex-direction: column;
+            }
+
+            .movie-details-poster {
+                width: 180px;
+                margin: 0 auto var(--spacing-medium);
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --font-size-small: 14px;
+                --font-size-medium: 16px;
+                --font-size-large: 20px;
+                --font-size-xlarge: 24px;
+                --spacing-large: 20px;
+            }
+
+            .site-title {
+                font-size: 28px;
+            }
+
+            .welcome-name {
+                font-size: 20px;
+            }
+
+            .movies-grid, .recipes-grid, .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .forecast-day {
+                width: 130px;
+            }
+
+            .movies-controls, .recipes-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .recipes-search, .movies-filter {
+                width: 100%;
+            }
+
+            .random-movie-button {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .health-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 var(--spacing-medium);
+            }
+
+            .big-button {
+                min-height: 60px;
+                font-size: 18px;
+            }
+
+            .temperature {
+                font-size: 36px;
+            }
+
+            .weather-icon {
+                font-size: 48px;
+            }
+
+            .weather-details {
+                font-size: 18px;
+            }
+
+            .cast-list {
+                gap: 10px;
+            }
+
+            .cast-item {
+                width: 80px;
+            }
+
+            .admin-tabs {
+                gap: 10px;
+            }
+
+            .admin-tab {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .movie-actions {
+                flex-direction: column;
+            }
+
+            .play-button {
+                width: 100%;
+            }
+
+            .memory-board {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .memory-card {
+                height: 100px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Главный заголовок сайта -->
+    <header>
+        <div class="header-content">
+            <h1 class="site-title">ДотКит.ме</h1>
+            <div class="site-tagline">Универсальный помощник для вас</div>
+            <div class="welcome-name" id="welcome-name"></div>
+            <div class="date-time">
+                <div id="current-date"></div>
+                <div id="current-time"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Контейнер для основного содержимого -->
     <div class="container">
-        <div class="hero">
-            <!-- Верхний информационный бейдж -->
-            <div class="gradient-badge">
-                <span>Персональний помічник для літніх людей</span>
+        <!-- Секция главного меню -->
+        <section id="main-section" class="section">
+            <!-- Погодный виджет на главной странице -->
+            <div class="weather-widget" id="main-weather">
+                <div class="weather-content">
+                    <div class="weather-icon">⛅</div>
+                    <div class="temperature">Загрузка...</div>
+                    <div class="weather-details">Обновление информации о погоде</div>
+                    <div class="weather-alerts hidden">
+                        <span>⚠️</span> Внимание! Ожидается сильный ветер
+                    </div>
+                </div>
+            </div>
+
+            <!-- Основные кнопки навигации -->
+            <div class="main-buttons">
+                <button class="big-button movies" onclick="showSection('movies-section')">
+                    <span class="icon">🎬</span> Фильмы
+                </button>
+                <button class="big-button weather" onclick="showSection('weather-section')">
+                    <span class="icon">☁️</span> Погода
+                </button>
+                <button class="big-button recipes" onclick="showSection('recipes-section')">
+                    <span class="icon">🍳</span> Рецепты
+                </button>
+                <button class="big-button games" onclick="showSection('games-section')">
+                    <span class="icon">🎮</span> Игры
+                </button>
+                <button class="big-button health" onclick="showSection('health-section')">
+                    <span class="icon">💊</span> Здоровье
+                </button>
+            </div>
+        </section>
+
+        <!-- Секция с фильмами -->
+        <section id="movies-section" class="section">
+            <button class="back-button" onclick="showSection('main-section')">
+                <span>←</span> Назад
+            </button>
+            <h2>Фильмы</h2>
+            
+            <div class="movies-controls">
+                <div class="movies-filter">
+                    <span class="filter-label">Жанр:</span>
+                    <select id="genre-filter" onchange="filterMovies()">
+                        <option value="all">Все жанры</option>
+                        <option value="Комедия">Комедии</option>
+                        <option value="Драма">Драмы</option>
+                        <option value="Военный">Военные</option>
+                        <option value="Мелодрама">Мелодрамы</option>
+                        <option value="Приключения">Приключения</option>
+                    </select>
+
+                    <span class="filter-label">Период:</span>
+                    <select id="year-filter" onchange="filterMovies()">
+                        <option value="all">Все годы</option>
+                        <option value="1950-1970">1950-1970</option>
+                        <option value="1970-1990">1970-1990</option>
+                        <option value="1990-2010">1990-2010</option>
+                        <option value="2010-2023">2010-2023</option>
+                    </select>
+                </div>
+                
+                <button class="random-movie-button" onclick="showRandomMovie()">
+                    <span>🎲</span> Случайный фильм
+                </button>
             </div>
             
-            <!-- Анимированный заголовок сайта -->
-            <div class="title-animation">
-                <h1>dotkit<span class="accent">.</span>me</h1>
-                <p class="subtitle">Універсальний інструмент для допомоги</p>
+            <!-- Сетка с фильмами -->
+            <div class="movies-grid" id="movies-grid">
+                <!-- Фильмы будут добавлены с помощью JavaScript -->
             </div>
+
+            <!-- Секция для детальной информации о фильме -->
+            <div class="movie-details" id="movie-details">
+                <button class="close-details" onclick="closeMovieDetails()">×</button>
+                
+                <div class="movie-details-content">
+                    <img src="" alt="" class="movie-details-poster" id="selected-movie-poster">
+                    
+                    <div class="movie-details-info">
+                        <h3 class="movie-details-title" id="selected-movie-title"></h3>
+                        
+                        <div class="movie-details-meta">
+                            <span id="selected-movie-year"></span>
+                            <span id="selected-movie-genre"></span>
+                            <span id="selected-movie-rating"></span>
+                            <span id="selected-movie-duration"></span>
+                        </div>
+                        
+                        <div class="movie-details-description" id="selected-movie-description"></div>
+                        
+                        <div class="movie-cast">
+                            <h4 class="cast-title">В ролях:</h4>
+                            <div class="cast-list" id="selected-movie-cast">
+                                <!-- Актеры будут добавлены с помощью JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="movie-actions">
+                    <button class="play-button" onclick="playMovie()">
+                        <span>▶</span> Смотреть фильм
+                    </button>
+                    <button class="button" onclick="addToFavorites()">
+                        <span>❤</span> Добавить в избранное
+                    </button>
+                </div>
+            </div>
+
+            <div class="movie-player" id="movie-player">
+                <video controls id="video-player">
+                    <source src="" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+            </div>
+        </section>
+
+        <!-- Секция с погодой -->
+        <section id="weather-section" class="section">
+            <button class="back-button" onclick="showSection('main-section')">
+                <span>←</span> Назад
+            </button>
+            <h2>Погода</h2>
+
+            <div class="weather-widget" id="detailed-weather">
+                <div class="weather-content">
+                    <div class="weather-icon">⛅</div>
+                    <div class="temperature">Загрузка...</div>
+                    <div class="weather-details">Обновление информации о погоде</div>
+                    <div class="weather-alerts hidden">
+                        <span>⚠️</span> Внимание! Ожидается сильный ветер
+                    </div>
+                </div>
+            </div>
+
+            <h3>Прогноз на ближайшие дни</h3>
+            <div class="weather-forecast" id="weather-forecast">
+                <!-- Прогноз погоды будет добавлен с помощью JavaScript -->
+            </div>
+
+            <div class="card mt-4">
+                <h3>Погодные рекомендации</h3>
+                <div id="weather-recommendations">
+                    <!-- Рекомендации будут добавлены с помощью JavaScript -->
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <h3>График температуры за неделю</h3>
+                <div id="temperature-chart" style="height: 300px; margin-top: 20px;">
+                    <!-- График будет добавлен с помощью JavaScript или имитирован изображением -->
+                    <img src="https://via.placeholder.com/800x300?text=График+температуры" alt="График температуры" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция с рецептами -->
+        <section id="recipes-section" class="section">
+            <button class="back-button" onclick="showSection('main-section')">
+                <span>←</span> Назад
+            </button>
+            <h2>Рецепты</h2>
+
+            <div class="recipes-header">
+                <div class="recipes-search">
+                    <input type="text" id="recipe-search" placeholder="Поиск рецептов...">
+                    <button onclick="searchRecipes()">Найти</button>
+                </div>
+                
+                <div class="recipes-filters">
+                    <span>Сортировать:</span>
+                    <select id="recipe-sort" onchange="sortRecipes()">
+                        <option value="popular">Популярные</option>
+                        <option value="easy">Простые</option>
+                        <option value="fast">Быстрые</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="recipes-grid" id="recipes-grid">
+                <!-- Рецепты будут добавлены с помощью JavaScript -->
+            </div>
+        </section>
+
+        <!-- Секция с играми -->
+        <section id="games-section" class="section">
+            <button class="back-button" onclick="showSection('main-section')">
+                <span>←</span> Назад
+            </button>
+            <h2>Игры для тренировки памяти и внимания</h2>
+
+            <div class="games-grid" id="games-grid">
+                <!-- Игры будут добавлены с помощью JavaScript -->
+            </div>
+
+            <div class="memory-game" id="memory-game">
+                <h3 class="mb-3">Игра "Найди пару"</h3>
+                <div class="memory-board" id="memory-board">
+                    <!-- Карточки будут добавлены с помощью JavaScript -->
+                </div>
+                <div class="memory-controls">
+                    <button onclick="restartMemoryGame()">Начать заново</button>
+                    <button onclick="closeMemoryGame()">Закрыть игру</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция здоровья -->
+        <section id="health-section" class="section">
+            <button class="back-button" onclick="showSection('main-section')">
+                <span>←</span> Назад
+            </button>
+            <h2>Здоровье</h2>
+
+            <div class="health-cards">
+                <div class="health-card">
+                    <div class="health-header">
+                        <span>💊</span> Напоминания о лекарствах
+                    </div>
+                    <div class="health-content">
+                        <div class="health-item">
+                            <span class="health-item-icon">💊</span>
+                            <div>Кардиомагнил</div>
+                            <div class="health-item-time">10:00</div>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-item-icon">💊</span>
+                            <div>Эналаприл</div>
+                            <div class="health-item-time">12:00</div>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-item-icon">💊</span>
+                            <div>Панангин</div>
+                            <div class="health-item-time">18:00</div>
+                        </div>
+                        <button class="button mt-2" style="width: 100%;">Добавить напоминание</button>
+                    </div>
+                </div>
+
+                <div class="health-card">
+                    <div class="health-header">
+                        <span>🩺</span> Посещение врачей
+                    </div>
+                    <div class="health-content">
+                        <div class="health-item">
+                            <span class="health-item-icon">👨‍⚕️</span>
+                            <div>Терапевт</div>
+                            <div class="health-item-time">15 июля</div>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-item-icon">👩‍⚕️</span>
+                            <div>Кардиолог</div>
+                            <div class="health-item-time">22 июля</div>
+                        </div>
+                        <button class="button mt-2" style="width: 100%;">Добавить посещение</button>
+                    </div>
+                </div>
+
+                <div class="health-card">
+                    <div class="health-header">
+                        <span>📊</span> Показатели здоровья
+                    </div>
+                    <div class="health-content">
+                        <div class="health-item">
+                            <span class="health-item-icon">❤️</span>
+                            <div>Артериальное давление</div>
+                            <div class="health-item-time">130/85</div>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-item-icon">📈</span>
+                            <div>Уровень сахара</div>
+                            <div class="health-item-time">5.4</div>
+                        </div>
+                        <div class="health-item">
+                            <span class="health-item-icon">⚖️</span>
+                            <div>Вес</div>
+                            <div class="health-item-time">75 кг</div>
+                        </div>
+                        <button class="button mt-2" style="width: 100%;">Добавить показатель</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <h3>Советы для здоровья</h3>
+                <div class="health-tips">
+                    <div class="health-item">
+                        <span class="health-item-icon">🚶‍♂️</span>
+                        <div>Ежедневная прогулка на свежем воздухе в течение 30 минут улучшает кровообращение и настроение.</div>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-icon">🥗</span>
+                        <div>Употребление овощей и фруктов каждый день обеспечивает организм необходимыми витаминами.</div>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-item-icon">💧</span>
+                        <div>Пейте не менее 1,5 литров воды в день для поддержания водного баланса.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция для администратора -->
+        <section id="admin-section" class="section">
+            <button class="back-button" onclick="showSection('main-section')">
+                <span>←</span> Назад
+            </button>
             
-            <!-- Кнопка для входа в основной раздел -->
-            <div class="buttons">
-                <a href="sections/main.html" class="btn-primary">Для вас</a>
-            </div>
-        </div>
-        
-        <!-- Фоновое свечение, создающее современный вид -->
-        <div class="glow-effect"></div>
-    </div>
-    
-    <!-- Футер с скрытым доступом к админке -->
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 dotkit.me | <span id="admin-access">dot_gh</span></p>
-        </div>
-    </footer>
-    
-    <!-- Подключаем наш JavaScript -->
-    <script src="./assets/js/main.js"></script>
-</body>
-</html>
+            <div class="admin-panel">
+                <div class="admin-header">
+                    <h2>Панель управления</h2>
+                    <button class="button" onclick="showNameModal()">
+                        <span>👤</span> Изменить профиль
+                    </button>
+                </div>
+
+                <div class="admin-tabs">
+                    <div class="admin-tab active" onclick="showAdminTab('user-tab')">Пользователи</div>
+                    <div class="admin-tab" onclick="showAdminTab('stats-tab')">Статистика</div>
+                    <div class="admin-tab" onclick="showAdminTab('history-tab')">История просмотров</div>
+                    <div class="admin-tab" onclick="showAdminTab('settings-tab')">Настройки</div>
+                </div>
+
+                <div class="admin-content">
+                    <div id="user-tab" class="admin-tab-content">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Активных пользователей</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">42</div>
+                                <div class="stat-label">Просмотров фильмов</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Просмотров рецептов</div>
+                            </div>
+                        </div>
+
+                        <h3 class="mb-2">Список пользователей</h3>
+                        <div class="user-list" id="user-list">
+                            <div class="user-card">
+                                <div class="user-info">
+                                    <div class="user-avatar">П</div>
+                                    <div>
+                                        <div class="user-name" id="current-user-name">Тек
