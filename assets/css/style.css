@@ -1,0 +1,347 @@
+/* 
+* Основные стили для dotkit.me
+* Автор: dot_gh
+* Дата: 2025-06-23
+* 
+* Используем CSS-переменные для легкой настройки темы в будущем
+* Добавляю темные оттенки с яркими акцентами - как в интерфейсах IDE
+*/
+
+:root {
+    /* Основные цвета фона */
+    --background-dark: #0d1117;
+    --background-darker: #010409;
+    
+    /* Цвета текста */
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    
+    /* Акцентные цвета - используются для важных элементов */
+    --accent-blue: #58a6ff;
+    --accent-purple: #bc8cff;
+    --accent-green: #3fb950;
+    --accent-pink: #ff49db;
+    
+    /* Градиенты для анимаций и декора */
+    --accent-gradient-start: #58a6ff;
+    --accent-gradient-mid: #a371f7;
+    --accent-gradient-end: #58a6ff;
+    
+    /* Цвета кнопок */
+    --button-gradient-start: #238636;
+    --button-gradient-end: #2ea043;
+    
+    /* Вспомогательные цвета */
+    --card-bg: #161b22;
+    --border-color: #30363d;
+}
+
+/* Базовые сбросы и общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Шрифт Inter выглядит современно и хорошо масштабируется */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+}
+
+/* Контейнер для центрирования содержимого */
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 1; /* Выше, чем glow-effect */
+}
+
+/* Главный контентный блок */
+.hero {
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    position: relative;
+    z-index: 2; /* Выше, чем glow-effect */
+}
+
+/* Верхний информационный бейдж */
+.gradient-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+    border-radius: 2rem;
+    background: linear-gradient(90deg, var(--background-dark), var(--card-bg));
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
+}
+
+.gradient-badge span {
+    /* Текстовый градиент - отличный способ добавить стиля без утяжеления */
+    background: linear-gradient(90deg, var(--accent-gradient-start), var(--accent-gradient-mid), var(--accent-gradient-end));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 500;
+}
+
+/* Анимация заголовка */
+.title-animation {
+    margin-bottom: 3rem;
+    position: relative;
+    animation: float 6s ease-in-out infinite; /* Плавное покачивание */
+}
+
+.title-animation h1 {
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+    background: linear-gradient(180deg, var(--text-primary) 60%, var(--text-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Точка в имени сайта - яркий акцент */
+.title-animation h1 .accent {
+    color: var(--accent-pink); /* Ярко-розовый акцент, как на скриншоте */
+}
+
+/* Подзаголовок */
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Контейнер для кнопок */
+.buttons {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Основная кнопка с градиентом */
+.btn-primary {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(180deg, var(--button-gradient-start), var(--button-gradient-end));
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 0 20px rgba(46, 160, 67, 0.4);
+    position: relative;
+    z-index: 1;
+    animation: pulse 2s infinite; /* Пульсирующее свечение - привлекает внимание */
+}
+
+/* Эффект при наведении */
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(46, 160, 67, 0.6);
+}
+
+/* Декоративная рамка при наведении - тонкий градиент */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0.5rem;
+    padding: 2px;
+    background: linear-gradient(90deg, var(--accent-gradient-start), var(--accent-gradient-end));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+/* Эффект свечения - создает глубину */
+.glow-effect {
+    position: absolute;
+    width: 150%;
+    height: 250px;
+    background: linear-gradient(90deg, 
+        rgba(88, 166, 255, 0.15), 
+        rgba(163, 113, 247, 0.15),
+        rgba(46, 160, 67, 0.15));
+    filter: blur(120px);
+    transform: translateY(-50%);
+    top: 50%;
+    z-index: 0;
+    border-radius: 100%;
+}
+
+/* Футер */
+footer {
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--background-darker);
+    position: relative;
+    z-index: 2;
+}
+
+/* Элемент для доступа к админке */
+#admin-access {
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+#admin-access:hover {
+    color: var(--accent-blue);
+}
+
+/* Анимации */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(46, 160, 67, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(46, 160, 67, 0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+/* Стили для сообщения об ошибке */
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+.error-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background-color: #f85149;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.error-message.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 768px) {
+    /* Для планшетов и средних экранов */
+    .title-animation h1 {
+        font-size: 3.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .gradient-badge {
+        padding: 0.4rem 0.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .buttons {
+        margin-top: 2rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Для мобильных устройств */
+    .title-animation h1 {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .container {
+        padding: 1.5rem;
+    }
+    
+    .gradient-badge span {
+        font-size: 0.8rem;
+    }
+}
+
+/* Поддержка iPhone и iPad */
+@supports (-webkit-touch-callout: none) {
+    /* Это правило сработает только для устройств Apple */
+    .btn-primary {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    }
+    
+    .glow-effect {
+        opacity: 0.7; /* Немного уменьшить интенсивность свечения на iOS */
+    }
+}
+
+/* Темный режим для системных предпочтений */
+@media (prefers-color-scheme: dark) {
+    /* Гарантируем, что сайт останется темным даже если системные настройки изменятся */
+    :root {
+        --background-dark: #0d1117;
+        --background-darker: #010409;
+    }
+}

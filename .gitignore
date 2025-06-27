@@ -1,0 +1,20 @@
+# Google OAuth credentials - НЕ ЗАГРУЖАТЬ В GIT!
+client_secret*.json
+credentials.json
+google-oauth-credentials.json
+oauth-credentials.json
+
+# Другие секретные файлы
+*.env
+.env
+.env.local
+.env.production
+
+# Логи
+logs
+*.log
+npm-debug.log*
+
+# Временные файлы
+.DS_Store
+Thumbs.db

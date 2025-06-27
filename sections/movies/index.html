@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фільми - dotkit.me</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/sections.css">
+</head>
+<body>
+    <div class="container">
+        <header class="section-header">
+            <div class="header-nav">
+                <a href="../main.html" class="back-btn">← Назад</a>
+                <h1>Фільми</h1>
+                <div class="search-container">
+                    <input type="text" id="movie-search" placeholder="Пошук фільмів...">
+                    <button onclick="searchMovies()">🔍</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Категории фильмов -->
+        <div class="categories">
+            <div class="category-tabs">
+                <button class="tab-btn active" onclick="filterMovies('all')">Всі</button>
+                <button class="tab-btn" onclick="filterMovies('action')">Бойовики</button>
+                <button class="tab-btn" onclick="filterMovies('comedy')">Комедії</button>
+                <button class="tab-btn" onclick="filterMovies('drama')">Драми</button>
+                <button class="tab-btn" onclick="filterMovies('thriller')">Трилери</button>
+                <button class="tab-btn" onclick="filterMovies('romance')">Романтичні</button>
+            </div>
+        </div>
+
+        <!-- Сетка фильмов -->
+        <div class="movies-grid" id="movies-grid">
+            <!-- Динамически загружается через JS -->
+            <div class="loading">Завантаження фільмів...</div>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="pagination" id="pagination">
+            <!-- Динамически создается -->
+        </div>
+    </div>
+
+    <script src="../../assets/js/ip-auth.js"></script>
+    <script src="../../assets/js/movies.js"></script>
+</body>
+</html>

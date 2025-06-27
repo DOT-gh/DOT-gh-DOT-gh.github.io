@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Головна - dotkit.me</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/sections.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Приветствие пользователя -->
+        <div class="welcome-section">
+            <div class="weather-bar">
+                <div class="weather-info">
+                    <span id="current-time"></span>
+                    <span id="weather-temp">+23°C</span>
+                    <span id="weather-desc">Сонячно</span>
+                </div>
+            </div>
+            
+            <div class="greeting">
+                <h1>Добро пожаловать, <span id="user-name">Гость</span>!</h1>
+                <p>Что хотите посмотреть сегодня?</p>
+            </div>
+        </div>
+
+        <!-- Основные кнопки разделов -->
+        <div class="main-sections">
+            <div class="section-grid">
+                <a href="movies/" class="section-card movies-card" id="movies-btn">
+                    <div class="card-icon">🎬</div>
+                    <h2>Фільми</h2>
+                    <p>Безкоштовні фільми без реклами</p>
+                </a>
+                
+                <a href="recipes/" class="section-card recipes-card">
+                    <div class="card-icon">👨‍🍳</div>
+                    <h2>Рецепти</h2>
+                    <p>Смачні страви для всієї родини</p>
+                </a>
+                
+                <!-- Скрытая кнопка для взрослого контента (показывается только если есть доступ) -->
+                <a href="adult/" class="section-card adult-card" id="adult-btn" style="display: none;">
+                    <div class="card-icon">🔞</div>
+                    <h2>Для дорослих</h2>
+                    <p>Контент 18+</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- История просмотров -->
+        <div class="history-section">
+            <h3>Недавно переглянуте</h3>
+            <div class="history-grid" id="history-grid">
+                <!-- Динамически загружается через JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="../index.html" class="back-home">← На головну</a>
+            <p>&copy; 2025 dotkit.me</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/ip-auth.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
