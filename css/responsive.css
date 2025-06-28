@@ -1,0 +1,165 @@
+/* Responsive styles for different screen sizes */
+
+/* Large desktop screens */
+@media (min-width: 1200px) {
+    html {
+        font-size: 18px; /* Slightly larger base font for large screens */
+    }
+}
+
+/* Medium desktop screens */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .menu-grid {
+        max-width: 800px;
+    }
+}
+
+/* Small desktop / tablet landscape */
+@media (max-width: 991px) and (min-width: 768px) {
+    html {
+        font-size: 17px;
+    }
+    
+    .menu-grid {
+        max-width: 700px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .weather-widget {
+        gap: var(--spacing-lg);
+    }
+}
+
+/* Tablet portrait */
+@media (max-width: 767px) and (min-width: 576px) {
+    html {
+        font-size: 16px;
+    }
+    
+    .menu-grid {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+        gap: var(--spacing-md);
+    }
+    
+    .weather-widget {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .menu-item {
+        min-height: 200px;
+        padding: var(--spacing-lg);
+    }
+    
+    .history-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 575px) {
+    html {
+        font-size: 16px;
+    }
+    
+    .weather-header {
+        margin: var(--spacing-sm) var(--spacing-sm);
+        padding: var(--spacing-sm);
+    }
+    
+    .weather-widget {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .menu-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        gap: var(--spacing-md);
+        margin: var(--spacing-lg) auto;
+    }
+    
+    .menu-item {
+        min-height: auto;
+        padding: var(--spacing-lg);
+    }
+    
+    .menu-icon {
+        font-size: 3rem;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .menu-item h2 {
+        font-size: 1.5rem;
+    }
+    
+    .history-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+    
+    .page-header {
+        padding: var(--spacing-sm);
+    }
+    
+    .back-button {
+        font-size: 1.1rem;
+    }
+    
+    button {
+        padding: var(--spacing-sm) var(--spacing-lg);
+    }
+}
+
+/* Small mobile phones */
+@media (max-width: 360px) {
+    html {
+        font-size: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    .history-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Account for older users who may need larger text */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+    }
+}
+
+/* High contrast mode for users with vision impairments */
+@media (prefers-contrast: high) {
+    :root {
+        --text-color: white;
+        --accent-color: #80caff;
+        --secondary-text: #e0e0e0;
+    }
+    
+    .menu-item,
+    .history-item {
+        border: 2px solid white;
+    }
+    
+    button {
+        border: 2px solid white;
+    }
+}
