@@ -10,12 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <meta name="description" content="ДотКит - удобный сайт-помощник для пожилых людей с функциями просмотра фильмов, погоды, рецептов и игр">
     <meta name="author" content="DOT-gh">
-    <!-- Мета-теги для соц.сетей -->
-    <meta property="og:title" content="ДотКит.ме - универсальный помощник">
-    <meta property="og:description" content="Погода, фильмы, рецепты и другая полезная информация в одном месте">
-    <meta property="og:image" content="https://dotkit.me/images/preview.jpg">
-    <meta property="og:url" content="https://dotkit.me">
-    <meta name="theme-color" content="#2c3e50">
 </head>
 <body>
     <!-- Прелоадер для первоначальной загрузки -->
@@ -24,6 +18,22 @@
             <div class="weather-icon">⛅</div>
             <h2 class="loading-text">Загрузка...</h2>
             <p class="loading-detail">Обновление информации о погоде</p>
+        </div>
+    </div>
+
+    <!-- Верхняя панель с временем и погодой -->
+    <div class="top-bar">
+        <div class="time-block">
+            <span class="time-icon">🕒</span>
+            <span id="current-time">00:00</span>
+        </div>
+        <div class="temp-block">
+            <span class="temp-icon">🌡️</span>
+            <span id="current-temp">+20°C</span>
+        </div>
+        <div class="weather-block">
+            <span id="weather-icon">☀️</span>
+            <span id="weather-condition">Солнечно</span>
         </div>
     </div>
 
@@ -75,10 +85,11 @@
         <div class="movie-filters">
             <select id="genre-filter" class="movie-filter" onchange="filterMovies()">
                 <option value="all">Все жанры</option>
-                <option value="comedy">Комедии</option>
-                <option value="drama">Драмы</option>
-                <option value="adventure">Приключения</option>
-                <option value="documentary">Документальные</option>
+                <option value="Комедия">Комедии</option>
+                <option value="Драма">Драмы</option>
+                <option value="Приключения">Приключения</option>
+                <option value="Мелодрама">Мелодрамы</option>
+                <option value="Военный">Военные</option>
             </select>
 
             <button class="random-movie-btn" onclick="showRandomMovie()">
@@ -364,22 +375,6 @@
     <div id="notification" class="notification">
         <div class="notification-content">
             <span id="notification-message"></span>
-        </div>
-    </div>
-
-    <!-- Панель с информацией о погоде и времени (всегда видна) -->
-    <div id="status-bar" class="status-bar hidden">
-        <div class="time-display" id="time-display">
-            <span class="time-icon">🕒</span>
-            <span id="current-time">00:00</span>
-        </div>
-        <div class="temp-display" id="temp-display">
-            <span class="temp-icon">🌡️</span>
-            <span id="current-temp">+20°C</span>
-        </div>
-        <div class="weather-status" id="weather-status">
-            <span class="status-icon" id="status-icon">☀️</span>
-            <span id="status-text">Солнечно</span>
         </div>
     </div>
 
