@@ -3,252 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ДотКит.ме - помощник для пожилых людей</title>
+    <title>ДотКит.ме - интеллектуальный ассистент</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <meta name="description" content="ДотКит - удобный сайт-помощник для пожилых людей с функциями просмотра фильмов, погоды, рецептов и игр">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="description" content="ДотКит - профессиональный ассистент с функциями просмотра фильмов, погоды, рецептов и игр">
     <meta name="author" content="DOT-gh">
 </head>
 <body>
+    <!-- Навигационная панель -->
+    <nav class="main-nav">
+        <div class="brand">
+            <span class="logo">dotkit<span class="accent">.</span>me</span>
+        </div>
+        <div class="nav-status">
+            <div class="status-item time">
+                <i class="fas fa-clock"></i>
+                <span id="current-time">20:20</span>
+            </div>
+            <div class="status-item weather" id="nav-weather">
+                <i class="fas fa-temperature-high"></i>
+                <span id="current-temp">+23°C</span>
+            </div>
+            <div class="status-item user" id="nav-user">
+                <i class="fas fa-user-circle"></i>
+                <span id="nav-user-name">Гость</span>
+            </div>
+        </div>
+    </nav>
+
     <!-- Прелоадер для первоначальной загрузки -->
     <div id="preloader" class="preloader">
+        <div class="loader"></div>
         <div class="loader-content">
-            <div class="weather-icon">⛅</div>
-            <h2 class="loading-text">Загрузка...</h2>
-            <p class="loading-detail">Обновление информации о погоде</p>
-        </div>
-    </div>
-
-    <!-- Верхняя панель с временем и погодой -->
-    <div class="top-bar">
-        <div class="time-block">
-            <span class="time-icon">🕒</span>
-            <span id="current-time">00:00</span>
-        </div>
-        <div class="temp-block">
-            <span class="temp-icon">🌡️</span>
-            <span id="current-temp">+20°C</span>
-        </div>
-        <div class="weather-block">
-            <span id="weather-icon">☀️</span>
-            <span id="weather-condition">Солнечно</span>
+            <h2 class="loading-text">Загружаем контент</h2>
+            <p class="loading-detail">Обновление данных о погоде</p>
         </div>
     </div>
 
     <!-- Главная страница -->
     <div id="main-section" class="section active">
-        <!-- Шапка сайта с градиентом -->
-        <header class="main-header">
-            <h1 class="site-title">ДотКит.ме</h1>
-            <p class="site-tagline">Универсальный помощник для вас</p>
-        </header>
+        <div class="container">
+            <!-- Приветствие пользователя -->
+            <div class="welcome-panel">
+                <h1 class="welcome-title">Добро пожаловать, <span id="user-name">Гость</span></h1>
+                <p class="welcome-subtitle" id="welcome-message">Что бы вы хотели сделать сегодня?</p>
+            </div>
 
-        <!-- Погодный виджет на главной -->
-        <div class="weather-widget" id="main-weather-widget">
-            <!-- Содержимое будет добавлено через JavaScript -->
-        </div>
+            <!-- Динамический погодный виджет -->
+            <div class="weather-widget" id="main-weather-widget">
+                <div class="weather-animation-container">
+                    <div class="weather-scene" id="weather-scene">
+                        <!-- Анимация погоды будет добавлена через JS -->
+                    </div>
+                </div>
+                <div class="weather-info">
+                    <div class="weather-primary">
+                        <div class="temp-display" id="main-temp">+23°C</div>
+                        <div class="weather-condition" id="main-condition">Солнечно</div>
+                    </div>
+                    <div class="weather-secondary" id="main-weather-details">
+                        <div class="weather-data-item">
+                            <i class="fas fa-wind"></i>
+                            <span id="main-wind">3 м/с</span>
+                        </div>
+                        <div class="weather-data-item">
+                            <i class="fas fa-tint"></i>
+                            <span id="main-humidity">45%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Основные кнопки навигации -->
-        <div class="main-buttons">
-            <button class="main-button movies-button" onclick="showSection('movies-section')">
-                <span class="button-icon">🎬</span>
-                <span class="button-text">Фильмы</span>
-            </button>
-            
-            <button class="main-button weather-button" onclick="showSection('weather-section')">
-                <span class="button-icon">☁️</span>
-                <span class="button-text">Погода</span>
-            </button>
-            
-            <button class="main-button recipes-button" onclick="showSection('recipes-section')">
-                <span class="button-icon">🍳</span>
-                <span class="button-text">Рецепты</span>
-            </button>
-            
-            <button class="main-button games-button" onclick="showSection('games-section')">
-                <span class="button-icon">🎮</span>
-                <span class="button-text">Игры</span>
-            </button>
+            <!-- Основные кнопки навигации -->
+            <div class="features-grid">
+                <div class="feature-card movies" onclick="showSection('movies-section')">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Фильмы</h3>
+                        <p>Классика советского и российского кино</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card weather" onclick="showSection('weather-section')">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Погода</h3>
+                        <p>Подробный прогноз на неделю вперёд</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card recipes" onclick="showSection('recipes-section')">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Рецепты</h3>
+                        <p>Вкусные и проверенные рецепты блюд</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card games" onclick="showSection('games-section')">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Игры</h3>
+                        <p>Тренировка памяти и внимания</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Раздел с фильмами -->
     <div id="movies-section" class="section">
-        <div class="section-header">
-            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
-            <h2 class="section-title">Фильмы</h2>
-        </div>
-
-        <!-- Фильтр по жанрам (минималистичный) -->
-        <div class="movie-filters">
-            <select id="genre-filter" class="movie-filter" onchange="filterMovies()">
-                <option value="all">Все жанры</option>
-                <option value="Комедия">Комедии</option>
-                <option value="Драма">Драмы</option>
-                <option value="Приключения">Приключения</option>
-                <option value="Мелодрама">Мелодрамы</option>
-                <option value="Военный">Военные</option>
-            </select>
-
-            <button class="random-movie-btn" onclick="showRandomMovie()">
-                <span class="button-icon">🎲</span>
-                <span>Случайный фильм</span>
-            </button>
-        </div>
-
-        <!-- Сетка с фильмами -->
-        <div class="movies-grid" id="movies-grid">
-            <!-- Фильмы будут добавлены через JavaScript -->
-        </div>
-
-        <!-- YouTube плеер для фильмов -->
-        <div id="movie-player-container" class="movie-player-container hidden">
-            <div class="player-header">
-                <h3 id="current-movie-title" class="movie-title">Название фильма</h3>
-                <button class="close-player-btn" onclick="closeMoviePlayer()">✖</button>
+        <div class="container">
+            <div class="section-header">
+                <button class="back-button" onclick="showSection('main-section')">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h2 class="section-title">Фильмы</h2>
+                <div class="actions">
+                    <button class="action-button" onclick="showRandomMovie()">
+                        <i class="fas fa-random"></i> Случайный фильм
+                    </button>
+                </div>
             </div>
-            <div class="youtube-player-wrapper">
-                <div id="youtube-player"></div>
-            </div>
-            <div class="movie-description" id="current-movie-description">
-                <!-- Описание фильма будет добавлено через JavaScript -->
-            </div>
-        </div>
 
-        <!-- Недавно просмотренные -->
-        <div class="recently-viewed">
-            <h3 class="section-subtitle">Недавно просмотренные</h3>
-            <div class="recently-viewed-list" id="recently-viewed-list">
-                <!-- История будет добавлена через JavaScript -->
+            <!-- Фильтр по жанрам -->
+            <div class="filters-panel">
+                <div class="filter-group">
+                    <label for="genre-filter">Жанр:</label>
+                    <select id="genre-filter" class="filter-select" onchange="filterMovies()">
+                        <option value="all">Все жанры</option>
+                        <option value="Комедия">Комедии</option>
+                        <option value="Драма">Драмы</option>
+                        <option value="Военный">Военные</option>
+                        <option value="Мелодрама">Мелодрамы</option>
+                        <option value="Приключения">Приключения</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="year-filter">Год:</label>
+                    <select id="year-filter" class="filter-select" onchange="filterMovies()">
+                        <option value="all">Все годы</option>
+                        <option value="1950-1970">1950-1970</option>
+                        <option value="1970-1990">1970-1990</option>
+                        <option value="1990-2010">1990-2010</option>
+                        <option value="2010-2025">2010-2025</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Сетка с фильмами -->
+            <div class="movies-grid" id="movies-grid">
+                <!-- Фильмы будут добавлены через JavaScript -->
+            </div>
+
+            <!-- YouTube плеер для фильмов -->
+            <div id="movie-player-container" class="movie-player-container hidden">
+                <div class="player-header">
+                    <h3 id="current-movie-title" class="movie-title">Название фильма</h3>
+                    <button class="close-button" onclick="closeMoviePlayer()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="youtube-player-wrapper">
+                    <div id="youtube-player"></div>
+                </div>
+                <div class="movie-details">
+                    <div class="movie-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="movie-year">1985</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-film"></i>
+                            <span id="movie-genre">Комедия</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-user"></i>
+                            <span id="movie-director">Режиссёр</span>
+                        </div>
+                    </div>
+                    <div class="movie-description" id="current-movie-description">
+                        <!-- Описание фильма будет добавлено через JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Недавно просмотренные -->
+            <div class="recently-viewed">
+                <h3 class="section-subtitle">Недавно просмотренные</h3>
+                <div class="carousel-wrapper">
+                    <button class="carousel-arrow prev" id="recent-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="recently-viewed-list" id="recently-viewed-list">
+                        <!-- История будет добавлена через JavaScript -->
+                    </div>
+                    <button class="carousel-arrow next" id="recent-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Раздел с погодой -->
     <div id="weather-section" class="section">
-        <div class="section-header">
-            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
-            <h2 class="section-title">Погода</h2>
-        </div>
-
-        <!-- Текущая погода (детально) -->
-        <div class="weather-card" id="current-weather">
-            <div class="weather-main">
-                <div class="weather-icon-large" id="weather-icon-large">⛅</div>
-                <div class="weather-temp" id="weather-temp-large">+22°C</div>
-                <div class="weather-condition" id="weather-condition">Переменная облачность</div>
-            </div>
-            
-            <div class="weather-details">
-                <div class="weather-detail-item">
-                    <span class="detail-icon">💧</span>
-                    <span class="detail-label">Влажность:</span>
-                    <span class="detail-value" id="weather-humidity">60%</span>
-                </div>
-                <div class="weather-detail-item">
-                    <span class="detail-icon">💨</span>
-                    <span class="detail-label">Ветер:</span>
-                    <span class="detail-value" id="weather-wind">5 м/с</span>
-                </div>
-                <div class="weather-detail-item">
-                    <span class="detail-icon">🌡️</span>
-                    <span class="detail-label">Давление:</span>
-                    <span class="detail-value" id="weather-pressure">750 мм рт.ст.</span>
+        <div class="container">
+            <div class="section-header">
+                <button class="back-button" onclick="showSection('main-section')">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h2 class="section-title">Погода</h2>
+                <div class="location-display" id="weather-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="current-location">Москва</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Прогноз на 5 дней -->
-        <h3 class="section-subtitle">Прогноз на 5 дней</h3>
-        <div class="forecast-container" id="forecast-container">
-            <!-- Прогноз погоды будет добавлен через JavaScript -->
-        </div>
+            <!-- Текущая погода (детально) -->
+            <div class="weather-dashboard">
+                <div class="current-weather-card">
+                    <div class="weather-animation-large" id="weather-animation-large">
+                        <!-- Анимация текущей погоды -->
+                    </div>
+                    <div class="current-weather-info">
+                        <div class="weather-primary">
+                            <div class="temp-display-large" id="weather-temp-large">+23°C</div>
+                            <div class="weather-condition-large" id="weather-condition-large">Солнечно</div>
+                        </div>
+                        <div class="weather-details-grid">
+                            <div class="weather-detail-item">
+                                <i class="fas fa-tint"></i>
+                                <div class="detail-content">
+                                    <span class="detail-label">Влажность</span>
+                                    <span class="detail-value" id="weather-humidity">60%</span>
+                                </div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fas fa-wind"></i>
+                                <div class="detail-content">
+                                    <span class="detail-label">Ветер</span>
+                                    <span class="detail-value" id="weather-wind">5 м/с</span>
+                                </div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fas fa-compress-alt"></i>
+                                <div class="detail-content">
+                                    <span class="detail-label">Давление</span>
+                                    <span class="detail-value" id="weather-pressure">750 мм рт.ст.</span>
+                                </div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <i class="fas fa-eye"></i>
+                                <div class="detail-content">
+                                    <span class="detail-label">Видимость</span>
+                                    <span class="detail-value" id="weather-visibility">10 км</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Почасовой прогноз -->
-        <h3 class="section-subtitle">Прогноз по часам</h3>
-        <div class="hourly-forecast" id="hourly-forecast">
-            <!-- Почасовой прогноз будет добавлен через JavaScript -->
-        </div>
+                <!-- Прогноз на неделю -->
+                <div class="weather-forecast-panel">
+                    <h3 class="section-subtitle">Прогноз на неделю</h3>
+                    <div class="forecast-container" id="forecast-container">
+                        <!-- Прогноз погоды будет добавлен через JavaScript -->
+                    </div>
+                </div>
 
-        <!-- Погодные рекомендации -->
-        <div class="weather-recommendations" id="weather-recommendations">
-            <h3 class="section-subtitle">Рекомендации</h3>
-            <div class="recommendation" id="clothing-recommendation">
-                <!-- Рекомендации будут добавлены через JavaScript -->
+                <!-- Почасовой прогноз -->
+                <div class="hourly-forecast-panel">
+                    <h3 class="section-subtitle">Прогноз по часам</h3>
+                    <div class="hourly-forecast" id="hourly-forecast">
+                        <!-- Почасовой прогноз будет добавлен через JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Погодные рекомендации -->
+                <div class="weather-recommendations-panel">
+                    <h3 class="section-subtitle">Рекомендации</h3>
+                    <div class="recommendation" id="clothing-recommendation">
+                        <!-- Рекомендации будут добавлены через JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Раздел с рецептами -->
     <div id="recipes-section" class="section">
-        <div class="section-header">
-            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
-            <h2 class="section-title">Рецепты</h2>
-        </div>
-
-        <!-- Поиск рецептов -->
-        <div class="recipe-search">
-            <input type="text" id="recipe-search-input" placeholder="Поиск рецептов..." class="search-input">
-            <button class="search-button" onclick="searchRecipes()">Найти</button>
-        </div>
-
-        <!-- Фильтр по категориям -->
-        <div class="recipe-categories">
-            <button class="category-btn active" data-category="all">Все</button>
-            <button class="category-btn" data-category="breakfast">Завтраки</button>
-            <button class="category-btn" data-category="soups">Супы</button>
-            <button class="category-btn" data-category="main">Основные</button>
-            <button class="category-btn" data-category="dessert">Десерты</button>
-        </div>
-
-        <!-- Сетка с рецептами -->
-        <div class="recipes-grid" id="recipes-grid">
-            <!-- Рецепты будут добавлены через JavaScript -->
-        </div>
-
-        <!-- Детальная информация о рецепте -->
-        <div id="recipe-details" class="recipe-details hidden">
-            <button class="close-details" onclick="closeRecipeDetails()">✖</button>
-            <div class="recipe-details-content">
-                <h3 id="recipe-detail-title" class="recipe-title"></h3>
-                <img id="recipe-detail-image" class="recipe-image" src="" alt="">
-                
-                <div class="recipe-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span id="recipe-detail-time"></span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🍽️</span>
-                        <span id="recipe-detail-servings"></span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">⭐</span>
-                        <span id="recipe-detail-difficulty"></span>
-                    </div>
+        <div class="container">
+            <div class="section-header">
+                <button class="back-button" onclick="showSection('main-section')">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h2 class="section-title">Рецепты</h2>
+                <div class="actions">
+                    <button class="action-button" id="recipe-favorites">
+                        <i class="fas fa-heart"></i> Избранное
+                    </button>
                 </div>
+            </div>
 
-                <h4 class="ingredients-title">Ингредиенты:</h4>
-                <ul id="recipe-detail-ingredients" class="ingredients-list">
-                    <!-- Ингредиенты будут добавлены через JavaScript -->
-                </ul>
+            <!-- Поиск рецептов -->
+            <div class="search-panel">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="recipe-search-input" placeholder="Поиск рецептов..." class="search-input">
+                    <button class="search-button" onclick="searchRecipes()">Найти</button>
+                </div>
+            </div>
 
-                <h4 class="steps-title">Приготовление:</h4>
-                <ol id="recipe-detail-steps" class="steps-list">
-                    <!-- Шаги приготовления будут добавлены через JavaScript -->
-                </ol>
+            <!-- Фильтр по категориям -->
+            <div class="categories-panel">
+                <button class="category-tab active" data-category="all">Все</button>
+                <button class="category-tab" data-category="breakfast">Завтраки</button>
+                <button class="category-tab" data-category="soups">Супы</button>
+                <button class="category-tab" data-category="main">Основные</button>
+                <button class="category-tab" data-category="bakery">Выпечка</button>
+                <button class="category-tab" data-category="drinks">Напитки</button>
+            </div>
 
-                <div class="recipe-actions">
-                    <button class="print-recipe-btn" onclick="printRecipe()">
-                        <span class="button-icon">🖨️</span>
-                        <span>Распечатать</span>
+            <!-- Сетка с рецептами -->
+            <div class="recipes-grid" id="recipes-grid">
+                <!-- Рецепты будут добавлены через JavaScript -->
+            </div>
+
+            <!-- Детальная информация о рецепте -->
+            <div id="recipe-details" class="recipe-details-modal hidden">
+                <div class="recipe-details-container">
+                    <button class="close-details" onclick="closeRecipeDetails()">
+                        <i class="fas fa-times"></i>
                     </button>
-                    <button class="favorite-recipe-btn" onclick="toggleFavoriteRecipe()">
-                        <span class="button-icon">❤️</span>
-                        <span>В избранное</span>
-                    </button>
+                    <div class="recipe-details-content">
+                        <h3 id="recipe-detail-title" class="recipe-title"></h3>
+                        <div class="recipe-hero">
+                            <img id="recipe-detail-image" class="recipe-image" src="" alt="">
+                            <div class="recipe-meta-card">
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Время приготовления</span>
+                                        <span class="meta-value" id="recipe-detail-time"></span>
+                                    </div>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-utensils"></i>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Порции</span>
+                                        <span class="meta-value" id="recipe-detail-servings"></span>
+                                    </div>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <div class="meta-content">
+                                        <span class="meta-label">Сложность</span>
+                                        <span class="meta-value" id="recipe-detail-difficulty"></span>
+                                    </div>
+                                </div>
+                                <div class="recipe-actions">
+                                    <button class="recipe-action-button print" onclick="printRecipe()">
+                                        <i class="fas fa-print"></i> Распечатать
+                                    </button>
+                                    <button class="recipe-action-button favorite" onclick="toggleFavoriteRecipe()">
+                                        <i class="fas fa-heart"></i> В избранное
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="recipe-description" id="recipe-detail-description"></div>
+
+                        <div class="recipe-main-content">
+                            <div class="ingredients-section">
+                                <h4 class="ingredients-title">Ингредиенты</h4>
+                                <ul id="recipe-detail-ingredients" class="ingredients-list">
+                                    <!-- Ингредиенты будут добавлены через JavaScript -->
+                                </ul>
+                            </div>
+
+                            <div class="steps-section">
+                                <h4 class="steps-title">Приготовление</h4>
+                                <ol id="recipe-detail-steps" class="steps-list">
+                                    <!-- Шаги приготовления будут добавлены через JavaScript -->
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -256,106 +409,88 @@
 
     <!-- Раздел с играми -->
     <div id="games-section" class="section">
-        <div class="section-header">
-            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
-            <h2 class="section-title">Игры</h2>
-        </div>
+        <div class="container">
+            <div class="section-header">
+                <button class="back-button" onclick="showSection('main-section')">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h2 class="section-title">Игры</h2>
+            </div>
 
-        <!-- Список игр -->
-        <div class="games-grid">
-            <div class="game-card" onclick="startMemoryGame()">
-                <div class="game-icon">🎴</div>
-                <h3 class="game-title">Найди пару</h3>
-                <p class="game-description">Игра для тренировки памяти: найдите одинаковые карточки</p>
-            </div>
-            <div class="game-card" onclick="startPuzzleGame()">
-                <div class="game-icon">🧩</div>
-                <h3 class="game-title">Пазл</h3>
-                <p class="game-description">Соберите картинку из кусочков</p>
-            </div>
-            <div class="game-card" onclick="startWordGame()">
-                <div class="game-icon">📝</div>
-                <h3 class="game-title">Слова</h3>
-                <p class="game-description">Составьте слова из букв</p>
-            </div>
-        </div>
-
-        <!-- Зона для игры "Найди пару" -->
-        <div id="memory-game-container" class="game-container hidden">
-            <div class="game-header">
-                <h3>Игра "Найди пару"</h3>
-                <div class="game-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Ходы:</span>
-                        <span id="memory-moves" class="stat-value">0</span>
+            <!-- Список игр -->
+            <div class="games-grid">
+                <div class="game-card" onclick="startMemoryGame()">
+                    <div class="game-icon">
+                        <i class="fas fa-clone"></i>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Время:</span>
-                        <span id="memory-timer" class="stat-value">00:00</span>
+                    <div class="game-content">
+                        <h3 class="game-title">Найди пару</h3>
+                        <p class="game-description">Тренировка памяти: найдите одинаковые карточки</p>
+                        <div class="game-difficulty">
+                            <span class="difficulty-label">Сложность:</span>
+                            <span class="difficulty-stars">★★☆</span>
+                        </div>
                     </div>
                 </div>
-                <button class="close-game" onclick="closeMemoryGame()">✖</button>
+                <div class="game-card" onclick="startPuzzleGame()">
+                    <div class="game-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Пазл</h3>
+                        <p class="game-description">Соберите картинку из частей, перемещая фрагменты</p>
+                        <div class="game-difficulty">
+                            <span class="difficulty-label">Сложность:</span>
+                            <span class="difficulty-stars">★★★</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-card" onclick="startWordGame()">
+                    <div class="game-icon">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Слова</h3>
+                        <p class="game-description">Составляйте слова из предложенных букв</p>
+                        <div class="game-difficulty">
+                            <span class="difficulty-label">Сложность:</span>
+                            <span class="difficulty-stars">★★☆</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="memory-board" class="memory-board">
-                <!-- Карточки будут добавлены через JavaScript -->
-            </div>
-            <div class="game-controls">
-                <button class="restart-btn" onclick="restartMemoryGame()">Начать заново</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Секция "Для вас" (админка) -->
-    <div id="admin-section" class="section">
-        <div class="section-header">
-            <button class="back-button" onclick="showSection('main-section')">← Назад</button>
-            <h2 class="section-title">Для вас</h2>
-        </div>
-
-        <!-- Панель с информацией о текущем пользователе -->
-        <div class="user-panel">
-            <div class="user-info">
-                <div class="user-avatar">
-                    <span class="avatar-placeholder">👤</span>
-                </div>
-                <div class="user-details">
-                    <h3 id="user-display-name">Гость</h3>
-                    <p id="user-ip">IP: определяется...</p>
-                </div>
-            </div>
-            <button class="edit-user-btn" onclick="showNameModal()">Изменить имя</button>
-        </div>
-
-        <!-- Статистика использования -->
-        <div class="usage-stats">
-            <h3 class="section-subtitle">Статистика использования</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="movies-watched">0</div>
-                    <div class="stat-label">Фильмов просмотрено</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="weather-checks">0</div>
-                    <div class="stat-label">Проверок погоды</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="recipes-viewed">0</div>
-                    <div class="stat-label">Рецептов просмотрено</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="games-played">0</div>
-                    <div class="stat-label">Игр сыграно</div>
+            <!-- Зона для игры "Найди пару" -->
+            <div id="memory-game-container" class="game-container hidden">
+                <div class="game-interface">
+                    <div class="game-header">
+                        <h3 class="game-interface-title">Игра "Найди пару"</h3>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <i class="fas fa-sync-alt"></i>
+                                <span class="stat-label">Ходы:</span>
+                                <span id="memory-moves" class="stat-value">0</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-clock"></i>
+                                <span class="stat-label">Время:</span>
+                                <span id="memory-timer" class="stat-value">00:00</span>
+                            </div>
+                        </div>
+                        <button class="close-game" onclick="closeMemoryGame()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div id="memory-board" class="memory-board">
+                        <!-- Карточки будут добавлены через JavaScript -->
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-control-button restart" onclick="restartMemoryGame()">
+                            <i class="fas fa-redo"></i> Начать заново
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- История просмотров -->
-        <div class="view-history">
-            <h3 class="section-subtitle">История просмотров</h3>
-            <div id="history-list" class="history-list">
-                <!-- История будет добавлена через JavaScript -->
-            </div>
-            <button class="clear-history-btn" onclick="clearHistory()">Очистить историю</button>
         </div>
     </div>
 
@@ -363,24 +498,42 @@
     <div id="name-modal" class="modal">
         <div class="modal-content">
             <h3 class="modal-title">Как к вам обращаться?</h3>
-            <input type="text" id="user-name-input" class="modal-input" placeholder="Введите ваше имя">
+            <div class="input-group">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="user-name-input" class="modal-input" placeholder="Введите ваше имя">
+            </div>
             <div class="modal-buttons">
-                <button class="modal-btn" onclick="saveName()">Сохранить</button>
-                <button class="modal-btn cancel" onclick="closeModal()">Отмена</button>
+                <button class="modal-button primary" onclick="saveName()">
+                    <i class="fas fa-check"></i> Сохранить
+                </button>
+                <button class="modal-button secondary" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Отмена
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Уведомление -->
     <div id="notification" class="notification">
-        <div class="notification-content">
-            <span id="notification-message"></span>
+        <div class="notification-icon" id="notification-icon">
+            <i class="fas fa-check-circle"></i>
         </div>
+        <div class="notification-content">
+            <div class="notification-title" id="notification-title">Успешно</div>
+            <div class="notification-message" id="notification-message"></div>
+        </div>
+        <button class="notification-close" onclick="closeNotification()">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 
     <!-- Подвал с секретной кнопкой для админки -->
     <footer class="main-footer">
-        <p>© 2025 dotkit.me | <span class="admin-link" onclick="showSection('admin-section')">dot_gh</span></p>
+        <div class="footer-content">
+            <div class="copyright">
+                © 2025 <span class="admin-link" onclick="showSection('admin-section')">dotkit.me</span> | Разработано DOT-gh
+            </div>
+        </div>
     </footer>
 
     <!-- Подключение YouTube API -->
@@ -388,6 +541,7 @@
     
     <!-- Подключение JavaScript -->
     <script src="data.js"></script> <!-- Данные для сайта -->
+    <script src="animations.js"></script> <!-- Анимации для сайта -->
     <script src="script.js"></script> <!-- Основные функции -->
 </body>
 </html>
