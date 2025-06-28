@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DotKit - Помощник для пожилых людей</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+</head>
+<body>
+    <header class="weather-header">
+        <div class="weather-widget">
+            <span class="time-display"><i class="icon-clock"></i> <span id="current-time">--:--</span></span>
+            <span class="temp-display"><i class="icon-thermometer"></i> <span id="current-temp">--°C</span></span>
+            <span class="condition-display"><i class="icon-sun"></i> <span id="weather-condition">Загрузка...</span></span>
+        </div>
+    </header>
+
+    <main>
+        <div class="welcome-container">
+            <h1>Добро пожаловать, <span id="user-name">Гость</span>!</h1>
+            <p class="subtitle">Что хотите посмотреть сегодня?</p>
+        </div>
+
+        <div class="menu-grid">
+            <a href="pages/movies.html" class="menu-item">
+                <div class="menu-icon">🎬</div>
+                <h2>Фильмы</h2>
+                <p>Бесплатные фильмы без рекламы</p>
+            </a>
+            
+            <a href="pages/recipes.html" class="menu-item">
+                <div class="menu-icon">👨‍🍳</div>
+                <h2>Рецепты</h2>
+                <p>Смачні страви для всієї родини</p>
+            </a>
+        </div>
+
+        <div class="recently-viewed">
+            <h2>Недавно просмотренное</h2>
+            <div id="history-items" class="history-grid">
+                <!-- History items will be loaded here dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© <span id="current-year">2025</span> dotkit.me | dot_gh</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/weather-api.js"></script>
+    <script src="js/user-recognition.js"></script>
+</body>
+</html>

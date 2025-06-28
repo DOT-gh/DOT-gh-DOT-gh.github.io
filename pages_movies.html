@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильмы - DotKit</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/movies.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/dark-theme.css">
+</head>
+<body>
+    <header class="page-header">
+        <a href="../index.html" class="back-button">← Назад</a>
+        <h1>Фильмы</h1>
+        <div class="weather-mini">
+            <span id="current-time">--:--</span>
+            <span id="current-temp">--°C</span>
+        </div>
+    </header>
+
+    <div class="category-selector">
+        <button class="category-button active" data-category="recommended">Рекомендуемые</button>
+        <button class="category-button" data-category="drama">Драмы</button>
+        <button class="category-button" data-category="comedy">Комедии</button>
+        <button class="category-button" data-category="detective">Детективы</button>
+        <button class="random-movie-button">Случайный фильм</button>
+    </div>
+
+    <main class="movies-container">
+        <div class="movies-grid" id="movies-grid">
+            <!-- Movies will be loaded here dynamically -->
+            <div class="loading">Загрузка фильмов...</div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© <span id="current-year">2025</span> dotkit.me | dot_gh</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/weather-api.js"></script>
+    <script src="../js/movies-api.js"></script>
+</body>
+</html>
