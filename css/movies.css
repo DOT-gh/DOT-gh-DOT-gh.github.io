@@ -1,0 +1,214 @@
+/* Movies page specific styles */
+
+/* Category selection */
+.category-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    justify-content: center;
+    padding: 0 var(--spacing-md);
+}
+
+.category-button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--card-background);
+    color: var(--text-color);
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
+}
+
+.category-button.active {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.random-movie-button {
+    margin-left: auto;
+    background-color: var(--button-color);
+}
+
+/* Movies grid */
+.movies-container {
+    padding: 0 var(--spacing-md);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+/* Movie card */
+.movie-card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--card-border);
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.movie-poster {
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.movie-info {
+    padding: var(--spacing-md);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-title {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+}
+
+.movie-meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--secondary-text);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+.movie-description {
+    color: var(--secondary-text);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-base);
+    flex-grow: 1;
+}
+
+.watch-button {
+    align-self: center;
+    width: 100%;
+    margin-top: auto;
+    text-align: center;
+    font-size: var(--font-size-base);
+    font-weight: bold;
+}
+
+/* Movie player */
+.movie-player {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-controls {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.player-iframe {
+    width: 90%;
+    height: 70%;
+    max-width: 1200px;
+    border: none;
+}
+
+.close-player {
+    background-color: var(--error-color);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* Weather mini display */
+.weather-mini {
+    display: flex;
+    gap: var(--spacing-lg);
+    font-size: var(--font-size-base);
+}
+
+/* Responsive styles for movies page */
+@media (max-width: 768px) {
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: var(--spacing-md);
+    }
+    
+    .movie-poster {
+        height: 300px;
+    }
+    
+    .category-selector {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .random-movie-button {
+        margin-left: 0;
+        margin-top: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 576px) {
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--spacing-sm);
+    }
+    
+    .movie-poster {
+        height: 220px;
+    }
+    
+    .movie-title {
+        font-size: 1rem;
+    }
+    
+    .movie-meta,
+    .movie-description {
+        font-size: 0.9rem;
+    }
+    
+    .watch-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9rem;
+    }
+    
+    .category-button {
+        flex: 1 0 45%;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    
+    .random-movie-button {
+        flex: 1 0 100%;
+    }
+}

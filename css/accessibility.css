@@ -1,0 +1,119 @@
+/* Enhanced accessibility features for senior users */
+
+/* Optional class for larger text mode that user can toggle */
+body.large-text {
+    --font-size-xl: 3rem;      /* 48px */
+    --font-size-lg: 2.2rem;    /* 35.2px */
+    --font-size-md: 1.6rem;    /* 25.6px */
+    --font-size-base: 1.4rem;  /* 22.4px */
+    --font-size-sm: 1.1rem;    /* 17.6px */
+}
+
+/* High contrast mode */
+body.high-contrast {
+    --background-color: #000;
+    --card-background: #1a1a1a;
+    --text-color: #fff;
+    --accent-color: #ffff00;
+    --secondary-text: #dddddd;
+    --button-color: #00a8e8;
+    --button-hover: #0077cc;
+}
+
+body.high-contrast .menu-item,
+body.high-contrast .movie-card,
+body.high-contrast .recipe-card,
+body.high-contrast .history-item {
+    border: 2px solid white;
+}
+
+body.high-contrast button {
+    border: 2px solid white;
+}
+
+body.high-contrast h1 {
+    background: none;
+    -webkit-text-fill-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Simple mode with reduced features for easier comprehension */
+body.simple-mode .weather-widget {
+    flex-direction: column;
+}
+
+body.simple-mode .menu-grid {
+    grid-template-columns: 1fr;
+}
+
+body.simple-mode .movies-grid,
+body.simple-mode .recipes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* Focus indicators for keyboard navigation */
+*:focus {
+    outline: 3px solid var(--accent-color) !important;
+    outline-offset: 3px !important;
+}
+
+/* Reduced motion for users who might be sensitive to animation */
+body.reduced-motion * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+}
+
+/* Accessibility toolbar */
+.accessibility-toolbar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+    display: flex;
+    gap: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+    z-index: 100;
+    border: 1px solid var(--card-border);
+}
+
+.accessibility-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-background);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.accessibility-button.active {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* A+ text size button */
+.text-size-button::before {
+    content: "A+";
+    font-weight: bold;
+}
+
+/* High contrast button */
+.contrast-button::before {
+    content: "◐";
+}
+
+/* Simple mode button */
+.simple-mode-button::before {
+    content: "⊞";
+}
+
+/* Reduced motion button */
+.motion-button::before {
+    content: "⏸";
+}
