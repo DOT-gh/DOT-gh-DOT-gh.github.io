@@ -2,11 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
+:root { color-scheme: dark; }
+body { @apply bg-gray-950 text-gray-100; font-feature-settings: "cv02","cv03","cv04","cv11"; }
 
-body {
-  @apply bg-gray-950 text-gray-100;
-  font-feature-settings: "cv02","cv03","cv04","cv11";
-}
+/* Leaflet base */
+.leaflet-container { width: 100%; height: 100%; background: #0b0f19; }
+.leaflet-control-attribution { display:none; }
+
+/* UI helpers */
+.btn { @apply px-3 py-2 rounded text-sm bg-gray-800 hover:bg-gray-700 disabled:opacity-40; }
+.btn-primary { @apply bg-indigo-600 hover:bg-indigo-500; }
+.card { @apply rounded border border-gray-700 bg-gray-900/70; }
+.toolbar { @apply fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-3 p-3 rounded-xl bg-black/50 backdrop-blur border border-white/10 shadow-lg; }
+.range-circle { pointer-events:none; border-radius: 9999px; border: 2px dashed rgba(99,102,241,.6); position:absolute; transform: translate(-50%,-50%); }
+.entity-label { @apply text-[10px] px-1 py-0.5 rounded bg-black/60 border border-white/10; }
