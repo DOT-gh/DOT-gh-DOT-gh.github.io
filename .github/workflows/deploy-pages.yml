@@ -34,6 +34,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+      # фрагмент шага build
+      - name: Typecheck
+        run: npm run typecheck
 
   deploy:
     environment:
