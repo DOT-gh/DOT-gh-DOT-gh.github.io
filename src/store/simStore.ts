@@ -47,7 +47,8 @@ export const useSimStore = create<SimState & Actions>()(persist((set, get) => ({
     const south = s.config.spawnCorridors[1];
     const air = s.config.spawnCorridors[2];
 
-    const addFrom = (corr: typeof s.config.spawnCorridors[number], n: number) => {
+    const addFrom = (corr: SimState["config"]["spawnCorridors"][number] | undefined, n: number) => {
+      if (!corr) return; // важная защита от undefined
       for (let i=0;i<n;i++) {
         const k = pick(corr.kinds as any);
         const jitterLat = (Math.random()-0.5) * (corr.spread_km/111);
@@ -75,8 +76,6 @@ export const useSimStore = create<SimState & Actions>()(persist((set, get) => ({
     const s = get();
     const d = s.defenses.find(x => x.id === id);
     if (!d) return;
-    // naive upgrade price is in sim.upgradeDefense, call via set to trigger persist
-    // to keep message concise, call by copying object (actual function already changes state reference)
     const before = JSON.stringify(s.defenses);
     // @ts-ignore tick will clean mutated store
     s.defenses = s.defenses; // no-op
