@@ -1,30 +1,40 @@
-import { ThreatTable } from "../src/components/ThreatTable";
-import { ThreatWaveView } from "../src/components/ThreatWaveView";
-import { InterceptorPanel } from "../src/components/InterceptorPanel";
-import { ControlBar } from "../src/components/ControlBar";
-import { ScorePanel } from "../src/components/ScorePanel";
-import Link from "next/link";
+import dynamic from "next/dynamic";
+import React, { useEffect, useRef } from "react";
+import { Header } from "../src/components/Layout/Header";
+import { TopRightHUD } from "../src/components/HUD/TopRightHUD";
+import { BottomToolbar } from "../src/components/Toolbar/BottomToolbar";
+import { useSimStore } from "../src/store/simStore";
+
+const MapView = dynamic(() => import("../src/components/Map/MapView").then(m => m.MapView), { ssr: false });
 
 export default function GamePage() {
+  const frame = useSimStore(s => s.frame);
+  const paused = useSimStore(s => s.hud.paused);
+  const last = useRef<number | null>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const loop = (t: number) => {
+      raf = requestAnimationFrame(loop);
+      const prev = last.current ?? t;
+      last.current = t;
+      const dt = (t - prev) / 1000;
+      frame(dt);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [frame, paused]);
+
   return (
-    <main className="min-h-screen px-6 py-8 max-w-7xl mx-auto space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Wave Defense</h1>
-        <Link href="/" className="text-sm text-indigo-400 hover:underline">
-          На главную
-        </Link>
-      </div>
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
-          <ThreatWaveView />
-          <InterceptorPanel />
-          <ControlBar />
-        </div>
-        <div className="space-y-6">
-          <ScorePanel />
-          <ThreatTable />
+    <main className="min-h-screen px-4 py-4 max-w-[1400px] mx-auto">
+      <Header />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[70vh]">
+        <div className="lg:col-span-3 h-[70vh]">
+          <MapView />
         </div>
       </div>
+      <TopRightHUD />
+      <BottomToolbar />
     </main>
   );
 }
