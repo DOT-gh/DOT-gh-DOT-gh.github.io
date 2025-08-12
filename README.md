@@ -7,7 +7,7 @@ All "weapon" and "threat" data are abstracted, non-sensitive, non-technical. No 
 - Turn-based waves
 - Multiple threat classes (speed, durability, value of damage)
 - Interceptor allocation with different efficiency & cost
-- Simple economy (budget replenishment)
+- Simple economy (budget replenishment))
 - Outcome summary per wave
 - Scoring: cumulative prevented damage vs passed damage
 
