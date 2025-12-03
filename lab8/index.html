@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №8 - Чому НЕ Google Sites</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00fff2;
+            --neon-pink: #ff00ff;
+            --neon-green: #39ff14;
+            --neon-blue: #0066ff;
+            --dark-bg: #050505;
+            --card-bg: rgba(20, 20, 20, 0.8);
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--dark-bg);
+            color: var(--neon-cyan);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 242, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 242, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* Scanline Effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 242, 0.03),
+                rgba(0, 255, 242, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Home Button */
+        .home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 10px 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn:hover {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.5), inset 0 0 20px rgba(0, 255, 242, 0.1);
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 98% { transform: translateX(0); }
+            99% { transform: translateX(-5px) skew(-5deg); }
+            100% { transform: translateX(5px) skew(5deg); }
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        /* Corner Decorations */
+        .corner-tl, .corner-tr, .corner-bl, .corner-br {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--neon-pink);
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Comparison Section */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .comparison-card {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 40px;
+            position: relative;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+
+        .comparison-card.bad {
+            border-color: var(--neon-pink);
+        }
+
+        .comparison-card.good {
+            border-color: var(--neon-green);
+        }
+
+        .comparison-card h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .comparison-card.bad h3 {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .comparison-card.good h3 {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .comparison-item {
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .comparison-card.bad .comparison-item {
+            border-left-color: var(--neon-pink);
+        }
+
+        .comparison-card.good .comparison-item {
+            border-left-color: var(--neon-green);
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .comparison-card.bad .icon {
+            color: var(--neon-pink);
+        }
+
+        .comparison-card.good .icon {
+            color: var(--neon-green);
+        }
+
+        /* Content Box */
+        .content-box {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
+        }
+
+        .content-box h3 {
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .content-box p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(0, 255, 242, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--neon-cyan);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 242, 0.4);
+            border-color: var(--neon-pink);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: rgba(0, 255, 242, 0.7);
+        }
+
+        /* Google Sites Link */
+        .google-site-link {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-pink);
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .google-site-link h3 {
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .google-site-link p {
+            color: rgba(255, 0, 255, 0.7);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 15px 30px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--neon-pink);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Conclusion */
+        .conclusion {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-green);
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .conclusion h3 {
+            font-size: 2rem;
+            color: var(--neon-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .conclusion p {
+            font-size: 1.2rem;
+            color: rgba(0, 255, 242, 0.8);
+            line-height: 1.8;
+        }
+
+        .conclusion .quote {
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            margin-top: 30px;
+            font-style: italic;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header h2 {
+                font-size: 1.5rem;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="home-btn">
+        <i class="fas fa-home"></i> ГОЛОВНА
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <div class="corner-tl"></div>
+            <div class="corner-br"></div>
+            <h1>Лабораторна робота №8</h1>
+            <h2>Чому НЕ Google Sites</h2>
+        </div>
+
+        <div class="comparison">
+            <div class="comparison-card bad">
+                <h3><i class="fas fa-times-circle"></i> Google Sites</h3>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-lock"></i></span>
+                    <strong>Обмежений функціонал</strong> - тільки те, що дозволяє Google
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-clone"></i></span>
+                    <strong>Шаблонний дизайн</strong> - виглядає як всі інші сайти
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-ban"></i></span>
+                    <strong>Немає контролю</strong> - обмежені можливості кастомізації
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-palette"></i></span>
+                    <strong>Обмежені стилі</strong> - базові кольори та шрифти
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-robot"></i></span>
+                    <strong>Немає інтерактиву</strong> - мінімальний JavaScript
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-scroll"></i></span>
+                    <strong>Залежність</strong> - від Google та їх правил
+                </div>
+            </div>
+
+            <div class="comparison-card good">
+                <h3><i class="fas fa-check-circle"></i> Власний Код</h3>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-infinity"></i></span>
+                    <strong>Повна свобода</strong> - можна робити що завгодно
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-magic"></i></span>
+                    <strong>Інтерактивність</strong> - квізи, симулятори, анімації
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-paint-brush"></i></span>
+                    <strong>Унікальний дизайн</strong> - Cyberpunk HUD style!
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-code"></i></span>
+                    <strong>Навчання</strong> - розвиток навичок програмування
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-rocket"></i></span>
+                    <strong>Продуктивність</strong> - оптимізація під свої потреби
+                </div>
+                <div class="comparison-item">
+                    <span class="icon"><i class="fas fa-crown"></i></span>
+                    <strong>Власність</strong> - повний контроль над кодом
+                </div>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <h3>Що ми реалізували без Google Sites:</h3>
+            <p>
+                Цей проект демонструє можливості чистого HTML/CSS/JavaScript без використання 
+                конструкторів сайтів. Всі ефекти, анімації та інтерактивні елементи створені вручну.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-desktop"></i>
+                <h4>Cyberpunk Design</h4>
+                <p>Унікальний дизайн з neon ефектами, scanlines та grid background</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-gamepad"></i>
+                <h4>17 Interactive Slides</h4>
+                <p>Презентація з квізами, симуляторами та демонстраціями</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-keyboard"></i>
+                <h4>Keyboard Navigation</h4>
+                <p>Навігація стрілками, прогрес-бар, mini-map слайдів</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-brain"></i>
+                <h4>AI Hallucination Demo</h4>
+                <p>Інтерактивна демонстрація помилок штучного інтелекту</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-virus"></i>
+                <h4>Security Quiz</h4>
+                <p>Тест на знання IoT безпеки з підрахунком результатів</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-virus"></i>
+                <h4>Mirai Simulator</h4>
+                <p>Візуальна симуляція кібератаки на IoT пристрої</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-list-check"></i>
+                <h4>Security Checklist</h4>
+                <p>Інтерактивний чеклист з прогрес-баром та localStorage</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-map-marked-alt"></i>
+                <h4>Ukraine Cyber Map</h4>
+                <p>SVG карта з анімованими точками атак та захисту</p>
+            </div>
+        </div>
+
+        <div class="google-site-link">
+            <h3><i class="fas fa-link"></i> Посилання на Google Site</h3>
+            <p>
+                Якщо б ми використовували Google Sites, то нічого з вищенаведеного не було б можливим.
+                <br>
+                Але ви можете створити простий Google Site для порівняння (опціонально):
+            </p>
+            <button class="btn" disabled>
+                <i class="fas fa-external-link-alt"></i> GOOGLE SITE (PLACEHOLDER)
+            </button>
+        </div>
+
+        <div class="conclusion">
+            <h3><i class="fas fa-trophy"></i> Висновок</h3>
+            <p>
+                Власний код дає необмежені можливості для творчості та навчання.
+                <br>
+                Google Sites - це зручно для швидких сайтів, але обмежує потенціал.
+                <br>
+                Для справжніх проектів потрібен справжній код!
+            </p>
+            <p class="quote">
+                "Code is poetry. Google Sites is a fill-in-the-blank form."
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & IoT: Як не стати батарейкою для Матриці</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-cyan: #00fff2;
+            --neon-pink: #ff00ff;
+            --neon-green: #39ff14;
+            --neon-blue: #0066ff;
+            --dark-bg: #050505;
+            --card-bg: rgba(20, 20, 20, 0.8);
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--dark-bg);
+            color: var(--neon-cyan);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 242, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 242, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* Scanline Effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 242, 0.03),
+                rgba(0, 255, 242, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        .presentation {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Slide Container */
+        .slides-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Slide Styles */
+        .slide h1 {
+            font-size: 3.5rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 20px var(--neon-cyan);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 98% { transform: translateX(0); }
+            99% { transform: translateX(-5px) skew(-5deg); }
+            100% { transform: translateX(5px) skew(5deg); }
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            color: var(--neon-pink);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .slide h3 {
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .slide p, .slide li {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(0, 255, 242, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .slide ul {
+            list-style: none;
+            max-width: 900px;
+        }
+
+        .slide li::before {
+            content: '▸ ';
+            color: var(--neon-pink);
+            margin-right: 10px;
+        }
+
+        .author {
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            margin-top: 40px;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* Menu Cards */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+
+        .menu-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 255, 242, 0.5);
+            border-color: var(--neon-pink);
+        }
+
+        .menu-card i {
+            font-size: 3rem;
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+        }
+
+        .menu-card h3 {
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+        }
+
+        .menu-card p {
+            font-size: 0.9rem;
+            color: rgba(0, 255, 242, 0.6);
+        }
+
+        /* Content Box */
+        .content-box {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 40px;
+            max-width: 1000px;
+            box-shadow: 0 0 30px rgba(0, 255, 242, 0.3);
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 30px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.4);
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 10px 25px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-pink);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            color: var(--neon-cyan);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        /* Mini Map */
+        .mini-map {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px;
+        }
+
+        .mini-dot {
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mini-dot.active {
+            background: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .mini-dot:hover {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Home Button */
+        .home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 10px 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn:hover {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* Button Styles */
+        .btn {
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 15px 30px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .btn-pink {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        .btn-pink:hover {
+            background: var(--neon-pink);
+        }
+
+        .btn-green {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .btn-green:hover {
+            background: var(--neon-green);
+        }
+
+        /* Interactive Elements */
+        .demo-box {
+            background: rgba(255, 0, 255, 0.05);
+            border: 2px solid var(--neon-pink);
+            padding: 30px;
+            margin: 20px 0;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .demo-output {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-cyan);
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 100px;
+            font-family: monospace;
+            color: var(--neon-green);
+        }
+
+        .highlight-error {
+            color: var(--neon-pink);
+            background: rgba(255, 0, 255, 0.1);
+            padding: 2px 5px;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .question {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .question h4 {
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(0, 255, 242, 0.1);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .quiz-result {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-green);
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        /* Simulator Styles */
+        .simulator {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .attack-stage {
+            background: var(--card-bg);
+            border-left: 4px solid var(--dark-bg);
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.5s ease;
+        }
+
+        .attack-stage.active {
+            border-left-color: var(--neon-pink);
+            background: rgba(255, 0, 255, 0.1);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .device-counter {
+            font-size: 3rem;
+            color: var(--neon-pink);
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        /* Checklist Styles */
+        .checklist {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: var(--neon-pink);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .checklist-item.checked {
+            border-color: var(--neon-green);
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-cyan);
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        /* Map Styles */
+        .cyber-map {
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+        }
+
+        .map-container {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 30px;
+            position: relative;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-cyan);
+        }
+
+        .attack-point {
+            fill: var(--neon-pink);
+            animation: blink 2s infinite;
+        }
+
+        .defense-point {
+            fill: var(--neon-green);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .map-filters {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .map-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-cyan);
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: var(--neon-pink);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: var(--neon-cyan);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide h1 { font-size: 2rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .slide h3 { font-size: 1.2rem; }
+            .slide p, .slide li { font-size: 1rem; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .nav-controls { flex-wrap: wrap; padding: 10px; }
+            .mini-map { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="home-btn">
+        <i class="fas fa-home"></i> ГОЛОВНА
+    </a>
+
+    <div class="presentation">
+        <div class="slides-container" id="slidesContainer">
+
+            <!-- Slide 1: Title -->
+            <div class="slide active" data-slide="1">
+                <h1>AI & IoT</h1>
+                <h2>Як не стати батарейкою для Матриці</h2>
+                <p class="author">by Dmytro Turchin</p>
+            </div>
+
+            <!-- Slide 2: Main Menu -->
+            <div class="slide" data-slide="2">
+                <h2>Main Menu</h2>
+                <div class="menu-grid">
+                    <div class="menu-card" onclick="goToSlide(3)">
+                        <i class="fas fa-brain"></i>
+                        <h3>AI Reality</h3>
+                        <p>Що таке AI насправді і де його обмеження</p>
+                    </div>
+                    <div class="menu-card" onclick="goToSlide(5)">
+                        <i class="fas fa-house-signal"></i>
+                        <h3>IoT Security</h3>
+                        <p>Вразливості розумного дому та атаки</p>
+                    </div>
+                    <div class="menu-card" onclick="goToSlide(8)">
+                        <i class="fas fa-jet-fighter"></i>
+                        <h3>Війна Tech</h3>
+                        <p>Технології на полі бою України</p>
+                    </div>
+                    <div class="menu-card" onclick="goToSlide(10)">
+                        <i class="fas fa-shield-virus"></i>
+                        <h3>Захист</h3>
+                        <p>Як захистити себе і свої дані</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: AI Reality Check -->
+            <div class="slide" data-slide="3">
+                <h2>AI Reality Check</h2>
+                <div class="content-box">
+                    <h3>Що таке AI насправді?</h3>
+                    <ul>
+                        <li>Pattern matching на стероїдах</li>
+                        <li>Статистичні моделі, а не свідомість</li>
+                        <li>Навчання на даних → передбачення наступного токена</li>
+                        <li>ChatGPT не "розуміє" - він "угадує"</li>
+                        <li>Немає здорового глузду, лише вірогідності</li>
+                    </ul>
+                    <p style="margin-top: 30px; color: var(--neon-pink);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        AI може помилятися з впевненим виглядом!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 4: AI Deep Dive -->
+            <div class="slide" data-slide="4">
+                <h2>Галюцинації AI</h2>
+                <div class="content-box">
+                    <h3>Типові помилки:</h3>
+                    <ul>
+                        <li>Вигадування фактів і посилань</li>
+                        <li>Впевнені відповіді на невідомі питання</li>
+                        <li>Плутанина з датами, числами, іменами</li>
+                        <li>Створення неіснуючих джерел</li>
+                        <li>Несумісні твердження в одному тексті</li>
+                    </ul>
+                    <button class="btn btn-pink" onclick="goToSlide(13)">
+                        <i class="fas fa-flask"></i> ДЕМО: AI Hallucination
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 5: IoT Intro -->
+            <div class="slide" data-slide="5">
+                <h2>Internet of Things (IoT)</h2>
+                <div class="content-box">
+                    <h3>Що це таке?</h3>
+                    <ul>
+                        <li>Розумні пристрої з підключенням до інтернету</li>
+                        <li>Лампочки, камери, термостати, холодильники</li>
+                        <li>Часто працюють на Linux з мінімальним захистом</li>
+                        <li>Стандартні паролі: admin/admin, root/root</li>
+                        <li>Рідко оновлюються власниками</li>
+                    </ul>
+                    <p style="margin-top: 30px; color: var(--neon-pink);">
+                        <i class="fas fa-bug"></i>
+                        25+ мільярдів IoT пристроїв у світі (2024)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 6: Smart Home Risks -->
+            <div class="slide" data-slide="6">
+                <h2>Smart Home Risks</h2>
+                <div class="content-box">
+                    <h3>Вразливості розумного дому:</h3>
+                    <ul>
+                        <li>Камери можуть бути зламані → спостереження</li>
+                        <li>Роутер - ключ до всієї мережі</li>
+                        <li>Mirai botnet: 600,000+ IoT пристроїв</li>
+                        <li>DDoS атаки потужністю 1+ Tbps</li>
+                        <li>Викрадення даних через вразливі пристрої</li>
+                    </ul>
+                    <button class="btn btn-pink" onclick="goToSlide(15)">
+                        <i class="fas fa-virus"></i> СИМУЛЯТОР: Mirai Attack
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 7: IoT Attack Vectors -->
+            <div class="slide" data-slide="7">
+                <h2>IoT Attack Vectors</h2>
+                <div class="content-box">
+                    <h3>Як хакери атакують:</h3>
+                    <ul>
+                        <li>Сканування портів (Telnet 23, SSH 22)</li>
+                        <li>Brute-force стандартних паролів</li>
+                        <li>Експлуатація вразливостей прошивки</li>
+                        <li>Man-in-the-Middle через WiFi</li>
+                        <li>Фішинг для отримання доступу</li>
+                    </ul>
+                    <button class="btn btn-green" onclick="goToSlide(14)">
+                        <i class="fas fa-question"></i> КВІЗ: IoT Security
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 8: War Tech -->
+            <div class="slide" data-slide="8">
+                <h2>Технології на Війні</h2>
+                <div class="content-box">
+                    <h3>Український досвід:</h3>
+                    <ul>
+                        <li>Дрони FPV - зброя нового покоління</li>
+                        <li>Starlink - стабільний зв'язок на передовій</li>
+                        <li>Системи РЕБ проти ворожих дронів</li>
+                        <li>AI для розпізнавання цілей</li>
+                        <li>Delta - система управління військами</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 9: Cyber Defense Ukraine -->
+            <div class="slide" data-slide="9">
+                <h2>Кіберзахист України</h2>
+                <div class="content-box">
+                    <h3>Захист критичної інфраструктури:</h3>
+                    <ul>
+                        <li>Відбито 1000+ кібератак з 2022 року</li>
+                        <li>SSSCIP - захист держустанов</li>
+                        <li>Співпраця з NATO та ЄС</li>
+                        <li>IT Army of Ukraine - цивільний кіберспротив</li>
+                        <li>Постійний моніторинг загроз</li>
+                    </ul>
+                    <button class="btn btn-pink" onclick="goToSlide(17)">
+                        <i class="fas fa-map"></i> КАРТА: Cyber Attacks
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 10: User Risks -->
+            <div class="slide" data-slide="10">
+                <h2>Ризики для Користувачів</h2>
+                <div class="content-box">
+                    <h3>Персональні загрози:</h3>
+                    <ul>
+                        <li>Фішинг через email і SMS</li>
+                        <li>Зламані IoT камери → витік приватного життя</li>
+                        <li>Викрадення банківських даних</li>
+                        <li>Ransomware - шифрування файлів</li>
+                        <li>Стеження через смартфони</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 11: Practical Defense -->
+            <div class="slide" data-slide="11">
+                <h2>Практичний Захист</h2>
+                <div class="content-box">
+                    <h3>Рекомендації з безпеки:</h3>
+                    <ul>
+                        <li>✓ Складні унікальні паролі (Password Manager)</li>
+                        <li>✓ Двофакторна автентифікація (2FA)</li>
+                        <li>✓ Регулярні оновлення ПЗ</li>
+                        <li>✓ VPN для публічних мереж</li>
+                        <li>✓ Перевірка джерел інформації</li>
+                        <li>✓ Backup важливих даних</li>
+                    </ul>
+                    <button class="btn btn-green" onclick="goToSlide(16)">
+                        <i class="fas fa-check-square"></i> CHECKLIST: Router Security
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 12: Conclusions -->
+            <div class="slide" data-slide="12">
+                <h2>Висновки</h2>
+                <div class="content-box">
+                    <h3>Ключові думки:</h3>
+                    <ul>
+                        <li>AI - потужний інструмент, але не ідеальний</li>
+                        <li>IoT пристрої потребують захисту</li>
+                        <li>Технології змінили характер війни</li>
+                        <li>Кібербезпека - відповідальність кожного</li>
+                        <li>Освіта і пильність - найкращий захист</li>
+                    </ul>
+                    <p style="margin-top: 30px; text-align: center; font-size: 1.5rem;">
+                        <i class="fas fa-terminal"></i>
+                        Stay Safe. Stay Cyber-Aware.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 13: AI Hallucination Demo -->
+            <div class="slide" data-slide="13">
+                <h2>AI Hallucination Demo</h2>
+                <div class="demo-box">
+                    <button class="btn" onclick="generateHallucination()">
+                        <i class="fas fa-magic"></i> ЗАПИТАТИ AI
+                    </button>
+                    <div class="demo-output" id="hallucinationOutput">
+                        Натисніть кнопку, щоб побачити приклад AI галюцинації...
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-pink" onclick="generateHallucination()">ПОВТОРИТИ</button>
+                        <button class="btn btn-green" onclick="goToSlide(2)">ГОЛОВНЕ МЕНЮ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 14: IoT Security Quiz -->
+            <div class="slide" data-slide="14">
+                <h2>IoT Security Quiz</h2>
+                <div class="quiz-container" id="quizContainer">
+                    <div class="question">
+                        <h4>1. Що є найкращим паролем для WiFi роутера?</h4>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="a"> admin123
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="b"> password
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q1" value="c"> K9#mP2$vL8@qX4!nR
+                        </label>
+                    </div>
+                    <div class="question">
+                        <h4>2. Як часто треба оновлювати прошивку роутера?</h4>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="a"> Ніколи
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="b"> Раз на 5 років
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q2" value="c"> При виході нових версій
+                        </label>
+                    </div>
+                    <div class="question">
+                        <h4>3. Чи безпечно використовувати WPS?</h4>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="a"> Так, дуже зручно
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="b"> Ні, має вразливості
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q3" value="c"> Залежить від провайдера
+                        </label>
+                    </div>
+                    <div class="question">
+                        <h4>4. Чи можна підключатись до публічних WiFi без VPN?</h4>
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="a"> Так, якщо це кафе
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="b"> Ні, небезпечно
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q4" value="c"> Тільки для перегляду сайтів
+                        </label>
+                    </div>
+                    <div class="question">
+                        <h4>5. Що таке 2FA?</h4>
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="a"> Два фактори автентифікації
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="b"> Двічі на день перевірка
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="q5" value="c"> Два файли антивіруса
+                        </label>
+                    </div>
+                    <button class="btn btn-green" onclick="checkQuiz()">ПЕРЕВІРИТИ ВІДПОВІДІ</button>
+                    <div id="quizResult"></div>
+                </div>
+            </div>
+
+            <!-- Slide 15: Mirai Attack Simulator -->
+            <div class="slide" data-slide="15">
+                <h2>Mirai Attack Simulator</h2>
+                <div class="simulator">
+                    <button class="btn btn-pink" id="startAttack" onclick="startMiraiAttack()">
+                        <i class="fas fa-skull-crossbones"></i> ЗАПУСТИТИ АТАКУ
+                    </button>
+                    <div class="device-counter" id="deviceCounter">0</div>
+                    <p style="text-align: center; color: var(--neon-cyan);">ЗАРАЖЕНИХ ПРИСТРОЇВ</p>
+                    
+                    <div class="attack-stage" id="stage1">
+                        <h4 style="color: var(--neon-cyan);">ЕТАП 1: Сканування мережі</h4>
+                        <p>Пошук вразливих IoT пристроїв...</p>
+                    </div>
+                    <div class="attack-stage" id="stage2">
+                        <h4 style="color: var(--neon-cyan);">ЕТАП 2: Підбір паролів</h4>
+                        <p>Brute-force атака на стандартні паролі...</p>
+                    </div>
+                    <div class="attack-stage" id="stage3">
+                        <h4 style="color: var(--neon-cyan);">ЕТАП 3: Зараження</h4>
+                        <p>Завантаження шкідливого ПЗ на пристрої...</p>
+                    </div>
+                    <div class="attack-stage" id="stage4">
+                        <h4 style="color: var(--neon-cyan);">ЕТАП 4: DDoS</h4>
+                        <p>Координована атака на ціль...</p>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button class="btn" id="stopAttack" onclick="stopMiraiAttack()" style="display: none;">
+                            ЗУПИНИТИ
+                        </button>
+                        <button class="btn btn-green" onclick="resetMiraiAttack()">RESET</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 16: Router Security Checklist -->
+            <div class="slide" data-slide="16">
+                <h2>Router Security Checklist</h2>
+                <div class="checklist">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleChecklistItem(this, 0)">
+                        <input type="checkbox" id="check0">
+                        <label for="check0">Змінив стандартний пароль роутера</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleChecklistItem(this, 1)">
+                        <input type="checkbox" id="check1">
+                        <label for="check1">Оновив прошивку до останньої версії</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleChecklistItem(this, 2)">
+                        <input type="checkbox" id="check2">
+                        <label for="check2">Вимкнув WPS (WiFi Protected Setup)</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleChecklistItem(this, 3)">
+                        <input type="checkbox" id="check3">
+                        <label for="check3">Змінив SSID (назву мережі)</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleChecklistItem(this, 4)">
+                        <input type="checkbox" id="check4">
+                        <label for="check4">Включив WPA3 або WPA2</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleChecklistItem(this, 5)">
+                        <input type="checkbox" id="check5">
+                        <label for="check5">Вимкнув remote access</label>
+                    </div>
+                    <p style="margin-top: 20px; text-align: center; color: var(--neon-green);">
+                        <span id="checklistProgress">0/6</span> виконано
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 17: Ukraine Cyber Map -->
+            <div class="slide" data-slide="17">
+                <h2>Ukraine Cyber Map</h2>
+                <div class="cyber-map">
+                    <div class="map-container">
+                        <div class="map-filters">
+                            <button class="btn" onclick="filterYear(2022)">2022</button>
+                            <button class="btn" onclick="filterYear(2023)">2023</button>
+                            <button class="btn" onclick="filterYear(2024)">2024</button>
+                            <button class="btn btn-green" onclick="filterYear('all')">ВСІ</button>
+                        </div>
+                        <svg class="map-svg" id="ukraineMap" viewBox="0 0 800 400">
+                            <!-- Simplified Ukraine outline -->
+                            <path d="M 100,200 L 150,150 L 250,140 L 350,160 L 450,140 L 550,150 L 650,180 L 700,220 L 680,280 L 600,320 L 500,340 L 400,330 L 300,310 L 200,280 L 120,240 Z" 
+                                  fill="none" stroke="var(--neon-cyan)" stroke-width="2"/>
+                            
+                            <!-- Attack points (red) -->
+                            <circle class="attack-point" cx="200" cy="200" r="5" data-year="2022"/>
+                            <circle class="attack-point" cx="350" cy="180" r="5" data-year="2022"/>
+                            <circle class="attack-point" cx="500" cy="200" r="5" data-year="2023"/>
+                            <circle class="attack-point" cx="300" cy="250" r="5" data-year="2023"/>
+                            <circle class="attack-point" cx="450" cy="220" r="5" data-year="2024"/>
+                            <circle class="attack-point" cx="250" cy="280" r="5" data-year="2024"/>
+                            <circle class="attack-point" cx="600" cy="250" r="5" data-year="2022"/>
+                            
+                            <!-- Defense points (green) -->
+                            <circle class="defense-point" cx="400" cy="200" r="5" data-year="2022"/>
+                            <circle class="defense-point" cx="350" cy="270" r="5" data-year="2023"/>
+                            <circle class="defense-point" cx="550" cy="230" r="5" data-year="2024"/>
+                            <circle class="defense-point" cx="280" cy="220" r="5" data-year="2023"/>
+                        </svg>
+                        <div class="map-stats">
+                            <div class="stat-box">
+                                <div class="stat-value" id="attackCount">12</div>
+                                <div class="stat-label">КІБЕРАТАК</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="defenseCount">8</div>
+                                <div class="stat-label">ЗАХИЩЕНО</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">98%</div>
+                                <div class="stat-label">УСПІШНІСТЬ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="nav-controls">
+            <button class="nav-btn" id="prevBtn" onclick="previousSlide()">
+                <i class="fas fa-arrow-left"></i> PREV
+            </button>
+            <div class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">17</span>
+            </div>
+            <div class="mini-map" id="miniMap"></div>
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+                NEXT <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 1;
+        const totalSlides = 17;
+        let miraiInterval = null;
+        let miraiDevices = 0;
+        let checklistState = [false, false, false, false, false, false];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSlideDisplay();
+            createMiniMap();
+            loadChecklistState();
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') previousSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'Home') goToSlide(2);
+            });
+        });
+
+        function goToSlide(slideNum) {
+            if (slideNum < 1 || slideNum > totalSlides) return;
+            
+            const slides = document.querySelectorAll('.slide');
+            slides[currentSlideIndex - 1].classList.remove('active');
+            currentSlideIndex = slideNum;
+            slides[currentSlideIndex - 1].classList.add('active');
+            updateSlideDisplay();
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides) {
+                goToSlide(currentSlideIndex + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlideIndex > 1) {
+                goToSlide(currentSlideIndex - 1);
+            }
+        }
+
+        function updateSlideDisplay() {
+            document.getElementById('currentSlide').textContent = currentSlideIndex;
+            document.getElementById('totalSlides').textContent = totalSlides;
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentSlideIndex === 1;
+            document.getElementById('nextBtn').disabled = currentSlideIndex === totalSlides;
+            
+            // Update mini-map
+            const dots = document.querySelectorAll('.mini-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentSlideIndex);
+            });
+        }
+
+        function createMiniMap() {
+            const miniMap = document.getElementById('miniMap');
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'mini-dot';
+                dot.onclick = () => goToSlide(i);
+                miniMap.appendChild(dot);
+            }
+        }
+
+        // AI Hallucination Demo
+        const hallucinations = [
+            {
+                question: "Коли була заснована компанія Tesla?",
+                answer: "Tesla була заснована у 1995 році Ілоном Маском в Каліфорнії.",
+                errors: ["1995", "Ілоном Маском"],
+                correct: "Насправді: 2003, засновники Martin Eberhard і Marc Tarpenning"
+            },
+            {
+                question: "Скільки країн є членами ООН?",
+                answer: "Станом на 2024 рік, членами ООН є 237 країн.",
+                errors: ["237"],
+                correct: "Насправді: 193 країни-члени ООН"
+            },
+            {
+                question: "Хто написав 'Гаррі Поттера'?",
+                answer: "Серію книг про Гаррі Поттера написав Дж. Р. Р. Толкін у 1990-х роках.",
+                errors: ["Толкін", "1990-х"],
+                correct: "Насправді: Дж. К. Роулінг, 1997-2007"
+            },
+            {
+                question: "Яка столиця України?",
+                answer: "Столицею України є місто Львів, розташоване в центрі країни.",
+                errors: ["Львів", "центрі"],
+                correct: "Насправді: Київ"
+            }
+        ];
+
+        function generateHallucination() {
+            const random = hallucinations[Math.floor(Math.random() * hallucinations.length)];
+            const output = document.getElementById('hallucinationOutput');
+            
+            let highlighted = random.answer;
+            random.errors.forEach(error => {
+                highlighted = highlighted.replace(error, `<span class="highlight-error">${error}</span>`);
+            });
+            
+            output.innerHTML = `
+                <p style="color: var(--neon-green); margin-bottom: 10px;">Q: ${random.question}</p>
+                <p style="color: var(--neon-cyan); margin-bottom: 15px;">AI: ${highlighted}</p>
+                <p style="color: var(--neon-pink); font-size: 0.9rem;">
+                    <i class="fas fa-exclamation-triangle"></i> ${random.correct}
+                </p>
+            `;
+        }
+
+        // Quiz
+        function checkQuiz() {
+            const answers = {q1: 'c', q2: 'c', q3: 'b', q4: 'b', q5: 'a'};
+            let score = 0;
+            
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                if (selected && selected.value === answers[q]) {
+                    score++;
+                }
+            }
+            
+            const result = document.getElementById('quizResult');
+            let message = '';
+            let color = '';
+            
+            if (score === 5) {
+                message = '🎉 ВІДМІННО! Ви експерт з IoT безпеки!';
+                color = 'var(--neon-green)';
+            } else if (score >= 3) {
+                message = '👍 ДОБРЕ! Але є куди рости.';
+                color = 'var(--neon-cyan)';
+            } else {
+                message = '⚠️ УВАГА! Вам потрібно більше вивчати кібербезпеку.';
+                color = 'var(--neon-pink)';
+            }
+            
+            result.innerHTML = `
+                <div class="quiz-result" style="border-color: ${color}; color: ${color};">
+                    ${message}<br>
+                    Ваш результат: ${score}/5
+                </div>
+            `;
+        }
+
+        // Mirai Attack Simulator
+        function startMiraiAttack() {
+            document.getElementById('startAttack').style.display = 'none';
+            document.getElementById('stopAttack').style.display = 'inline-block';
+            
+            miraiDevices = 0;
+            let stage = 1;
+            
+            miraiInterval = setInterval(() => {
+                // Update device count
+                miraiDevices += Math.floor(Math.random() * 1000) + 500;
+                document.getElementById('deviceCounter').textContent = miraiDevices.toLocaleString();
+                
+                // Update stages
+                document.querySelectorAll('.attack-stage').forEach((el, index) => {
+                    el.classList.remove('active');
+                });
+                
+                if (stage <= 4) {
+                    document.getElementById(`stage${stage}`).classList.add('active');
+                    stage++;
+                } else {
+                    stage = 1;
+                }
+                
+                // Stop at 100k devices
+                if (miraiDevices > 100000) {
+                    stopMiraiAttack();
+                }
+            }, 1500);
+        }
+
+        function stopMiraiAttack() {
+            if (miraiInterval) {
+                clearInterval(miraiInterval);
+                miraiInterval = null;
+            }
+            document.getElementById('startAttack').style.display = 'inline-block';
+            document.getElementById('stopAttack').style.display = 'none';
+            document.querySelectorAll('.attack-stage').forEach(el => {
+                el.classList.remove('active');
+            });
+        }
+
+        function resetMiraiAttack() {
+            stopMiraiAttack();
+            miraiDevices = 0;
+            document.getElementById('deviceCounter').textContent = '0';
+        }
+
+        // Checklist
+        function toggleChecklistItem(element, index) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            checklistState[index] = checkbox.checked;
+            
+            if (checkbox.checked) {
+                element.classList.add('checked');
+            } else {
+                element.classList.remove('checked');
+            }
+            
+            updateChecklistProgress();
+            saveChecklistState();
+        }
+
+        function updateChecklistProgress() {
+            const checked = checklistState.filter(x => x).length;
+            const progress = (checked / 6) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('checklistProgress').textContent = `${checked}/6`;
+        }
+
+        function saveChecklistState() {
+            localStorage.setItem('routerChecklist', JSON.stringify(checklistState));
+        }
+
+        function loadChecklistState() {
+            const saved = localStorage.getItem('routerChecklist');
+            if (saved) {
+                checklistState = JSON.parse(saved);
+                checklistState.forEach((checked, index) => {
+                    if (checked) {
+                        const checkbox = document.getElementById(`check${index}`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            checkbox.closest('.checklist-item').classList.add('checked');
+                        }
+                    }
+                });
+                updateChecklistProgress();
+            }
+        }
+
+        // Cyber Map
+        function filterYear(year) {
+            const points = document.querySelectorAll('.attack-point, .defense-point');
+            points.forEach(point => {
+                if (year === 'all' || point.dataset.year == year) {
+                    point.style.display = 'block';
+                } else {
+                    point.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
