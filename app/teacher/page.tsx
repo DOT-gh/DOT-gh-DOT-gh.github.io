@@ -1,0 +1,1178 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import {
+  Home,
+  BookOpen,
+  Users,
+  BarChart3,
+  Bot,
+  ChevronLeft,
+  AlertTriangle,
+  TrendingUp,
+  Sparkles,
+  Plus,
+  Eye,
+  MessageSquare,
+  Shield,
+  Target,
+  Clock,
+  Zap,
+  Activity,
+  Settings,
+  EyeOff,
+  Bell,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  ArrowUp,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts"
+import ActivityHeatmap from "@/components/activity-heatmap"
+import FunnelChart from "@/components/teacher/funnel-chart"
+import PredictionsPanel from "@/components/teacher/predictions-panel"
+import DetailedStudentAnalytics from "@/components/teacher/detailed-student-analytics"
+
+type View = "dashboard" | "classes" | "builder" | "monitor" | "analytics" | "ai-settings"
+
+export default function TeacherDashboard() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [currentView, setCurrentView] = useState<View>("dashboard")
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [teacherCode, setTeacherCode] = useState("")
+  const [screenMode, setScreenMode] = useState(false)
+
+  useEffect(() => {
+    const codeFromUrl = searchParams.get("code")
+    if (codeFromUrl && (codeFromUrl === "Teacher443" || codeFromUrl === "Teacher123")) {
+      setTeacherCode(codeFromUrl)
+      setIsAuthorized(true)
+      localStorage.setItem("edu_teacher_access", "true")
+      localStorage.setItem("edu_teacher_code", codeFromUrl)
+    } else {
+      // Check localStorage
+      const savedAccess = localStorage.getItem("edu_teacher_access")
+      const savedCode = localStorage.getItem("edu_teacher_code")
+      if (savedAccess === "true" && savedCode) {
+        setTeacherCode(savedCode)
+        setIsAuthorized(true)
+      }
+    }
+  }, [searchParams])
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <p className="text-muted-foreground">Доступ заборонено. Поверніться до головної сторінки.</p>
+      </div>
+    )
+  }
+
+  const isDemo = teacherCode === "Teacher123"
+
+  return (
+    <div className="flex h-screen bg-background">
+      {/* Sidebar */}
+      <aside className="w-64 border-r border-border bg-card flex flex-col">
+        {/* Logo */}
+        <div className="p-4 border-b border-border">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
+              <BookOpen className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <h1 className="font-semibold text-sm">Edu Survival Kit</h1>
+              <p className="text-xs text-muted-foreground">Панель вчителя v.0.4</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-2">
+          <NavItem
+            icon={Home}
+            label="Головна"
+            active={currentView === "dashboard"}
+            onClick={() => setCurrentView("dashboard")}
+          />
+          <NavItem
+            icon={BookOpen}
+            label="Конструктор уроків"
+            active={currentView === "builder"}
+            onClick={() => setCurrentView("builder")}
+          />
+          <NavItem
+            icon={Users}
+            label="Мої класи"
+            active={currentView === "classes"}
+            onClick={() => setCurrentView("classes")}
+          />
+          <NavItem
+            icon={Eye}
+            label="Моніторинг учнів"
+            active={currentView === "monitor"}
+            onClick={() => setCurrentView("monitor")}
+          />
+          <NavItem
+            icon={BarChart3}
+            label="Аналітика"
+            active={currentView === "analytics"}
+            onClick={() => setCurrentView("analytics")}
+          />
+          <NavItem
+            icon={Bot}
+            label="Налаштування ШІ"
+            active={currentView === "ai-settings"}
+            onClick={() => setCurrentView("ai-settings")}
+          />
+        </nav>
+
+        {/* Back to Student */}
+        <div className="p-2 border-t border-border">
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-2 text-xs"
+            onClick={() => {
+              localStorage.removeItem("edu_teacher_access")
+              localStorage.removeItem("edu_teacher_code")
+              router.push("/")
+            }}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Повернутись до учнівського режиму
+          </Button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto">
+        {/* Top Bar */}
+        <div className="border-b border-border bg-card px-6 py-3 flex items-center justify-between sticky top-0 z-10">
+          <div className="flex items-center gap-4">
+            <h2 className="font-semibold">
+              {currentView === "dashboard" && "Головна"}
+              {currentView === "builder" && "Конструктор уроків"}
+              {currentView === "classes" && "Мої класи"}
+              {currentView === "monitor" && "Моніторинг учнів"}
+              {currentView === "analytics" && "Аналітика"}
+              {currentView === "ai-settings" && "Налаштування ШІ"}
+            </h2>
+            {isDemo && (
+              <Badge variant="outline" className="text-xs">
+                Демо-режим
+              </Badge>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 bg-transparent"
+              onClick={() => setScreenMode(!screenMode)}
+            >
+              {screenMode ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              {screenMode ? "Показати імена" : "Режим скріна"}
+            </Button>
+            <Button variant="outline" size="icon">
+              <Bell className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Content */}
+        {currentView === "dashboard" && <DashboardView isDemo={isDemo} screenMode={screenMode} />}
+        {currentView === "builder" && <ContentBuilderView isDemo={isDemo} />}
+        {currentView === "classes" && <ClassesView isDemo={isDemo} screenMode={screenMode} />}
+        {currentView === "monitor" && <MonitorView isDemo={isDemo} screenMode={screenMode} />}
+        {currentView === "analytics" && <AnalyticsView isDemo={isDemo} screenMode={screenMode} />}
+        {currentView === "ai-settings" && <AISettingsView isDemo={isDemo} />}
+      </main>
+    </div>
+  )
+}
+
+function NavItem({
+  icon: Icon,
+  label,
+  active,
+  onClick,
+}: {
+  icon: any
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+        active
+          ? "bg-primary/10 text-primary font-medium"
+          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+      }`}
+    >
+      <Icon className="h-4 w-4" />
+      {label}
+    </button>
+  )
+}
+
+function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
+  const [notificationDismissed, setNotificationDismissed] = useState(false)
+
+  if (isDemo) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[80vh]">
+        <Card className="p-12 text-center max-w-md">
+          <div className="h-16 w-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
+            <Users className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h2 className="text-xl font-semibold mb-2">Демо-кабінет порожній</h2>
+          <p className="text-muted-foreground text-sm mb-4">
+            Цей кабінет створений для демонстрації. Немає даних учнів або класів.
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Використайте код <code className="bg-muted px-2 py-0.5 rounded">Teacher443</code> для доступу до кабінету з
+            реальними даними практики.
+          </p>
+        </Card>
+      </div>
+    )
+  }
+
+  // Real data from practice
+  const activityData = [
+    { date: "3.11", students: 28 },
+    { date: "6.11", students: 30 },
+    { date: "11.11", students: 8 }, // Air raid
+    { date: "13.11", students: 26 },
+    { date: "17.11", students: 24 },
+    { date: "19.11", students: 6 }, // Blackout
+    { date: "20.11", students: 29 },
+    { date: "21.11", students: 24 },
+  ]
+
+  const statsData = [
+    { name: "Активні", value: 24, color: "#10b981" },
+    { name: "Неактивні", value: 6, color: "#64748b" },
+    { name: "Потребують допомоги", value: 3, color: "#ef4444" },
+  ]
+
+  const efficiencyData = [
+    { name: "Ефективність", value: 94, color: "#10b981" },
+    { name: "Залишок", value: 6, color: "#1e293b" },
+  ]
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold mb-1">Вітаємо, {screenMode ? "████████ ██████████" : "Турчин Д.О."}!</h1>
+        <p className="text-muted-foreground text-sm">Практикант | Листопад 2025 | Система працює стабільно</p>
+      </div>
+
+      {/* Alert Banner */}
+      {!notificationDismissed && (
+        <Card className="p-4 border-amber-500/30 bg-amber-500/5">
+          <div className="flex gap-3">
+            <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="font-semibold mb-1 text-amber-500">Увага: Графік планових відключень</h3>
+              <p className="text-sm text-muted-foreground">
+                За графіком ГПВ можливе відключення 4-ї черги о 14:00. Рекомендується зберегти роботу учнів до цього
+                часу.
+              </p>
+            </div>
+            <Button variant="ghost" size="sm" onClick={() => setNotificationDismissed(true)}>
+              <XCircle className="h-4 w-4" />
+            </Button>
+          </div>
+        </Card>
+      )}
+
+      {/* Top Metrics with Circular Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p className="text-sm text-muted-foreground mb-1">Активні учні</p>
+              <p className="text-3xl font-bold">24 / 30</p>
+              <div className="flex items-center gap-1 mt-1">
+                <ArrowUp className="h-3 w-3 text-emerald-500" />
+                <span className="text-xs text-emerald-500">+6 vs вчора</span>
+              </div>
+            </div>
+            <ResponsiveContainer width={80} height={80}>
+              <PieChart>
+                <Pie
+                  data={statsData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={25}
+                  outerRadius={35}
+                  paddingAngle={2}
+                  dataKey="value"
+                >
+                  {statsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="space-y-1">
+            {statsData.map((stat) => (
+              <div key={stat.name} className="flex items-center gap-2 text-xs">
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: stat.color }} />
+                <span className="text-muted-foreground">{stat.name}:</span>
+                <span className="font-medium">{stat.value}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p className="text-sm text-muted-foreground mb-1">Середній бал (Мережі)</p>
+              <p className="text-3xl font-bold">10.5</p>
+              <div className="flex items-center gap-1 mt-1">
+                <ArrowUp className="h-3 w-3 text-emerald-500" />
+                <span className="text-xs text-emerald-500">+0.3 цього тижня</span>
+              </div>
+            </div>
+            <div className="h-20 w-20 rounded-full bg-emerald-500/10 flex items-center justify-center relative">
+              <div className="text-center">
+                <TrendingUp className="h-6 w-6 text-emerald-500 mx-auto" />
+              </div>
+              <svg className="absolute inset-0 -rotate-90" viewBox="0 0 80 80">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="34"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  className="text-emerald-500/20"
+                />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="34"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeDasharray={`${(10.5 / 12) * 213} 213`}
+                  className="text-emerald-500"
+                />
+              </svg>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">Практична: Адресація в Інтернеті та DNS</p>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p className="text-sm text-muted-foreground mb-1">Ефективність ШІ</p>
+              <p className="text-3xl font-bold">94%</p>
+              <div className="flex items-center gap-1 mt-1">
+                <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                <span className="text-xs text-emerald-500">Відмінно</span>
+              </div>
+            </div>
+            <ResponsiveContainer width={80} height={80}>
+              <PieChart>
+                <Pie
+                  data={efficiencyData}
+                  cx="50%"
+                  cy="50%"
+                  startAngle={90}
+                  endAngle={-270}
+                  innerRadius={25}
+                  outerRadius={35}
+                  dataKey="value"
+                >
+                  {efficiencyData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="text-xs text-muted-foreground">14 стріків відновлено (Smart Forgiveness)</p>
+        </Card>
+      </div>
+
+      {/* Activity Chart */}
+      <Card className="p-6">
+        <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <Activity className="h-4 w-4 text-primary" />
+          Активність учнів (Листопад 2025)
+        </h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={activityData}>
+            <XAxis dataKey="date" stroke="#64748b" style={{ fontSize: "12px" }} />
+            <YAxis stroke="#64748b" style={{ fontSize: "12px" }} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "hsl(var(--card))",
+                border: "1px solid hsl(var(--border))",
+                borderRadius: "8px",
+              }}
+            />
+            <Line type="monotone" dataKey="students" stroke="#10b981" strokeWidth={2} dot={{ fill: "#10b981", r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
+        <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-3 w-3 text-amber-500" />
+            <span>11.11 та 19.11 - повітряні тривоги</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Zap className="h-3 w-3 text-amber-500" />
+            <span>Блекаути впливали на активність</span>
+          </div>
+        </div>
+      </Card>
+
+      {/* AI Recommendations */}
+      <Card className="p-4 border-primary/30 bg-primary/5">
+        <div className="flex gap-3">
+          <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <h3 className="font-semibold mb-1">Рекомендації ШІ</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              На основі статистики класу 11-А: 40% учнів не впоралися з модулем{" "}
+              <span className="text-foreground font-medium">"Цикли в Python"</span>. Рекомендується повторити матеріал
+              або створити додатковий посібник.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              <Button size="sm" variant="default" className="gap-2">
+                <Plus className="h-3 w-3" />
+                Згенерувати додаткові завдання
+              </Button>
+              <Button size="sm" variant="outline">
+                Переглянути деталі
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Recent Activity */}
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <Clock className="h-4 w-4 text-primary" />
+          Останні події
+        </h3>
+        <div className="space-y-3">
+          <ActivityItem
+            icon={CheckCircle2}
+            text={`${screenMode ? "████████ █." : "Шевченко Т."} завершив курс 'Python: Основи'`}
+            time="5 хв тому"
+            type="success"
+          />
+          <ActivityItem
+            icon={MessageSquare}
+            text={`${screenMode ? "██████ █." : "Франко І."} запитав допомогу в ШІ-тьютора (завдання: Рекурсія)`}
+            time="12 хв тому"
+            type="info"
+          />
+          <ActivityItem
+            icon={Shield}
+            text={`${screenMode ? "████████ █." : "Сидоренко О."} - виявлена спроба вставки коду (заблоковано)`}
+            time="1 год тому"
+            type="warning"
+          />
+          <ActivityItem icon={Target} text="Клас 10-А завершив 89% завдань цього тижня" time="2 год тому" type="info" />
+        </div>
+      </Card>
+    </div>
+  )
+}
+
+function ActivityItem({ icon: Icon, text, time, type }: any) {
+  const colors = {
+    success: "bg-emerald-500/10 text-emerald-500",
+    warning: "bg-amber-500/10 text-amber-500",
+    info: "bg-blue-500/10 text-blue-500",
+  }
+
+  return (
+    <div className="flex gap-3">
+      <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${colors[type]}`}>
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm">{text}</p>
+        <p className="text-xs text-muted-foreground">{time}</p>
+      </div>
+    </div>
+  )
+}
+
+function ContentBuilderView({ isDemo }: { isDemo: boolean }) {
+  const [subject, setSubject] = useState("history")
+  const [inDevelopment, setInDevelopment] = useState(false)
+
+  return (
+    <div className="p-6 space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold mb-1">Конструктор уроків</h1>
+        <p className="text-sm text-muted-foreground">
+          Універсальна система для створення завдань з будь-якого предмету
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left: Form */}
+        <Card className="p-6 space-y-4">
+          <div>
+            <label className="text-sm font-medium mb-2 block">Предмет</label>
+            <select
+              className="w-full p-2 rounded-lg border border-border bg-background"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            >
+              <option value="informatics">Інформатика</option>
+              <option value="history">Історія України</option>
+              <option value="physics">Фізика</option>
+              <option value="math">Математика</option>
+              <option value="english">Англійська мова</option>
+            </select>
+          </div>
+
+          {subject === "history" && (
+            <>
+              <div>
+                <label className="text-sm font-medium mb-2 block">Назва уроку</label>
+                <input
+                  type="text"
+                  className="w-full p-2 rounded-lg border border-border bg-background"
+                  value="Україна в роки Першої світової війни. Галицька битва"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Опис завдання</label>
+                <textarea
+                  className="w-full p-3 rounded-lg border border-border bg-background min-h-[200px]"
+                  value="Уявіть, що ви живете у Львові в 1914 році. Почалася Перша світова війна. Опишіть, як ці події вплинули на життя вашої родини. Використайте історичні факти про Галицьку битву."
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Налаштування ШІ-методології</label>
+                <div className="space-y-2 p-3 border border-border rounded-lg bg-secondary/30">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">System Prompt Role:</span>
+                    <select className="text-sm p-1 rounded border border-border bg-background">
+                      <option>Вчитель Історії (Storyteller)</option>
+                      <option>Строгий екзаменатор</option>
+                      <option>Дослідник</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Strictness:</span>
+                    <select className="text-sm p-1 rounded border border-border bg-background">
+                      <option>Socratic Mode</option>
+                      <option>Hints Allowed</option>
+                      <option>Strict (No Help)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <Button className="w-full" onClick={() => setInDevelopment(true)}>
+                Згенерувати тест
+              </Button>
+
+              {inDevelopment && (
+                <Card className="p-3 border-amber-500/30 bg-amber-500/5">
+                  <p className="text-sm text-amber-500 font-medium">🚧 Ще в розробці</p>
+                  <p className="text-xs text-muted-foreground mt-1">Ця функція буде доступна в наступній версії</p>
+                </Card>
+              )}
+            </>
+          )}
+
+          {subject === "informatics" && (
+            <div>
+              <label className="text-sm font-medium mb-2 block">Тип завдання</label>
+              <select className="w-full p-2 rounded-lg border border-border bg-background">
+                <option>Написання коду</option>
+                <option>Тест (Quiz)</option>
+                <option>Відкрите питання</option>
+              </select>
+            </div>
+          )}
+        </Card>
+
+        {/* Right: AI Copilot */}
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Bot className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold">ШІ-Помічник вчителя</h3>
+          </div>
+          <div className="space-y-3 mb-4 max-h-[400px] overflow-auto">
+            <div className="p-3 rounded-lg bg-secondary">
+              <p className="text-sm">
+                <span className="font-medium">Ви:</span> Зроби 3 проблемних питання по темі "Галицька битва 1914"
+              </p>
+            </div>
+            <div className="p-3 rounded-lg bg-primary/10">
+              <p className="text-sm">
+                <span className="font-medium text-primary">ШІ:</span> Згенеровано 3 проблемних питання про Гаврила
+                Принципа та вплив на Галицьку битву. Питання стимулюють критичне мислення та аналіз причинно-наслідкових
+                зв'язків.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Запитайте ШІ про створення завдань..."
+              className="flex-1 p-2 rounded-lg border border-border bg-background text-sm"
+            />
+            <Button size="icon">
+              <MessageSquare className="h-4 w-4" />
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
+  const classes = isDemo
+    ? []
+    : [
+        {
+          name: "10-А",
+          profile: "Math Profile",
+          students: 30,
+          activeNow: 24,
+          avgProgress: 67,
+          topic: "Адресація IP та DNS",
+        },
+        { name: "11-Б", profile: "Standard", students: 28, activeNow: 22, avgProgress: 54, topic: "Flexbox практика" },
+        {
+          name: "7-А",
+          profile: "Standard",
+          students: 26,
+          activeNow: 18,
+          avgProgress: 73,
+          topic: "Алгоритми (гра 'Робот')",
+        },
+      ]
+
+  if (isDemo) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-12">
+          <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Немає класів в демо-режимі</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-6 space-y-4">
+      {classes.map((cls) => (
+        <Card key={cls.name} className="p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h3 className="font-semibold text-xl mb-1">Клас {cls.name}</h3>
+              <p className="text-sm text-muted-foreground">{cls.profile}</p>
+            </div>
+            <Badge variant="outline">{cls.topic}</Badge>
+          </div>
+
+          <div className="grid grid-cols-4 gap-4 mb-4">
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Всього учнів</p>
+              <p className="text-2xl font-bold">{cls.students}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Онлайн зараз</p>
+              <p className="text-2xl font-bold text-emerald-500">{cls.activeNow}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Офлайн/Укриття</p>
+              <p className="text-2xl font-bold text-red-500">{cls.students - cls.activeNow}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Середній прогрес</p>
+              <p className="text-2xl font-bold">{cls.avgProgress}%</p>
+            </div>
+          </div>
+
+          <Progress value={cls.avgProgress} className="mb-4" />
+
+          <div className="flex gap-2">
+            <Button variant="outline" className="flex-1 bg-transparent">
+              Переглянути деталі
+            </Button>
+            <Button variant="outline" className="flex-1 bg-transparent">
+              Експорт даних
+            </Button>
+          </div>
+        </Card>
+      ))}
+    </div>
+  )
+}
+
+function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
+  const [selectedClass, setSelectedClass] = useState("10-А")
+  const [interceptModal, setInterceptModal] = useState(false)
+
+  const students = isDemo
+    ? []
+    : [
+        { name: "Шевченко О.", status: "online", task: "Адресація IP - Маска підмережі", progress: 75 },
+        { name: "Бойко А.", status: "offline", task: "Адресація IP", progress: 45, lastSeen: "2 год тому" },
+        { name: "Коваленко М.", status: "help", task: "DNS Резолюція", progress: 60 },
+        { name: "Франко І.", status: "online", task: "DHCP конфігурація", progress: 82 },
+      ]
+
+  if (isDemo) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-12">
+          <Eye className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Немає учнів для моніторингу в демо-режимі</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-6 space-y-4">
+      <div className="flex gap-2">
+        <Button
+          size="sm"
+          variant={selectedClass === "10-А" ? "default" : "outline"}
+          onClick={() => setSelectedClass("10-А")}
+        >
+          10-А
+        </Button>
+        <Button
+          size="sm"
+          variant={selectedClass === "11-Б" ? "default" : "outline"}
+          onClick={() => setSelectedClass("11-Б")}
+        >
+          11-Б
+        </Button>
+        <Button
+          size="sm"
+          variant={selectedClass === "7-А" ? "default" : "outline"}
+          onClick={() => setSelectedClass("7-А")}
+        >
+          7-А
+        </Button>
+      </div>
+
+      <div className="space-y-2">
+        {students.map((student, i) => (
+          <Card key={i} className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium">
+                  {student.name[0]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium">{screenMode ? "████████ █." : student.name}</p>
+                  <p className="text-xs text-muted-foreground">{student.task}</p>
+                  {student.status === "offline" && (
+                    <p className="text-xs text-red-500">🔴 Офлайн - {student.lastSeen}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <p className="text-sm font-medium">{student.progress}%</p>
+                  <Progress value={student.progress} className="w-24 h-1" />
+                </div>
+
+                {student.status === "online" && (
+                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30">
+                    Online
+                  </Badge>
+                )}
+                {student.status === "help" && (
+                  <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/30">
+                    Потрібна допомога
+                  </Badge>
+                )}
+                {student.status === "offline" && (
+                  <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/30">
+                    Офлайн
+                  </Badge>
+                )}
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setInterceptModal(true)}
+                  disabled={student.status === "offline"}
+                >
+                  Перехопити чат
+                </Button>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {interceptModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <Card className="p-6 max-w-md">
+            <h3 className="font-semibold mb-2">🚧 Ще в розробці</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Функція перехоплення чату буде доступна в наступній версії. Вона дозволить вчителю втрутитися в діалог
+              учня з ШІ-тьютором.
+            </p>
+            <Button onClick={() => setInterceptModal(false)} className="w-full">
+              Зрозуміло
+            </Button>
+          </Card>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function AnalyticsView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
+  if (isDemo) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-12">
+          <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Немає аналітики в демо-режимі</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Activity Heatmap */}
+      <ActivityHeatmap />
+
+      {/* New analytics components */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <FunnelChart />
+        <PredictionsPanel screenMode={screenMode} />
+      </div>
+
+      <DetailedStudentAnalytics screenMode={screenMode} />
+
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <Shield className="h-4 w-4 text-primary" />
+          Лог подій безпеки (Security Events)
+        </h3>
+        <div className="space-y-2">
+          <LogItem
+            name={screenMode ? "██-Б / ████████" : "11-Б / Flexbox"}
+            event="Mass Paste Detected (Code copied from ChatGPT)"
+            severity="high"
+            time="17.11, 10:15"
+            action="Заблоковано & Попередження"
+          />
+          <LogItem
+            name={screenMode ? "██-А / ██ █████████" : "10-А / IP Addressing"}
+            event="Session Interrupted (Air Raid Siren)"
+            severity="medium"
+            time="11.11, 09:45"
+            action="Таймер призупинено"
+          />
+          <LogItem
+            name={screenMode ? "██-Б / ████████" : "11-Б / Сидоренко"}
+            event="DevTools opened during task"
+            severity="medium"
+            time="19.11, 14:20"
+            action="Попередження"
+          />
+          <LogItem
+            name={screenMode ? "█-А / ███ 'Робот'" : "7-А / Гра 'Робот'"}
+            event="Offline activity during shelter"
+            severity="low"
+            time="19.11, 11:30"
+            action="Smart Forgiveness активовано"
+          />
+        </div>
+      </Card>
+
+      <Card className="p-4 border-primary/30 bg-primary/5">
+        <div className="flex gap-3">
+          <Sparkles className="h-5 w-5 text-primary shrink-0" />
+          <div>
+            <h3 className="font-semibold mb-1">Аналіз ШІ</h3>
+            <p className="text-sm text-muted-foreground">
+              <strong>Аналіз 7-А:</strong> Гра "Робот" в укритті покращила розуміння лінійних алгоритмів на 15%.
+              Рекомендація: більше офлайн-вправ для умов блекаутів.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  )
+}
+
+function LogItem({ name, event, severity, time, action }: any) {
+  const colors = {
+    high: "bg-red-500/10 text-red-500 border-red-500/30",
+    medium: "bg-amber-500/10 text-amber-500 border-amber-500/30",
+    low: "bg-blue-500/10 text-blue-500 border-blue-500/30",
+  }
+
+  return (
+    <div className="flex items-start justify-between p-3 rounded-lg border border-border">
+      <div className="flex items-start gap-3 flex-1">
+        <Badge variant="outline" className={`${colors[severity]} text-xs shrink-0`}>
+          {severity === "high" ? "Критично" : severity === "medium" ? "Попередження" : "Інфо"}
+        </Badge>
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-sm">{name}</p>
+          <p className="text-xs text-muted-foreground">{event}</p>
+          <p className="text-xs text-primary mt-1">→ {action}</p>
+        </div>
+      </div>
+      <span className="text-xs text-muted-foreground shrink-0 ml-2">{time}</span>
+    </div>
+  )
+}
+
+function AISettingsView({ isDemo }: { isDemo: boolean }) {
+  const [temperature, setTemperature] = useState(0.7)
+  const [maxTokens, setMaxTokens] = useState(500)
+  const [topP, setTopP] = useState(0.9)
+  const [frequencyPenalty, setFrequencyPenalty] = useState(0.5)
+  const [presencePenalty, setPresencePenalty] = useState(0.5)
+  const [selectedModel, setSelectedModel] = useState("gpt-4o-mini")
+
+  const models = [
+    { id: "gpt-4o", name: "GPT-4o (Найкращий)", speed: "Середній", cost: "Високий" },
+    { id: "gpt-4o-mini", name: "GPT-4o Mini (Рекомендовано)", speed: "Швидкий", cost: "Низький" },
+    { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo", speed: "Дуже швидкий", cost: "Дуже низький" },
+    { id: "claude-sonnet", name: "Claude 3.5 Sonnet", speed: "Швидкий", cost: "Середній" },
+    { id: "gemini-pro", name: "Gemini 1.5 Pro", speed: "Швидкий", cost: "Низький" },
+    { id: "llama-3", name: "Llama 3 70B", speed: "Середній", cost: "Безкоштовно" },
+  ]
+
+  return (
+    <div className="p-6 space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold mb-1">Налаштування ШІ-Асистента</h1>
+        <p className="text-sm text-muted-foreground">Тонке налаштування поведінки ШІ для учнів та вчителя</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Model Selection */}
+        <Card className="p-6">
+          <h3 className="font-semibold mb-4 flex items-center gap-2">
+            <Bot className="h-4 w-4 text-primary" />
+            Вибір моделі ШІ
+          </h3>
+          <div className="space-y-2">
+            {models.map((model) => (
+              <button
+                key={model.id}
+                onClick={() => setSelectedModel(model.id)}
+                className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                  selectedModel === model.id ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-medium text-sm">{model.name}</span>
+                  {selectedModel === model.id && <CheckCircle2 className="h-4 w-4 text-primary" />}
+                </div>
+                <div className="flex gap-4 text-xs text-muted-foreground">
+                  <span>⚡ {model.speed}</span>
+                  <span>💰 {model.cost}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </Card>
+
+        {/* Advanced Parameters */}
+        <Card className="p-6">
+          <h3 className="font-semibold mb-4 flex items-center gap-2">
+            <Settings className="h-4 w-4 text-primary" />
+            Параметри генерації
+          </h3>
+          <div className="space-y-6">
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="text-sm font-medium">Temperature (Креативність)</label>
+                <span className="text-sm text-muted-foreground">{temperature.toFixed(1)}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="2"
+                step="0.1"
+                value={temperature}
+                onChange={(e) => setTemperature(Number.parseFloat(e.target.value))}
+                className="w-full"
+              />
+              <p className="text-xs text-muted-foreground mt-1">Нижче = точніше, вище = креативніше</p>
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="text-sm font-medium">Max Tokens (Довжина відповіді)</label>
+                <span className="text-sm text-muted-foreground">{maxTokens}</span>
+              </div>
+              <input
+                type="range"
+                min="100"
+                max="2000"
+                step="100"
+                value={maxTokens}
+                onChange={(e) => setMaxTokens(Number.parseInt(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="text-sm font-medium">Top P (Nucleus Sampling)</label>
+                <span className="text-sm text-muted-foreground">{topP.toFixed(1)}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={topP}
+                onChange={(e) => setTopP(Number.parseFloat(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="text-sm font-medium">Frequency Penalty</label>
+                <span className="text-sm text-muted-foreground">{frequencyPenalty.toFixed(1)}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="2"
+                step="0.1"
+                value={frequencyPenalty}
+                onChange={(e) => setFrequencyPenalty(Number.parseFloat(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <label className="text-sm font-medium">Presence Penalty</label>
+                <span className="text-sm text-muted-foreground">{presencePenalty.toFixed(1)}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="2"
+                step="0.1"
+                value={presencePenalty}
+                onChange={(e) => setPresencePenalty(Number.parseFloat(e.target.value))}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </Card>
+
+        {/* Student AI Persona */}
+        <Card className="p-6">
+          <h3 className="font-semibold mb-3">Персона ШІ для учнів</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            ШІ-тьютор використовує педагогічний підхід: ставить запитання замість надання готових відповідей.
+          </p>
+          <div className="space-y-3">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Заборонити давати готовий код</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Стимулювати самостійне мислення (Socratic Method)</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Використовувати українську мову</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Адаптивна складність відповідей</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" className="rounded" />
+              <span className="text-sm">Дозволити міні-підказки для початківців</span>
+            </label>
+          </div>
+        </Card>
+
+        {/* Teacher AI Persona */}
+        <Card className="p-6">
+          <h3 className="font-semibold mb-3">Персона ШІ для вчителя</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            ШІ-помічник допомагає створювати завдання, аналізувати статистику та надає рекомендації.
+          </p>
+          <div className="space-y-3">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Автоматична аналітика щодня (8:00)</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Генерувати індивідуальні завдання</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm">Виявляти учнів, що потребують уваги</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" className="rounded" />
+              <span className="text-sm">Режим автопілоту (без підтвердження)</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" className="rounded" />
+              <span className="text-sm">Щоденні email-звіти</span>
+            </label>
+          </div>
+        </Card>
+      </div>
+
+      <Card className="p-4 border-amber-500/30 bg-amber-500/5">
+        <div className="flex gap-3">
+          <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
+          <div>
+            <h3 className="font-semibold text-amber-500 mb-1">Етичне використання ШІ</h3>
+            <p className="text-sm text-muted-foreground">
+              Налаштування спроектовані так, щоб ШІ не давав готових відповідей, а стимулював самостійне мислення учнів.
+              Це відповідає сучасним етичним принципам використання ШІ в освіті.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  )
+}
