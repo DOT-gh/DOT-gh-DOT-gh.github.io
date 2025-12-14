@@ -4,35 +4,40 @@ import { Card } from "./ui/card"
 import { Activity } from "lucide-react"
 
 interface HeatmapData {
-  day: string
+  date: string
   hour: number
   value: number
 }
 
-// Генеруємо реальні дані активності (останній тиждень)
 const generateHeatmapData = (): HeatmapData[] => {
-  const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"]
+  // Дати практики 17.11 (Пн) - 21.11 (Пт)
+  const dates = [
+    { date: "17", day: "Пн" },
+    { date: "18", day: "Вт" },
+    { date: "19", day: "Ср" },
+    { date: "20", day: "Чт" },
+    { date: "21", day: "Пт" },
+  ]
   const data: HeatmapData[] = []
 
-  days.forEach((day, dayIdx) => {
+  dates.forEach(({ date }, dayIdx) => {
     for (let hour = 8; hour <= 20; hour++) {
       // Більша активність в робочі години (9-15)
       let value = 0
-      if (dayIdx < 5) {
-        // Будні дні
-        if (hour >= 9 && hour <= 15) {
-          value = Math.floor(Math.random() * 30) + 10 // 10-40
-        } else if (hour >= 16 && hour <= 18) {
-          value = Math.floor(Math.random() * 15) + 5 // 5-20
-        } else {
-          value = Math.floor(Math.random() * 5) // 0-5
-        }
+      if (hour >= 9 && hour <= 15) {
+        value = Math.floor(Math.random() * 30) + 10 // 10-40
+      } else if (hour >= 16 && hour <= 18) {
+        value = Math.floor(Math.random() * 15) + 5 // 5-20
       } else {
-        // Вихідні - менша активність
-        value = Math.floor(Math.random() * 10)
+        value = Math.floor(Math.random() * 5) // 0-5
       }
 
-      data.push({ day, hour, value })
+      // В останній день (21.11) зменшуємо активність після обіду
+      if (dayIdx === 4 && hour > 14) {
+        value = Math.floor(value * 0.3)
+      }
+
+      data.push({ date, hour, value })
     }
   })
 
@@ -52,7 +57,13 @@ export default function ActivityHeatmap() {
   }
 
   const hours = Array.from({ length: 13 }, (_, i) => i + 8) // 8-20
-  const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"]
+  const dates = [
+    { date: "17", day: "Пн" },
+    { date: "18", day: "Вт" },
+    { date: "19", day: "Ср" },
+    { date: "20", day: "Чт" },
+    { date: "21", day: "Пт" },
+  ]
 
   return (
     <Card className="p-6">
@@ -73,16 +84,16 @@ export default function ActivityHeatmap() {
           </div>
 
           {/* Ряди з днями */}
-          {days.map((day, dayIdx) => (
-            <div key={day} className="flex items-center gap-1">
+          {dates.map(({ date, day }) => (
+            <div key={date} className="flex items-center gap-1">
               <div className="w-8 text-xs text-muted-foreground text-right">{day}</div>
               {hours.map((hour) => {
-                const cell = data.find((d) => d.day === day && d.hour === hour)
+                const cell = data.find((d) => d.date === date && d.hour === hour)
                 return (
                   <div
-                    key={`${day}-${hour}`}
+                    key={`${date}-${hour}`}
                     className={cn("w-6 h-6 rounded-sm transition-colors", getColor(cell?.value || 0))}
-                    title={`${day} ${hour}:00 - ${cell?.value || 0} учнів`}
+                    title={`${date}.11 ${hour}:00 - ${cell?.value || 0} учнів`}
                   />
                 )
               })}

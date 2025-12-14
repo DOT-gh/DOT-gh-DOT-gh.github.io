@@ -26,7 +26,7 @@ export default function DetailedStudentAnalytics({ screenMode }: { screenMode: b
       streakDays: 14,
       accuracy: 95,
       hintsUsed: 3,
-      lastActive: "5 хв тому",
+      lastActive: "21.11, 14:30",
     },
     {
       name: screenMode ? "██████" : "Сидоренко М.",
@@ -36,7 +36,7 @@ export default function DetailedStudentAnalytics({ screenMode }: { screenMode: b
       streakDays: 7,
       accuracy: 78,
       hintsUsed: 12,
-      lastActive: "2 год тому",
+      lastActive: "20.11, 16:45",
     },
     {
       name: screenMode ? "██████" : "Петренко О.",
@@ -46,7 +46,7 @@ export default function DetailedStudentAnalytics({ screenMode }: { screenMode: b
       streakDays: 10,
       accuracy: 88,
       hintsUsed: 7,
-      lastActive: "1 год тому",
+      lastActive: "21.11, 11:20",
     },
   ]
 
