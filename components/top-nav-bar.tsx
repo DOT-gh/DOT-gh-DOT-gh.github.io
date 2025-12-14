@@ -36,6 +36,7 @@ export function TopNavBar() {
     setShowSettings,
     setShowProfile,
     selectedCourse,
+    connectionStatus,
   } = useAppState()
   const router = useRouter()
 
@@ -150,7 +151,7 @@ export function TopNavBar() {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
                 </span>
                 <Wifi className="h-3.5 w-3.5 text-primary" />
-                <span className="hidden sm:inline font-mono text-xs font-medium text-primary">ONLINE</span>
+                <span className="hidden sm:inline font-mono text-xs font-medium text-primary">{connectionStatus}</span>
               </>
             )}
           </button>
