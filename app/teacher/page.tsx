@@ -291,13 +291,13 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
     { date: "17.11", students: 24 },
     { date: "19.11", students: 6 }, // Blackout
     { date: "20.11", students: 29 },
-    { date: "21.11", students: 24 },
+    { date: "21.11", students: 24 }, // Last day of practice
   ]
 
   const statsData = [
-    { name: "Активні", value: 24, color: "#10b981" },
-    { name: "Неактивні", value: 6, color: "#64748b" },
-    { name: "Потребують допомоги", value: 3, color: "#ef4444" },
+    { name: "Активні", value: 0, color: "#10b981" },
+    { name: "Неактивні", value: 27, color: "#64748b" },
+    { name: "Потребували допомоги", value: 3, color: "#ef4444" },
   ]
 
   const efficiencyData = [
@@ -310,7 +310,7 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold mb-1">Вітаємо, {screenMode ? "████████ ██████████" : "Турчин Д.О."}!</h1>
-        <p className="text-muted-foreground text-sm">Практикант | Листопад 2025 | Система працює стабільно</p>
+        <p className="text-muted-foreground text-sm">Практикант | 03.11-21.11.2025 | Практика завершена</p>
       </div>
 
       {/* Alert Banner */}
@@ -338,10 +338,9 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
           <div className="flex items-start justify-between mb-4">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Активні учні</p>
-              <p className="text-3xl font-bold">24 / 30</p>
+              <p className="text-3xl font-bold">0 / 30</p>
               <div className="flex items-center gap-1 mt-1">
-                <ArrowUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-xs text-emerald-500">+6 vs вчора</span>
+                <span className="text-xs text-muted-foreground">Практика завершена 21.11</span>
               </div>
             </div>
             <ResponsiveContainer width={80} height={80}>
@@ -380,7 +379,7 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
               <p className="text-3xl font-bold">10.5</p>
               <div className="flex items-center gap-1 mt-1">
                 <ArrowUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-xs text-emerald-500">+0.3 цього тижня</span>
+                <span className="text-xs text-emerald-500">Фінальний результат</span>
               </div>
             </div>
             <div className="h-20 w-20 rounded-full bg-emerald-500/10 flex items-center justify-center relative">
@@ -450,7 +449,7 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
       <Card className="p-6">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
           <Activity className="h-4 w-4 text-primary" />
-          Активність учнів (Листопад 2025)
+          Активність учнів (03.11 - 21.11.2025)
         </h3>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={activityData}>
@@ -695,27 +694,35 @@ function ContentBuilderView({ isDemo }: { isDemo: boolean }) {
 }
 
 function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
-  const classes = isDemo
-    ? []
-    : [
-        {
-          name: "10-А",
-          profile: "Math Profile",
-          students: 30,
-          activeNow: 0,
-          avgProgress: 67,
-          topic: "Адресація IP та DNS",
-        },
-        { name: "11-Б", profile: "Standard", students: 28, activeNow: 0, avgProgress: 54, topic: "Flexbox практика" },
-        {
-          name: "7-А",
-          profile: "Standard",
-          students: 26,
-          activeNow: 0,
-          avgProgress: 73,
-          topic: "Алгоритми (гра 'Робот')",
-        },
-      ]
+  const mockClasses = [
+    {
+      id: "10a",
+      name: "10-А",
+      subject: "Math Profile",
+      students: 30,
+      activeNow: 0,
+      offline: 30,
+      avgProgress: 67,
+    },
+    {
+      id: "11b",
+      name: "11-Б",
+      subject: "Standard",
+      students: 28,
+      activeNow: 0,
+      offline: 28,
+      avgProgress: 54,
+    },
+    {
+      id: "7a",
+      name: "7-А",
+      subject: "Алгоритми (гра 'Робот')",
+      students: 26,
+      activeNow: 0,
+      offline: 26,
+      avgProgress: 73,
+    },
+  ]
 
   if (isDemo) {
     return (
@@ -730,14 +737,14 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
 
   return (
     <div className="p-6 space-y-4">
-      {classes.map((cls) => (
-        <Card key={cls.name} className="p-6">
+      {mockClasses.map((cls) => (
+        <Card key={cls.id} className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div>
               <h3 className="font-semibold text-xl mb-1">Клас {cls.name}</h3>
-              <p className="text-sm text-muted-foreground">{cls.profile}</p>
+              <p className="text-sm text-muted-foreground">{cls.subject}</p>
             </div>
-            <Badge variant="outline">{cls.topic}</Badge>
+            <Badge variant="outline">{cls.subject}</Badge>
           </div>
 
           <div className="grid grid-cols-4 gap-4 mb-4">
@@ -747,11 +754,11 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">Онлайн зараз</p>
-              <p className="text-2xl font-bold text-emerald-500">{cls.activeNow}</p>
+              <p className="text-2xl font-bold text-primary">{cls.activeNow}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">Офлайн/Укриття</p>
-              <p className="text-2xl font-bold text-red-500">{cls.students - cls.activeNow}</p>
+              <p className="text-2xl font-bold text-muted-foreground">{cls.offline}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">Середній прогрес</p>
@@ -775,11 +782,152 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
   )
 }
 
+type Student = {
+  id: string
+  name: string
+  avatar: string
+  course: string
+  progress: number
+  status: "offline" | "help"
+  lastActivity: string
+  badges: number
+}
+
 function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   const [selectedClass, setSelectedClass] = useState("10-А")
   const [interceptModal, setInterceptModal] = useState(false)
 
-  const students = isDemo ? [] : studentsByClass[selectedClass] || []
+  const mock10AStudents: Student[] = [
+    {
+      id: "1",
+      name: "Дмитренко А.",
+      avatar: "Д",
+      course: "Гра 'Робот' - Рівень 3",
+      progress: 80,
+      status: "offline",
+      lastActivity: "21.11, 15:45",
+      badges: 12,
+    },
+    {
+      id: "2",
+      name: "Ковальчук Н.",
+      avatar: "К",
+      course: "Гра 'Робот' - Рівень 2",
+      progress: 65,
+      status: "offline",
+      lastActivity: "20.11, 11:20",
+      badges: 8,
+    },
+    {
+      id: "3",
+      name: "Романенко С.",
+      avatar: "Р",
+      course: "Гра 'Робот' - Рівень 4",
+      progress: 50,
+      status: "help",
+      lastActivity: "19.11, 16:10",
+      badges: 5,
+    },
+  ]
+
+  const mock11BStudents: Student[] = [
+    {
+      id: "4",
+      name: "Мельник Т.",
+      avatar: "М",
+      course: "Flexbox - Вирівнювання",
+      progress: 68,
+      status: "offline",
+      lastActivity: "21.11, 14:15",
+      badges: 10,
+    },
+    {
+      id: "5",
+      name: "Петренко В.",
+      avatar: "П",
+      course: "Flexbox - Grid комбінація",
+      progress: 72,
+      status: "offline",
+      lastActivity: "21.11, 10:30",
+      badges: 11,
+    },
+    {
+      id: "6",
+      name: "Сидоренко К.",
+      avatar: "С",
+      course: "Flexbox - Респонсив",
+      progress: 55,
+      status: "help",
+      lastActivity: "18.11, 13:45",
+      badges: 6,
+    },
+    {
+      id: "7",
+      name: "Іваненко О.",
+      avatar: "І",
+      course: "CSS Grid основи",
+      progress: 40,
+      status: "offline",
+      lastActivity: "17.11, 09:20",
+      badges: 4,
+    },
+    {
+      id: "8",
+      name: "Ткаченко М.",
+      avatar: "Т",
+      course: "Flexbox практика",
+      progress: 85,
+      status: "offline",
+      lastActivity: "21.11, 16:00",
+      badges: 14,
+    },
+  ]
+
+  const mock7AStudents: Student[] = [
+    {
+      id: "9",
+      name: "Гриценко Д.",
+      avatar: "Г",
+      course: "Адресація IP - Маска підмережі",
+      progress: 75,
+      status: "offline",
+      lastActivity: "21.11, 12:40",
+      badges: 9,
+    },
+    {
+      id: "10",
+      name: "Бойко А.",
+      avatar: "Б",
+      course: "Адресація IP",
+      progress: 45,
+      status: "offline",
+      lastActivity: "19.11, 08:15",
+      badges: 3,
+    },
+    {
+      id: "11",
+      name: "Коваленко М.",
+      avatar: "К",
+      course: "DNS Резолюція",
+      progress: 60,
+      status: "help",
+      lastActivity: "20.11, 15:25",
+      badges: 7,
+    },
+    {
+      id: "12",
+      name: "Франко І.",
+      avatar: "Ф",
+      course: "DHCP конфігурація",
+      progress: 82,
+      status: "offline",
+      lastActivity: "21.11, 13:50",
+      badges: 13,
+    },
+  ]
+
+  const students =
+    selectedClass === "10-А" ? mock10AStudents : selectedClass === "11-Б" ? mock11BStudents : mock7AStudents
 
   if (isDemo) {
     return (
@@ -819,18 +967,18 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
       </div>
 
       <div className="space-y-2">
-        {students.map((student, i) => (
-          <Card key={i} className="p-4">
+        {students.map((student) => (
+          <Card key={student.id} className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 flex-1">
                 <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium">
-                  {student.name[0]}
+                  {student.avatar}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium">{screenMode ? "████████ █." : student.name}</p>
-                  <p className="text-xs text-muted-foreground">{student.task}</p>
+                  <p className="text-xs text-muted-foreground">{student.course}</p>
                   {student.status === "offline" && (
-                    <p className="text-xs text-red-500">🔴 Офлайн - {student.lastSeen}</p>
+                    <p className="text-xs text-red-500">🔴 Офлайн - {student.lastActivity}</p>
                   )}
                 </div>
               </div>
@@ -841,18 +989,12 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
                   <Progress value={student.progress} className="w-24 h-1" />
                 </div>
 
-                {student.status === "help" && (
-                  <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/30">
-                    Потрібна допомога
-                  </Badge>
-                )}
-                {student.status === "offline" && (
-                  <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/30">
-                    Офлайн
-                  </Badge>
-                )}
+                <Badge variant={student.status === "help" ? "destructive" : "secondary"} className="text-xs">
+                  {student.status === "offline" && "Офлайн"}
+                  {student.status === "help" && "Потрібна допомога"}
+                </Badge>
 
-                <Button size="sm" variant="outline" onClick={() => setInterceptModal(true)} disabled={true}>
+                <Button size="sm" variant="outline" onClick={() => setInterceptModal(true)} disabled>
                   Перехопити чат
                 </Button>
               </div>

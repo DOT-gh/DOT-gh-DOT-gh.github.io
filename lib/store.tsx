@@ -77,6 +77,7 @@ interface AppState {
   // App Data
   courses: Course[]
   isOffline: boolean
+  connectionStatus: string
   batteryLevel: number
   fontSize: number
   storageUsed: number
@@ -108,6 +109,7 @@ interface AppState {
   setShowSettings: (show: boolean) => void
   setShowProfile: (show: boolean) => void
   setIsOffline: (offline: boolean) => void
+  setConnectionStatus: (status: string) => void
   setBatteryLevel: (level: number) => void
   setFontSize: (size: number) => void
   setStorageUsed: (used: number) => void
@@ -768,6 +770,7 @@ export const useAppState = create<AppState>()(
       showProfile: false,
       courses: initialCourses,
       isOffline: false,
+      connectionStatus: "CONNECTED",
       batteryLevel: 100,
       fontSize: 14,
       storageUsed: 12.4,
@@ -798,6 +801,7 @@ export const useAppState = create<AppState>()(
       setShowSettings: (show) => set({ showSettings: show }),
       setShowProfile: (show) => set({ showProfile: show }),
       setIsOffline: (offline) => set({ isOffline: offline }),
+      setConnectionStatus: (status) => set({ connectionStatus: status }),
       setBatteryLevel: (level) => set({ batteryLevel: level }),
       setFontSize: (size) => set({ fontSize: size }),
       setStorageUsed: (used) => set({ storageUsed: used }),
