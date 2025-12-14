@@ -40,6 +40,42 @@ import DetailedStudentAnalytics from "@/components/teacher/detailed-student-anal
 
 type View = "dashboard" | "classes" | "builder" | "monitor" | "analytics" | "ai-settings"
 
+const studentsByClass: Record<
+  string,
+  Array<{ name: string; status: "offline" | "help"; task: string; progress: number; lastSeen: string }>
+> = {
+  "10-А": [
+    {
+      name: "Шевченко О.",
+      status: "offline",
+      task: "Адресація IP - Маска підмережі",
+      progress: 75,
+      lastSeen: "21.11, 14:20",
+    },
+    { name: "Бойко А.", status: "offline", task: "Адресація IP", progress: 45, lastSeen: "20.11, 15:30" },
+    { name: "Коваленко М.", status: "help", task: "DNS Резолюція", progress: 60, lastSeen: "18.11, 11:45" },
+    { name: "Франко І.", status: "offline", task: "DHCP конфігурація", progress: 82, lastSeen: "21.11, 16:10" },
+  ],
+  "11-Б": [
+    { name: "Мельник Т.", status: "offline", task: "Flexbox - Вирівнювання", progress: 68, lastSeen: "21.11, 13:30" },
+    {
+      name: "Петренко В.",
+      status: "offline",
+      task: "Flexbox - Grid комбінація",
+      progress: 72,
+      lastSeen: "20.11, 17:45",
+    },
+    { name: "Сидоренко К.", status: "help", task: "Flexbox - Респонсив", progress: 55, lastSeen: "19.11, 12:20" },
+    { name: "Іваненко О.", status: "offline", task: "CSS Grid основи", progress: 40, lastSeen: "19.11, 10:15" },
+    { name: "Ткаченко М.", status: "offline", task: "Flexbox практика", progress: 85, lastSeen: "21.11, 15:50" },
+  ],
+  "7-А": [
+    { name: "Дмитренко А.", status: "offline", task: "Гра 'Робот' - Рівень 3", progress: 80, lastSeen: "21.11, 12:40" },
+    { name: "Ковальчук Н.", status: "offline", task: "Гра 'Робот' - Рівень 2", progress: 65, lastSeen: "20.11, 14:15" },
+    { name: "Романенко С.", status: "help", task: "Гра 'Робот' - Рівень 4", progress: 50, lastSeen: "18.11, 16:30" },
+  ],
+}
+
 export default function TeacherDashboard() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -743,27 +779,6 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
   const [selectedClass, setSelectedClass] = useState("10-А")
   const [interceptModal, setInterceptModal] = useState(false)
 
-  const studentsByClass: Record<string, any[]> = {
-    "10-А": [
-      { name: "Шевченко О.", status: "online", task: "Адресація IP - Маска підмережі", progress: 75 },
-      { name: "Бойко А.", status: "offline", task: "Адресація IP", progress: 45, lastSeen: "20.11, 15:30" },
-      { name: "Коваленко М.", status: "help", task: "DNS Резолюція", progress: 60 },
-      { name: "Франко І.", status: "online", task: "DHCP конфігурація", progress: 82 },
-    ],
-    "11-Б": [
-      { name: "Мельник Т.", status: "online", task: "Flexbox - Вирівнювання", progress: 68 },
-      { name: "Петренко В.", status: "online", task: "Flexbox - Grid комбінація", progress: 72 },
-      { name: "Сидоренко К.", status: "help", task: "Flexbox - Респонсив", progress: 55 },
-      { name: "Іваненко О.", status: "offline", task: "CSS Grid основи", progress: 40, lastSeen: "19.11, 10:15" },
-      { name: "Ткаченко М.", status: "online", task: "Flexbox практика", progress: 85 },
-    ],
-    "7-А": [
-      { name: "Дмитренко А.", status: "online", task: "Гра 'Робот' - Рівень 3", progress: 80 },
-      { name: "Ковальчук Н.", status: "online", task: "Гра 'Робот' - Рівень 2", progress: 65 },
-      { name: "Романенко С.", status: "help", task: "Гра 'Робот' - Рівень 4", progress: 50 },
-    ],
-  }
-
   const students = isDemo ? [] : studentsByClass[selectedClass] || []
 
   if (isDemo) {
@@ -826,11 +841,6 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
                   <Progress value={student.progress} className="w-24 h-1" />
                 </div>
 
-                {student.status === "online" && (
-                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30">
-                    Online
-                  </Badge>
-                )}
                 {student.status === "help" && (
                   <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/30">
                     Потрібна допомога
@@ -842,12 +852,7 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
                   </Badge>
                 )}
 
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setInterceptModal(true)}
-                  disabled={student.status === "offline"}
-                >
+                <Button size="sm" variant="outline" onClick={() => setInterceptModal(true)} disabled={true}>
                   Перехопити чат
                 </Button>
               </div>
