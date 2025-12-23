@@ -9,60 +9,87 @@ import { cn } from "@/lib/utils"
 import { useAppState } from "@/lib/store"
 import { useState, useRef, useEffect } from "react"
 
-// Pre-defined AI responses based on keywords
-const aiResponses: Record<string, string[]> = {
+const aiResponseTemplates = {
   default: [
     "Цікаве питання! Давай розберемося разом. Що конкретно тебе збиває з пантелику?",
     "Спробуй проаналізувати код крок за кроком. Яка частина здається найскладнішою?",
     "Підказка: перечитай умову задачі та порівняй з тим, що робить твій код.",
+    "Гарне запитання! Почнемо з основ - чи розумієш ти загальну логіку цього завдання?",
+    "Давай подумаємо разом. Спочатку опиши своїми словами, що має робити код.",
   ],
   error: [
     "Помилка синтаксису зазвичай означає, що Python не може зрозуміти структуру коду. Перевір чи всі дужки закриті, чи є потрібні двокрапки.",
     "SyntaxError часто виникає через пропущені символи. Уважно перевір рядок, на який вказує помилка.",
+    "Помилки - це нормально! Давай знайдемо, де саме Python не розуміє твій код.",
+    "Перевір синтаксис: чи правильні відступи, чи не пропущені лапки чи дужки?",
   ],
   for: [
     "Цикл for у Python має специфічний синтаксис. Чи пам'ятаєш, як правильно його оголошувати?",
     "Підказка: for variable in sequence: — зверни увагу на останній символ!",
     "Кожен блок коду в Python (цикл, умова, функція) має закінчуватися двокрапкою (:).",
+    "Цикл for дозволяє перебирати елементи. Чи правильно ти вказав колекцію для перебору?",
   ],
   while: [
     "Цикл while виконується поки умова істинна. Чи впевнений, що умова колись стане хибною?",
     "Підказка: while condition: — не забудь про двокрапку!",
+    "Обережно з while - переконайся, що створюєш не нескінченний цикл!",
   ],
   function: [
     "Функції допомагають структурувати код. def назва_функції(параметри): — базовий синтаксис.",
     "Пам'ятай про відступи всередині функції — вони обов'язкові в Python!",
+    "Функція має робити щось конкретне. Чи зрозуміла тобі її мета?",
   ],
   list: [
     "Списки — потужний інструмент. Доступ до елементу: список[індекс], де індексація з 0.",
     "Корисні методи: append(), remove(), len(). Який саме тобі потрібен?",
+    "Пам'ятай: перший елемент має індекс 0, а останній - len(список)-1.",
   ],
   print: [
     "print() виводить дані в консоль. Для форматування використовуй f-рядки: f'{змінна}'",
     "Декілька значень можна вивести через кому: print(a, b, c)",
+    "Спробуй f-рядки для зручного форматування: print(f'Результат: {value}')",
   ],
   help: [
     "Я тут щоб допомогти, але не давати готові відповіді. Опиши проблему детальніше.",
     "Спробуй сформулювати, що саме не працює — це допоможе мені дати точнішу підказку.",
+    "Чим конкретніше опишеш проблему, тим краще зможу допомогти!",
   ],
   hint: [
     "Ось підказка: уважно перечитай повідомлення про помилку. Воно вказує на конкретний рядок!",
     "Підказка: порівняй свій код з прикладами з теорії. Бачиш різницю?",
+    "Спробуй запустити код по частинах - так легше знайти проблемне місце.",
   ],
 }
 
-function getAIResponse(message: string): string {
+function getAIResponse(message: string, previousMessages: any[]): string {
   const lowerMessage = message.toLowerCase()
 
-  // Check for keywords
-  for (const [keyword, responses] of Object.entries(aiResponses)) {
+  // Check for keywords and get matching responses
+  let matchingResponses: string[] = []
+
+  for (const [keyword, responses] of Object.entries(aiResponseTemplates)) {
     if (keyword !== "default" && lowerMessage.includes(keyword)) {
-      return responses[Math.floor(Math.random() * responses.length)]
+      matchingResponses = [...matchingResponses, ...responses]
     }
   }
 
-  // Default response
-  return aiResponses.default[Math.floor(Math.random() * aiResponses.default.length)]
+  // If no matches, use default
+  if (matchingResponses.length === 0) {
+    matchingResponses = aiResponseTemplates.default
+  }
+
+  // Filter out recently used responses to avoid repetition
+  const recentResponses = previousMessages
+    .filter((m) => m.role === "assistant")
+    .slice(-3)
+    .map((m) => m.content)
+
+  const availableResponses = matchingResponses.filter((r) => !recentResponses.includes(r))
+
+  // If all responses were used recently, reset and use all
+  const finalPool = availableResponses.length > 0 ? availableResponses : matchingResponses
+
+  return finalPool[Math.floor(Math.random() * finalPool.length)]
 }
 
 export function AiTutorChat() {
@@ -72,6 +99,7 @@ export function AiTutorChat() {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const safeMessages = messages || []
 
@@ -79,12 +107,17 @@ export function AiTutorChat() {
   const safeClearMessages = clearMessages || (() => {})
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (messagesEndRef.current && messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight
+    }
   }
 
   useEffect(() => {
+    // Scroll immediately and after a short delay to ensure content is rendered
     scrollToBottom()
-  }, [safeMessages])
+    const timer = setTimeout(scrollToBottom, 100)
+    return () => clearTimeout(timer)
+  }, [safeMessages, isTyping])
 
   const handleSend = () => {
     if (!input.trim() || !addMessage) return
@@ -100,7 +133,7 @@ export function AiTutorChat() {
     // Simulate AI response after delay
     setTimeout(() => {
       setIsTyping(false)
-      const response = getAIResponse(userInput)
+      const response = getAIResponse(userInput, safeMessages)
       safeAddMessage({ role: "assistant", content: response })
     }, 1500)
   }
@@ -165,7 +198,7 @@ export function AiTutorChat() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 space-y-4 overflow-y-auto p-4">
+      <div ref={messagesContainerRef} className="flex-1 space-y-4 overflow-y-auto p-4">
         {safeMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 mb-3">
