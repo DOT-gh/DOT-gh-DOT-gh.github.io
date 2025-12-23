@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.2 Програмно-алгоритмічна реалізація</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .diagram-container {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #e74c3c; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .mermaid { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>2.2 Програмно-алгоритмічна реалізація адаптивної системи</h1>
+    
+    <div class="diagram-container">
+        <h2>Діаграма 2.2.1: Компонентна архітектура системи</h2>
+        <div class="mermaid">
+graph TB
+    subgraph "Клієнтська частина (Next.js 16)"
+        A[React Components]
+        B[State Management]
+        C[UI/UX Layer]
+        
+        A --> B
+        B --> C
+    end
+    
+    subgraph "Серверна частина"
+        D[API Routes]
+        E[Server Actions]
+        F[Authentication]
+        
+        D --> E
+        E --> F
+    end
+    
+    subgraph "AI-модуль"
+        G[AI SDK v5]
+        H[Prompt Engineering]
+        I[Context Management]
+        J[Response Parser]
+        
+        G --> H
+        H --> I
+        I --> J
+    end
+    
+    subgraph "Система аналітики"
+        K[Progress Tracker]
+        L[Behavior Analytics]
+        M[Performance Monitor]
+        
+        K --> L
+        L --> M
+    end
+    
+    subgraph "База даних"
+        N[(PostgreSQL)]
+        O[User Profiles]
+        P[Learning Data]
+        Q[Analytics Data]
+        
+        N --> O
+        N --> P
+        N --> Q
+    end
+    
+    C --> D
+    D --> G
+    E --> K
+    F --> N
+    J --> D
+    M --> N
+    
+    style G fill:#fff3e0
+    style K fill:#e8f5e9
+    style N fill:#e3f2fd
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>Діаграма 2.2.2: Алгоритм адаптивної системи навчання</h2>
+        <div class="mermaid">
+flowchart TD
+    Start([Початок сесії]) --> LoadProfile[Завантаження профілю учня]
+    
+    LoadProfile --> CheckHistory{Є історія навчання?}
+    
+    CheckHistory -->|Ні| InitDiagnostic[Початкова діагностика]
+    CheckHistory -->|Так| LoadHistory[Завантаження історії]
+    
+    InitDiagnostic --> CreateProfile[Створення базового профілю]
+    LoadHistory --> AnalyzeData[Аналіз даних навчання]
+    
+    CreateProfile --> AIAnalysis
+    AnalyzeData --> AIAnalysis[AI-аналіз готовності]
+    
+    AIAnalysis --> CalcDifficulty[Розрахунок складності]
+    CalcDifficulty --> SelectContent[Підбір контенту]
+    
+    SelectContent --> GenerateTask[Генерація завдання]
+    GenerateTask --> PresentTask[Представлення учню]
+    
+    PresentTask --> Monitor[Моніторинг виконання]
+    
+    Monitor --> CheckProgress{Потрібна допомога?}
+    CheckProgress -->|Так| AIHint[AI-підказка]
+    CheckProgress -->|Ні| Continue[Продовження]
+    
+    AIHint --> Monitor
+    Continue --> Submitted{Відправлено?}
+    
+    Submitted -->|Ні| Monitor
+    Submitted -->|Так| Evaluate[Оцінка роботи]
+    
+    Evaluate --> AIFeedback[AI-фідбек]
+    AIFeedback --> UpdateProfile[Оновлення профілю]
+    
+    UpdateProfile --> CalcMetrics[Розрахунок метрик]
+    CalcMetrics --> SaveData[Збереження даних]
+    
+    SaveData --> CheckGoal{Досягнуто мети?}
+    CheckGoal -->|Ні| AIAnalysis
+    CheckGoal -->|Так| Reward[Нагорода]
+    
+    Reward --> End([Завершення])
+    
+    style AIAnalysis fill:#fff9c4
+    style AIHint fill:#fff9c4
+    style AIFeedback fill:#fff9c4
+    style Evaluate fill:#e8f5e9
+    style UpdateProfile fill:#e8f5e9
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>Діаграма 2.2.3: ER-діаграма бази даних</h2>
+        <div class="mermaid">
+erDiagram
+    USERS ||--o{ STUDENT_PROFILES : has
+    USERS ||--o{ TEACHER_PROFILES : has
+    USERS ||--o{ AUTH_SESSIONS : creates
+    
+    STUDENT_PROFILES ||--o{ LEARNING_HISTORY : generates
+    STUDENT_PROFILES ||--o{ ACHIEVEMENTS : earns
+    STUDENT_PROFILES ||--o{ PROGRESS_DATA : tracks
+    
+    TEACHER_PROFILES ||--o{ CLASSES : manages
+    CLASSES ||--o{ STUDENT_PROFILES : contains
+    
+    LEARNING_HISTORY ||--o{ AI_INTERACTIONS : includes
+    LEARNING_HISTORY ||--o{ TASK_SUBMISSIONS : records
+    
+    COURSES ||--o{ LESSONS : contains
+    LESSONS ||--o{ TASKS : includes
+    TASKS ||--o{ TASK_SUBMISSIONS : receives
+    
+    ANALYTICS_EVENTS ||--o{ STUDENT_PROFILES : monitors
+    
+    USERS {
+        uuid id PK
+        string email
+        string password_hash
+        string role
+        timestamp created_at
+    }
+    
+    STUDENT_PROFILES {
+        uuid id PK
+        uuid user_id FK
+        int level
+        json learning_style
+        float progress_rate
+    }
+    
+    LEARNING_HISTORY {
+        uuid id PK
+        uuid student_id FK
+        uuid lesson_id FK
+        json performance_data
+        timestamp completed_at
+    }
+    
+    AI_INTERACTIONS {
+        uuid id PK
+        uuid history_id FK
+        text prompt
+        text response
+        json context
+        timestamp created_at
+    }
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>Діаграма 2.2.4: Data Flow діаграма</h2>
+        <div class="mermaid">
+graph LR
+    subgraph Input
+        A[Дії учня]
+        B[Відповіді на завдання]
+    end
+    
+    subgraph Processing
+        C[Збір даних]
+        D[Нормалізація]
+        E[AI-обробка]
+        F[Аналіз патернів]
+    end
+    
+    subgraph Storage
+        G[(Основна БД)]
+        H[(Кеш Redis)]
+        I[(Аналітика)]
+    end
+    
+    subgraph Output
+        J[Персоналізований контент]
+        K[Рекомендації]
+        L[Фідбек]
+        M[Звіти для вчителя]
+    end
+    
+    A --> C
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    
+    F --> G
+    F --> H
+    F --> I
+    
+    G --> J
+    H --> K
+    E --> L
+    I --> M
+    
+    style E fill:#fff9c4
+    style G fill:#e3f2fd
+    style H fill:#ffccbc
+    style I fill:#c8e6c9
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>Діаграма 2.2.5: Алгоритм генерації адаптивного контенту</h2>
+        <div class="mermaid">
+flowchart TD
+    A[Запит на контент] --> B[Отримати профіль учня]
+    B --> C{Аналіз параметрів}
+    
+    C --> D[Рівень складності]
+    C --> E[Стиль навчання]
+    C --> F[Історія помилок]
+    C --> G[Темп прогресу]
+    
+    D --> H[AI Prompt Builder]
+    E --> H
+    F --> H
+    G --> H
+    
+    H --> I[Формування промпту]
+    I --> J[Виклик AI API]
+    
+    J --> K[Отримання відповіді]
+    K --> L[Парсинг контенту]
+    
+    L --> M{Валідація}
+    M -->|Невалідно| N[Корекція промпту]
+    N --> I
+    
+    M -->|Валідно| O[Форматування]
+    O --> P[Додавання метаданих]
+    
+    P --> Q[Збереження в кеш]
+    Q --> R[Відправка учню]
+    
+    R --> S[Логування взаємодії]
+    S --> T([Кінець])
+    
+    style J fill:#fff9c4
+    style M fill:#e8f5e9
+    style Q fill:#e3f2fd
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { 
+                curve: 'basis',
+                padding: 20
+            }
+        });
+    </script>
+</body>
+</html>
