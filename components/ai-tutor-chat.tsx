@@ -9,87 +9,186 @@ import { cn } from "@/lib/utils"
 import { useAppState } from "@/lib/store"
 import { useState, useRef, useEffect } from "react"
 
-const aiResponseTemplates = {
-  default: [
-    "Цікаве питання! Давай розберемося разом. Що конкретно тебе збиває з пантелику?",
-    "Спробуй проаналізувати код крок за кроком. Яка частина здається найскладнішою?",
-    "Підказка: перечитай умову задачі та порівняй з тим, що робить твій код.",
-    "Гарне запитання! Почнемо з основ - чи розумієш ти загальну логіку цього завдання?",
-    "Давай подумаємо разом. Спочатку опиши своїми словами, що має робити код.",
-  ],
-  error: [
-    "Помилка синтаксису зазвичай означає, що Python не може зрозуміти структуру коду. Перевір чи всі дужки закриті, чи є потрібні двокрапки.",
-    "SyntaxError часто виникає через пропущені символи. Уважно перевір рядок, на який вказує помилка.",
-    "Помилки - це нормально! Давай знайдемо, де саме Python не розуміє твій код.",
-    "Перевір синтаксис: чи правильні відступи, чи не пропущені лапки чи дужки?",
-  ],
-  for: [
-    "Цикл for у Python має специфічний синтаксис. Чи пам'ятаєш, як правильно його оголошувати?",
-    "Підказка: for variable in sequence: — зверни увагу на останній символ!",
-    "Кожен блок коду в Python (цикл, умова, функція) має закінчуватися двокрапкою (:).",
-    "Цикл for дозволяє перебирати елементи. Чи правильно ти вказав колекцію для перебору?",
-  ],
-  while: [
-    "Цикл while виконується поки умова істинна. Чи впевнений, що умова колись стане хибною?",
-    "Підказка: while condition: — не забудь про двокрапку!",
-    "Обережно з while - переконайся, що створюєш не нескінченний цикл!",
-  ],
-  function: [
-    "Функції допомагають структурувати код. def назва_функції(параметри): — базовий синтаксис.",
-    "Пам'ятай про відступи всередині функції — вони обов'язкові в Python!",
-    "Функція має робити щось конкретне. Чи зрозуміла тобі її мета?",
-  ],
-  list: [
-    "Списки — потужний інструмент. Доступ до елементу: список[індекс], де індексація з 0.",
-    "Корисні методи: append(), remove(), len(). Який саме тобі потрібен?",
-    "Пам'ятай: перший елемент має індекс 0, а останній - len(список)-1.",
-  ],
-  print: [
-    "print() виводить дані в консоль. Для форматування використовуй f-рядки: f'{змінна}'",
-    "Декілька значень можна вивести через кому: print(a, b, c)",
-    "Спробуй f-рядки для зручного форматування: print(f'Результат: {value}')",
-  ],
-  help: [
-    "Я тут щоб допомогти, але не давати готові відповіді. Опиши проблему детальніше.",
-    "Спробуй сформулювати, що саме не працює — це допоможе мені дати точнішу підказку.",
-    "Чим конкретніше опишеш проблему, тим краще зможу допомогти!",
-  ],
-  hint: [
-    "Ось підказка: уважно перечитай повідомлення про помилку. Воно вказує на конкретний рядок!",
-    "Підказка: порівняй свій код з прикладами з теорії. Бачиш різницю?",
-    "Спробуй запустити код по частинах - так легше знайти проблемне місце.",
-  ],
+function hashString(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash = hash & hash
+  }
+  return Math.abs(hash)
 }
 
 function getAIResponse(message: string, previousMessages: any[]): string {
   const lowerMessage = message.toLowerCase()
+  const msgHash = hashString(message + previousMessages.length.toString())
 
-  // Check for keywords and get matching responses
-  let matchingResponses: string[] = []
-
-  for (const [keyword, responses] of Object.entries(aiResponseTemplates)) {
-    if (keyword !== "default" && lowerMessage.includes(keyword)) {
-      matchingResponses = [...matchingResponses, ...responses]
-    }
+  // Помилки та debugging
+  if (
+    lowerMessage.includes("помилка") ||
+    lowerMessage.includes("error") ||
+    lowerMessage.includes("не працює") ||
+    lowerMessage.includes("не работает")
+  ) {
+    const responses = [
+      "Бачу проблему! Спершу перевір: чи є двокрапка після if/for/while? Чи правильні відступи? Покажи код - допоможу знайти помилку.",
+      "Помилка - це підказка від Python! Прочитай останній рядок повідомлення - там написано тип помилки. SyntaxError? NameError? TypeError?",
+      "Давай розберемося крок за кроком: 1) Що саме пише в помилці? 2) На якому рядку? 3) Що ти хотів зробити цим кодом?",
+      "Типова причина помилок: забута двокрапка, неправильний відступ, або друкарська помилка в назві змінної. Перевір ці три речі!",
+      "Спробуй закоментувати частину коду і запустити знову - так знайдеш проблемний рядок. Де саме ламається?",
+    ]
+    return responses[msgHash % responses.length]
   }
 
-  // If no matches, use default
-  if (matchingResponses.length === 0) {
-    matchingResponses = aiResponseTemplates.default
+  // Цикли for
+  if (lowerMessage.includes("for") || lowerMessage.includes("цикл")) {
+    const responses = [
+      "Цикл for: `for i in range(5):` - виконає код 5 разів (i буде 0,1,2,3,4). Не забудь двокрапку і відступ!",
+      "Підказка для циклів: range(start, stop, step). Наприклад range(0, 10, 2) дасть 0,2,4,6,8. Спробуй!",
+      "Всередині циклу обов'язковий відступ (Tab або 4 пробіли). Без відступу Python не зрозуміє що належить до циклу.",
+      "Хочеш перебрати список? `for item in my_list:` - і item буде кожним елементом по черзі. Спробуй вивести через print(item).",
+      "Цикл застряг? Перевір чи змінюється умова. В range() кінцеве значення НЕ включається: range(5) це 0-4, не 0-5!",
+    ]
+    return responses[msgHash % responses.length]
   }
 
-  // Filter out recently used responses to avoid repetition
-  const recentResponses = previousMessages
-    .filter((m) => m.role === "assistant")
-    .slice(-3)
-    .map((m) => m.content)
+  // While цикли
+  if (lowerMessage.includes("while")) {
+    const responses = [
+      "while працює ПОКИ умова True. Важливо: щось всередині циклу має змінити умову, інакше - нескінченний цикл!",
+      "Приклад: `count = 0` потім `while count < 5:` і всередині `count += 1`. Без останнього - зависне!",
+      "Для виходу з циклу використай `break`. Для пропуску ітерації - `continue`. Корисні інструменти!",
+    ]
+    return responses[msgHash % responses.length]
+  }
 
-  const availableResponses = matchingResponses.filter((r) => !recentResponses.includes(r))
+  // Функції
+  if (lowerMessage.includes("функ") || lowerMessage.includes("def") || lowerMessage.includes("return")) {
+    const responses = [
+      "Функція: `def назва(параметр):` - двокрапка обов'язкова! Всередині - відступ. Виклик: `назва(значення)`.",
+      "return повертає значення з функції. Без return функція поверне None. Приклад: `return результат`",
+      "Параметри - це вхідні дані функції. `def greet(name):` - name це параметр, при виклику передаєш реальне ім'я.",
+      "Функція спочатку оголошується (def...), а потім викликається. Не можна викликати до оголошення!",
+      "Локальні змінні існують тільки всередині функції. Якщо потрібен результат назовні - використай return.",
+    ]
+    return responses[msgHash % responses.length]
+  }
 
-  // If all responses were used recently, reset and use all
-  const finalPool = availableResponses.length > 0 ? availableResponses : matchingResponses
+  // Списки
+  if (
+    lowerMessage.includes("список") ||
+    lowerMessage.includes("list") ||
+    lowerMessage.includes("масив") ||
+    lowerMessage.includes("[")
+  ) {
+    const responses = [
+      "Список: `nums = [1, 2, 3]`. Доступ: `nums[0]` (перший елемент). Індекси з 0!",
+      "Додати елемент: `список.append(елемент)`. Видалити: `список.remove(елемент)` або `del список[індекс]`.",
+      "Негативні індекси: `список[-1]` - останній елемент, `список[-2]` - передостанній. Зручно!",
+      "Зрізи: `список[1:3]` - елементи з індексом 1 і 2. `список[:3]` - перші 3. `список[2:]` - з третього до кінця.",
+      "len(список) - довжина. Перебір: `for item in список:` - пройде по кожному елементу.",
+    ]
+    return responses[msgHash % responses.length]
+  }
 
-  return finalPool[Math.floor(Math.random() * finalPool.length)]
+  // Print та вивід
+  if (
+    lowerMessage.includes("print") ||
+    lowerMessage.includes("вивід") ||
+    lowerMessage.includes("вивести") ||
+    lowerMessage.includes("виведи")
+  ) {
+    const responses = [
+      "print() виводить в консоль. Текст в лапках: `print('Привіт!')`. Змінну без лапок: `print(x)`.",
+      "f-рядки - найзручніший спосіб: `print(f'Ім\\'я: {name}, вік: {age}')` - підставить значення змінних.",
+      "Декілька значень: `print('Результат:', x, 'балів')` - пробіли додадуться автоматично.",
+      "Щоб вивести без переходу на новий рядок: `print('текст', end='')` - end визначає що буде в кінці.",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // Умови if
+  if (
+    lowerMessage.includes("if") ||
+    lowerMessage.includes("умов") ||
+    lowerMessage.includes("else") ||
+    lowerMessage.includes("elif")
+  ) {
+    const responses = [
+      "Умова: `if x > 5:` - двокрапка обов'язкова! Код всередині - з відступом.",
+      "Повна конструкція: if умова: ... elif інша_умова: ... else: ... Порядок важливий!",
+      "Порівняння: == (рівно), != (не рівно), >, <, >=, <=. Подвійне == для порівняння, одинарне = для присвоєння!",
+      "Логічні оператори: and (і), or (або), not (не). Приклад: `if x > 0 and x < 10:`",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // Підказки
+  if (
+    lowerMessage.includes("підказ") ||
+    lowerMessage.includes("hint") ||
+    lowerMessage.includes("допомож") ||
+    lowerMessage.includes("помоги")
+  ) {
+    const responses = [
+      "Порада: спочатку напиши алгоритм словами (псевдокод), потім переводь в Python рядок за рядком.",
+      "Розбий задачу на маленькі кроки. Вирішуй кожен окремо, потім збирай разом.",
+      "Використовуй print() для дебагу - виводь проміжні значення щоб бачити що відбувається в коді.",
+      "Порівняй з прикладами з теорії. Що схоже? Що відрізняється? Часто рішення вже є в матеріалах.",
+      "Застряг? Спробуй пояснити задачу вголос - часто рішення приходить коли формулюєш проблему.",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // Змінні
+  if (lowerMessage.includes("змінн") || lowerMessage.includes("переменн") || lowerMessage.includes("variable")) {
+    const responses = [
+      "Змінна створюється присвоєнням: `x = 5`, `name = 'Іван'`. Тип визначається автоматично.",
+      "Назви змінних: літери, цифри, підкреслення. Не можна починати з цифри. Приклад: `user_age = 15`",
+      "Типи: int (число), float (дробове), str (текст), bool (True/False), list (список).",
+      "Перевірити тип: `type(змінна)`. Конвертувати: `int('5')`, `str(123)`, `float('3.14')`.",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // HTML/CSS питання
+  if (
+    lowerMessage.includes("html") ||
+    lowerMessage.includes("css") ||
+    lowerMessage.includes("flex") ||
+    lowerMessage.includes("тег")
+  ) {
+    const responses = [
+      "HTML структура: теги відкриваються `<tag>` і закриваються `</tag>`. Не забувай закривати!",
+      "Flexbox: `display: flex` на контейнері. Далі justify-content (горизонталь) і align-items (вертикаль).",
+      "CSS селектори: `.class` для класу, `#id` для id, `tag` для тегу. Специфічність важлива!",
+      "Блокові елементи (div, p, h1) займають всю ширину. Інлайнові (span, a) - тільки свій контент.",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // Приклад/покажи
+  if (lowerMessage.includes("приклад") || lowerMessage.includes("покаж") || lowerMessage.includes("пример")) {
+    const responses = [
+      "Ось базовий приклад - спробуй адаптувати під своє завдання. Що саме незрозуміло в синтаксисі?",
+      "Приклади є в теоретичному матеріалі зліва. Подивись розділ по цій темі - там покроково пояснено.",
+      "Давай я поясню логіку, а ти напишеш код сам - так краще запам'ятається. Що саме потрібно зробити?",
+      "Замість готового прикладу, давай розберемо алгоритм: які кроки потрібні для вирішення?",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // Загальні відповіді для невизначених питань
+  const generalResponses = [
+    "Цікаве питання! Уточни: який код пробував написати і що саме не вийшло?",
+    "Давай розберемось! Опиши детальніше задачу - що має робити твій код?",
+    "Щоб дати точну підказку, мені потрібно більше контексту. Яке завдання виконуєш?",
+    "Розумію, що застряг. Давай по кроках: що вже зробив і де зупинився?",
+    "Гарне питання! Скажи, яку конкретну частину завдання намагаєшся вирішити?",
+    "Я тут щоб допомогти розібратися. Поділись кодом або опиши що не працює.",
+  ]
+
+  return generalResponses[msgHash % generalResponses.length]
 }
 
 export function AiTutorChat() {
@@ -150,6 +249,8 @@ export function AiTutorChat() {
     { label: "Де помилка?", query: "Де в моєму коді помилка?" },
     { label: "Підказка", query: "Дай підказку" },
     { label: "Синтаксис", query: "Поясни синтаксис for циклу" },
+    { label: "HTML/CSS", query: "Що таке Flexbox?" },
+    { label: "Змінні", query: "Що таке змінна в Python?" },
   ]
 
   const MobileToggle = () => (
