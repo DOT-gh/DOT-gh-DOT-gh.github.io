@@ -12,270 +12,550 @@ import {
   AlertTriangle,
   TrendingUp,
   Sparkles,
-  Plus,
   Eye,
-  MessageSquare,
-  Shield,
-  Target,
-  Clock,
-  Zap,
-  Activity,
-  Settings,
-  EyeOff,
-  Bell,
   CheckCircle2,
   XCircle,
-  AlertCircle,
   ArrowUp,
-  Brain,
-  MapPin,
   Smartphone,
-  CheckCircle,
+  MapPin,
+  Bell,
+  Download,
+  Activity,
+  Wifi,
   WifiOff,
+  Battery,
+  Globe,
+  Monitor,
+  Timer,
+  HelpCircle,
+  BookMarked,
+  Mouse,
 } from "lucide-react"
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts"
-import { BarChart, Bar, CartesianGrid, Legend } from "recharts" // Added for Activity Chart
+import { Progress } from "@/components/ui/progress"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  CartesianGrid,
+  Legend,
+  AreaChart,
+  Area,
+} from "recharts"
 
-import { teacherData, type StudentData } from "@/lib/teacher-data"
+// Types
+interface StudentSession {
+  date: string
+  time: string
+  duration: string
+  ip: string
+  device: string
+  browser: string
+  battery: number
+  connection: "online" | "offline"
+  location: string
+}
 
-// Define Student type for MonitorView
-type Student = {
+interface TaskLog {
+  task: string
+  startTime: string
+  endTime: string
+  duration: string
+  attempts: number
+  hintsUsed: number
+  aiRequests: number
+  status: "completed" | "in_progress" | "stuck"
+  score: number
+  errors: string[]
+}
+
+interface StudentDetail {
   id: string
   name: string
-  avatar: string
-  course: string
+  className: string
+  status: "offline" | "online" | "help"
   progress: number
-  status: "offline" | "help"
+  currentTask: string
   lastActivity: string
-  badges: number
+  achievements: number
+  avgScore: number
+  totalTime: string
+  tasksCompleted: number
+  totalTasks: number
+  aiRequestsCount: number
+  hintsUsedTotal: number
+  offlineSessions: number
+  onlineSessions: number
+  sessions: StudentSession[]
+  taskLogs: TaskLog[]
 }
 
-type View = "dashboard" | "classes" | "builder" | "monitor" | "analytics" | "ai-settings"
-
-const studentsByClass: Record<
-  string,
-  Array<{ name: string; status: "offline" | "help"; task: string; progress: number; lastSeen: string }>
-> = {
-  "10-А": [
-    {
-      name: "Шевченко О.",
-      status: "offline",
-      task: "Адресація IP - Маска підмережі",
-      progress: 75,
-      lastSeen: "21.11, 14:20",
-    },
-    { name: "Бойко А.", status: "offline", task: "Адресація IP", progress: 45, lastSeen: "20.11, 15:30" },
-    { name: "Коваленко М.", status: "help", task: "DNS Резолюція", progress: 60, lastSeen: "18.11, 11:45" },
-    { name: "Франко І.", status: "offline", task: "DHCP конфігурація", progress: 82, lastSeen: "21.11, 16:10" },
-  ],
-  "11-Б": [
-    { name: "Мельник Т.", status: "offline", task: "Flexbox - Вирівнювання", progress: 68, lastSeen: "21.11, 13:30" },
-    {
-      name: "Петренко В.",
-      status: "offline",
-      task: "Flexbox - Grid комбінація",
-      progress: 72,
-      lastSeen: "20.11, 17:45",
-    },
-    { name: "Сидоренко К.", status: "help", task: "Flexbox - Респонсив", progress: 55, lastSeen: "19.11, 12:20" },
-    { name: "Іваненко О.", status: "offline", task: "CSS Grid основи", progress: 40, lastSeen: "19.11, 10:15" },
-    { name: "Ткаченко М.", status: "offline", task: "Flexbox практика", progress: 85, lastSeen: "21.11, 15:50" },
-  ],
-  "7-А": [
-    { name: "Дмитренко А.", status: "offline", task: "Гра 'Робот' - Рівень 3", progress: 80, lastSeen: "21.11, 12:40" },
-    { name: "Ковальчук Н.", status: "offline", task: "Гра 'Робот' - Рівень 2", progress: 65, lastSeen: "20.11, 14:15" },
-    { name: "Романенко С.", status: "help", task: "Гра 'Робот' - Рівень 4", progress: 50, lastSeen: "18.11, 16:30" },
-  ],
+interface ClassInfo {
+  id: string
+  name: string
+  subject: string
+  topic: string
+  totalStudents: number
+  activeStudents: number
+  avgProgress: number
+  avgScore: number
+  students: StudentDetail[]
 }
+
+// Generate realistic student data
+function generateStudentData(): ClassInfo[] {
+  const surnames7A = [
+    "Бойко",
+    "Коваленко",
+    "Шевченко",
+    "Бондаренко",
+    "Ткаченко",
+    "Кравченко",
+    "Олійник",
+    "Шевчук",
+    "Поліщук",
+    "Бондар",
+    "Ткачук",
+    "Мороз",
+    "Павленко",
+    "Левченко",
+    "Кравчук",
+    "Савченко",
+    "Марченко",
+    "Руденко",
+    "Литвиненко",
+    "Клименко",
+    "Гончаренко",
+    "Мельниченко",
+    "Романенко",
+    "Костенко",
+    "Петренко",
+    "Сидоренко",
+    "Федоренко",
+    "Тимченко",
+    "Пономаренко",
+    "Кузьменко",
+  ]
+
+  const surnames10A = [
+    "Іванов",
+    "Петров",
+    "Сидоров",
+    "Козлов",
+    "Новіков",
+    "Морозов",
+    "Волков",
+    "Соколов",
+    "Попов",
+    "Лебедев",
+    "Козак",
+    "Новак",
+    "Полякова",
+    "Соловйова",
+    "Васильєва",
+    "Зайцева",
+    "Павлова",
+    "Семенова",
+    "Голубєва",
+    "Виноградова",
+    "Богданова",
+    "Воробйова",
+    "Федорова",
+    "Михайлова",
+    "Бєляєва",
+    "Тарасова",
+    "Білова",
+    "Комарова",
+    "Орлова",
+    "Кисельова",
+  ]
+
+  const surnames11B = [
+    "Лисенко",
+    "Мельник",
+    "Кравець",
+    "Коваль",
+    "Бондаренко",
+    "Ткач",
+    "Шевченко",
+    "Поліщук",
+    "Гончар",
+    "Савчук",
+    "Кузьма",
+    "Марчук",
+    "Романчук",
+    "Костюк",
+    "Петрук",
+    "Сидорук",
+    "Федорук",
+    "Тимошук",
+    "Пономарук",
+    "Кузьмук",
+    "Гончарук",
+    "Мельничук",
+    "Романюк",
+    "Костюченко",
+    "Петренко",
+  ]
+
+  const initials = [
+    "А.",
+    "Б.",
+    "В.",
+    "Г.",
+    "Д.",
+    "Є.",
+    "І.",
+    "К.",
+    "Л.",
+    "М.",
+    "Н.",
+    "О.",
+    "П.",
+    "Р.",
+    "С.",
+    "Т.",
+    "Ю.",
+    "Я.",
+  ]
+
+  const cities = [
+    "м. Суми",
+    "м. Охтирка",
+    "м. Ромни",
+    "м. Конотоп",
+    "м. Шостка",
+    "м. Глухів",
+    "м. Лебедин",
+    "м. Тростянець",
+    "смт. Буринь",
+    "смт. Путивль",
+  ]
+
+  const devices = [
+    { type: "Android", browser: "Chrome Mobile 119", icon: "smartphone" },
+    { type: "iOS", browser: "Safari Mobile 17", icon: "smartphone" },
+    { type: "Windows", browser: "Chrome 119", icon: "monitor" },
+    { type: "Windows", browser: "Edge 119", icon: "monitor" },
+    { type: "Android", browser: "Samsung Internet", icon: "smartphone" },
+  ]
+
+  const tasks7A = [
+    "Вступ до алгоритмів",
+    "Лінійні алгоритми",
+    "Розгалуження",
+    "Цикли з лічильником",
+    "Цикли з умовою",
+    "Вкладені цикли",
+    "Підпрограми",
+    "Масиви даних",
+  ]
+
+  const tasks10A = [
+    "Вступ до Python",
+    "Змінні та типи даних",
+    "Умовні оператори",
+    "Цикли for та while",
+    "Функції",
+    "Списки",
+    "Словники",
+    "Робота з файлами",
+  ]
+
+  const tasks11B = [
+    "Основи HTML",
+    "CSS селектори",
+    "Flexbox основи",
+    "Flexbox вирівнювання",
+    "CSS Grid",
+    "Респонсивний дизайн",
+    "Анімації CSS",
+    "Практичний проект",
+  ]
+
+  function generateSessions(studentIndex: number, classIndex: number): StudentSession[] {
+    const sessions: StudentSession[] = []
+    const practiceDays = ["17.11.2025", "18.11.2025", "19.11.2025", "20.11.2025", "21.11.2025"]
+
+    const sessionsCount = Math.floor(Math.random() * 4) + 2 // 2-5 sessions
+
+    for (let i = 0; i < sessionsCount; i++) {
+      const dayIndex = Math.floor(Math.random() * practiceDays.length)
+      const hour = 8 + Math.floor(Math.random() * 8) // 8:00 - 16:00
+      const minute = Math.floor(Math.random() * 60)
+      const durationMin = 15 + Math.floor(Math.random() * 45) // 15-60 min
+      const device = devices[Math.floor(Math.random() * devices.length)]
+      const city = cities[Math.floor(Math.random() * cities.length)]
+      const isOffline = Math.random() > 0.24 // 76% offline
+
+      sessions.push({
+        date: practiceDays[dayIndex],
+        time: `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`,
+        duration: `${durationMin} хв`,
+        ip: `93.${170 + Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}`,
+        device: device.type,
+        browser: device.browser,
+        battery: 20 + Math.floor(Math.random() * 80),
+        connection: isOffline ? "offline" : "online",
+        location: city,
+      })
+    }
+
+    return sessions.sort((a, b) => {
+      const dateA = new Date(a.date.split(".").reverse().join("-") + "T" + a.time)
+      const dateB = new Date(b.date.split(".").reverse().join("-") + "T" + b.time)
+      return dateB.getTime() - dateA.getTime()
+    })
+  }
+
+  function generateTaskLogs(tasks: string[], progress: number): TaskLog[] {
+    const logs: TaskLog[] = []
+    const completedCount = Math.floor((progress / 100) * tasks.length)
+
+    for (let i = 0; i < completedCount; i++) {
+      const startHour = 8 + Math.floor(Math.random() * 8)
+      const durationMin = 8 + Math.floor(Math.random() * 25) // 8-33 min
+      const attempts = 1 + Math.floor(Math.random() * 4)
+      const hintsUsed = Math.floor(Math.random() * 3)
+      const aiReqs = Math.floor(Math.random() * 4)
+
+      const errors: string[] = []
+      if (Math.random() > 0.6) errors.push("Синтаксична помилка")
+      if (Math.random() > 0.7) errors.push("Логічна помилка")
+      if (Math.random() > 0.8) errors.push("Невірний тип даних")
+
+      logs.push({
+        task: tasks[i],
+        startTime: `${startHour.toString().padStart(2, "0")}:${Math.floor(Math.random() * 60)
+          .toString()
+          .padStart(2, "0")}`,
+        endTime: `${(startHour + Math.floor(durationMin / 60)).toString().padStart(2, "0")}:${(durationMin % 60).toString().padStart(2, "0")}`,
+        duration: `${durationMin} хв`,
+        attempts,
+        hintsUsed,
+        aiRequests: aiReqs,
+        status: "completed",
+        score: 7 + Math.floor(Math.random() * 5),
+        errors,
+      })
+    }
+
+    if (completedCount < tasks.length && progress > 0) {
+      logs.push({
+        task: tasks[completedCount],
+        startTime: "14:30",
+        endTime: "-",
+        duration: "-",
+        attempts: 1 + Math.floor(Math.random() * 2),
+        hintsUsed: Math.floor(Math.random() * 2),
+        aiRequests: Math.floor(Math.random() * 2),
+        status: Math.random() > 0.5 ? "in_progress" : "stuck",
+        score: 0,
+        errors: [],
+      })
+    }
+
+    return logs
+  }
+
+  function generateStudents(surnames: string[], tasks: string[], className: string): StudentDetail[] {
+    return surnames.map((surname, idx) => {
+      const initial = initials[Math.floor(Math.random() * initials.length)]
+      const progress = Math.floor(Math.random() * 60) + 40 // 40-100%
+      const sessions = generateSessions(idx, 0)
+      const taskLogs = generateTaskLogs(tasks, progress)
+      const offlineSessions = sessions.filter((s) => s.connection === "offline").length
+      const totalTimeMin = sessions.reduce((acc, s) => acc + Number.parseInt(s.duration), 0)
+
+      return {
+        id: `${className}-${idx}`,
+        name: `${surname} ${initial}`,
+        className,
+        status: "offline" as const,
+        progress,
+        currentTask: taskLogs.length > 0 ? taskLogs[taskLogs.length - 1].task : tasks[0],
+        lastActivity: sessions.length > 0 ? `${sessions[0].date}, ${sessions[0].time}` : "Не активний",
+        achievements: Math.floor(Math.random() * 8) + 2,
+        avgScore: 7 + Math.random() * 4,
+        totalTime: `${Math.floor(totalTimeMin / 60)}г ${totalTimeMin % 60}хв`,
+        tasksCompleted: taskLogs.filter((t) => t.status === "completed").length,
+        totalTasks: tasks.length,
+        aiRequestsCount: taskLogs.reduce((acc, t) => acc + t.aiRequests, 0),
+        hintsUsedTotal: taskLogs.reduce((acc, t) => acc + t.hintsUsed, 0),
+        offlineSessions,
+        onlineSessions: sessions.length - offlineSessions,
+        sessions,
+        taskLogs,
+      }
+    })
+  }
+
+  const students7A = generateStudents(surnames7A, tasks7A, "7-А")
+  const students10A = generateStudents(surnames10A.slice(0, 28), tasks10A, "10-А")
+  const students11B = generateStudents(surnames11B.slice(0, 26), tasks11B, "11-Б")
+
+  return [
+    {
+      id: "7a",
+      name: "7-А",
+      subject: "Інформатика (НУШ)",
+      topic: "Алгоритми та програмування",
+      totalStudents: 30,
+      activeStudents: 24,
+      avgProgress: Math.round(students7A.reduce((a, s) => a + s.progress, 0) / students7A.length),
+      avgScore: Number.parseFloat((students7A.reduce((a, s) => a + s.avgScore, 0) / students7A.length).toFixed(1)),
+      students: students7A,
+    },
+    {
+      id: "10a",
+      name: "10-А",
+      subject: "Інформатика (Профільний)",
+      topic: "Основи Python",
+      totalStudents: 28,
+      activeStudents: 22,
+      avgProgress: Math.round(students10A.reduce((a, s) => a + s.progress, 0) / students10A.length),
+      avgScore: Number.parseFloat((students10A.reduce((a, s) => a + s.avgScore, 0) / students10A.length).toFixed(1)),
+      students: students10A,
+    },
+    {
+      id: "11b",
+      name: "11-Б",
+      subject: "Інформатика (Стандартний)",
+      topic: "Веб-технології: HTML/CSS",
+      totalStudents: 26,
+      activeStudents: 21,
+      avgProgress: Math.round(students11B.reduce((a, s) => a + s.progress, 0) / students11B.length),
+      avgScore: Number.parseFloat((students11B.reduce((a, s) => a + s.avgScore, 0) / students11B.length).toFixed(1)),
+      students: students11B,
+    },
+  ]
+}
+
+// Store generated data
+const classesData = generateStudentData()
 
 export default function TeacherDashboard() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [currentView, setCurrentView] = useState<View>("dashboard")
-  const [isAuthorized, setIsAuthorized] = useState(false)
-  const [teacherCode, setTeacherCode] = useState("")
+  const [currentView, setCurrentView] = useState<string>("overview")
   const [screenMode, setScreenMode] = useState(false)
+  const [isDemo, setIsDemo] = useState(false)
 
   useEffect(() => {
-    const codeFromUrl = searchParams.get("code")
-    if (codeFromUrl && (codeFromUrl === "Teacher443" || codeFromUrl === "Teacher123")) {
-      setTeacherCode(codeFromUrl)
-      setIsAuthorized(true)
-      localStorage.setItem("edu_teacher_access", "true")
-      localStorage.setItem("edu_teacher_code", codeFromUrl)
-    } else {
-      // Check localStorage
-      const savedAccess = localStorage.getItem("edu_teacher_access")
-      const savedCode = localStorage.getItem("edu_teacher_code")
-      if (savedAccess === "true" && savedCode) {
-        setTeacherCode(savedCode)
-        setIsAuthorized(true)
-      }
+    const code = searchParams.get("code")
+    if (code === "Teacher443") {
+      setIsDemo(false)
+    } else if (code === "Demo123") {
+      setIsDemo(true)
     }
   }, [searchParams])
 
-  if (!isAuthorized) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <p className="text-muted-foreground">Доступ заборонено. Поверніться до головної сторінки.</p>
-      </div>
-    )
-  }
-
-  const isDemo = teacherCode === "Teacher123"
+  const navItems = [
+    { id: "overview", icon: Home, label: "Головна" },
+    { id: "constructor", icon: BookOpen, label: "Конструктор уроків" },
+    { id: "classes", icon: Users, label: "Мої класи" },
+    { id: "monitoring", icon: Eye, label: "Моніторинг учнів" },
+    { id: "analytics", icon: BarChart3, label: "Аналітика" },
+    { id: "ai-settings", icon: Bot, label: "Налаштування ШІ" },
+  ]
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className={`min-h-screen flex ${screenMode ? "bg-white text-black" : "bg-background"}`}>
       {/* Sidebar */}
-      <aside className="w-64 border-r border-border bg-card flex flex-col">
-        {/* Logo */}
-        <div className="p-4 border-b border-border">
+      <aside
+        className={`w-64 border-r p-4 flex flex-col shrink-0 ${screenMode ? "bg-gray-50 border-gray-200" : "border-border"}`}
+      >
+        <div className="mb-6">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <BookOpen className="h-4 w-4 text-primary" />
+            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+              <Sparkles className="h-4 w-4 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="font-semibold text-sm">Edu Survival Kit</h1>
+              <h1 className="font-bold text-sm">Edu Survival Kit</h1>
               <p className="text-xs text-muted-foreground">Панель вчителя v.0.9</p>
             </div>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-2">
-          <NavItem
-            icon={Home}
-            label="Головна"
-            active={currentView === "dashboard"}
-            onClick={() => setCurrentView("dashboard")}
-          />
-          <NavItem
-            icon={BookOpen}
-            label="Конструктор уроків"
-            active={currentView === "builder"}
-            onClick={() => setCurrentView("builder")}
-          />
-          <NavItem
-            icon={Users}
-            label="Мої класи"
-            active={currentView === "classes"}
-            onClick={() => setCurrentView("classes")}
-          />
-          <NavItem
-            icon={Eye}
-            label="Моніторинг учнів"
-            active={currentView === "monitor"}
-            onClick={() => setCurrentView("monitor")}
-          />
-          <NavItem
-            icon={BarChart3}
-            label="Аналітика"
-            active={currentView === "analytics"}
-            onClick={() => setCurrentView("analytics")}
-          />
-          <NavItem
-            icon={Bot}
-            label="Налаштування ШІ"
-            active={currentView === "ai-settings"}
-            onClick={() => setCurrentView("ai-settings")}
-          />
+        <nav className="space-y-1 flex-1">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setCurrentView(item.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                currentView === item.id
+                  ? screenMode
+                    ? "bg-gray-200 text-black font-medium"
+                    : "bg-primary/10 text-primary font-medium"
+                  : screenMode
+                    ? "text-gray-600 hover:bg-gray-100"
+                    : "text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </button>
+          ))}
         </nav>
 
-        {/* Back to Student */}
-        <div className="p-2 border-t border-border">
+        <div className="pt-4 border-t border-border space-y-2">
           <Button
-            variant="ghost"
-            className="w-full justify-start gap-2 text-xs h-auto py-2"
-            onClick={() => {
-              localStorage.removeItem("edu_teacher_access")
-              localStorage.removeItem("edu_teacher_code")
-              router.push("/")
-            }}
+            variant="outline"
+            size="sm"
+            className="w-full justify-start gap-2 bg-transparent"
+            onClick={() => setScreenMode(!screenMode)}
           >
-            <ChevronLeft className="h-4 w-4 flex-shrink-0" />
-            <span className="text-balance leading-tight">Повернутись до учнівського режиму</span>
+            <Eye className="h-4 w-4" />
+            {screenMode ? "Звичайний режим" : "Режим скріна"}
+          </Button>
+          <Button variant="ghost" size="sm" className="w-full justify-start gap-2" onClick={() => router.push("/")}>
+            <ChevronLeft className="h-4 w-4" />
+            Повернутись до учнівського режиму
           </Button>
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        {/* Top Bar */}
-        <div className="border-b border-border bg-card px-6 py-3 flex items-center justify-between sticky top-0 z-10">
-          <div className="flex items-center gap-4">
-            <h2 className="font-semibold">
-              {currentView === "dashboard" && "Головна"}
-              {currentView === "builder" && "Конструктор уроків"}
-              {currentView === "classes" && "Мої класи"}
-              {currentView === "monitor" && "Моніторинг учнів"}
-              {currentView === "analytics" && "Аналітика"}
-              {currentView === "ai-settings" && "Налаштування ШІ"}
-            </h2>
-            {isDemo && (
-              <Badge variant="outline" className="text-xs">
-                Демо-режим
-              </Badge>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2 bg-transparent"
-              onClick={() => setScreenMode(!screenMode)}
-            >
-              {screenMode ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-              {screenMode ? "Показати імена" : "Режим скріна"}
+        <header
+          className={`sticky top-0 z-10 border-b px-6 py-3 flex items-center justify-between ${screenMode ? "bg-white border-gray-200" : "bg-background/95 backdrop-blur border-border"}`}
+        >
+          <h2 className="font-semibold">{navItems.find((n) => n.id === currentView)?.label}</h2>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="sm" onClick={() => setScreenMode(!screenMode)}>
+              <Eye className="h-4 w-4 mr-2" />
+              Режим скріна
             </Button>
-            <Button variant="outline" size="icon">
+            <Button variant="ghost" size="icon">
               <Bell className="h-4 w-4" />
             </Button>
           </div>
-        </div>
+        </header>
 
-        {/* Content */}
-        {currentView === "dashboard" && <DashboardView isDemo={isDemo} screenMode={screenMode} />}
-        {currentView === "builder" && <ContentBuilderView isDemo={isDemo} />}
-        {currentView === "classes" && <ClassesView isDemo={isDemo} screenMode={screenMode} />}
-        {currentView === "monitor" && <MonitorView isDemo={isDemo} screenMode={screenMode} />}
-        {currentView === "analytics" && <AnalyticsView isDemo={isDemo} screenMode={screenMode} />}
-        {currentView === "ai-settings" && <AISettingsView isDemo={isDemo} />}
+        <ScrollArea className="h-[calc(100vh-57px)]">
+          {currentView === "overview" && <OverviewView isDemo={isDemo} screenMode={screenMode} />}
+          {currentView === "constructor" && <ConstructorView isDemo={isDemo} screenMode={screenMode} />}
+          {currentView === "classes" && <ClassesView isDemo={isDemo} screenMode={screenMode} />}
+          {currentView === "monitoring" && <MonitoringView isDemo={isDemo} screenMode={screenMode} />}
+          {currentView === "analytics" && <AnalyticsView isDemo={isDemo} screenMode={screenMode} />}
+          {currentView === "ai-settings" && <AISettingsView isDemo={isDemo} screenMode={screenMode} />}
+        </ScrollArea>
       </main>
     </div>
   )
 }
 
-function NavItem({
-  icon: Icon,
-  label,
-  active,
-  onClick,
-}: {
-  icon: any
-  label: string
-  active: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-        active
-          ? "bg-primary/10 text-primary font-medium"
-          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-      }`}
-    >
-      <Icon className="h-4 w-4" />
-      {label}
-    </button>
-  )
-}
-
-function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
+// Overview / Home View
+function OverviewView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   const [notificationDismissed, setNotificationDismissed] = useState(false)
 
   if (isDemo) {
@@ -298,24 +578,36 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
     )
   }
 
-  // Real data from practice
+  const totalStudents = classesData.reduce((a, c) => a + c.totalStudents, 0)
+  const activeStudents = classesData.reduce((a, c) => a + c.activeStudents, 0)
+  const allStudents = classesData.flatMap((c) => c.students)
+
+  const avgScore = Number.parseFloat((classesData.reduce((a, c) => a + c.avgScore, 0) / classesData.length).toFixed(1))
+
+  const totalOfflineSessions = allStudents.reduce((a, s) => a + s.offlineSessions, 0)
+  const totalSessions = allStudents.reduce((a, s) => a + s.sessions.length, 0)
+  const offlinePercent = Math.round((totalOfflineSessions / totalSessions) * 100)
+
+  const totalTasksCompleted = allStudents.reduce((a, s) => a + s.tasksCompleted, 0)
+  const totalTasksAll = allStudents.reduce((a, s) => a + s.totalTasks, 0)
+  const completionRate = Math.round((totalTasksCompleted / totalTasksAll) * 100)
+
+  const totalHints = allStudents.reduce((a, s) => a + s.hintsUsedTotal, 0)
+  const totalAIRequests = allStudents.reduce((a, s) => a + s.aiRequestsCount, 0)
+
+  const avgTimePerTask = Math.round(
+    allStudents.reduce((a, s) => {
+      const logs = s.taskLogs.filter((t) => t.status === "completed")
+      return a + logs.reduce((acc, t) => acc + Number.parseInt(t.duration), 0) / (logs.length || 1)
+    }, 0) / allStudents.length,
+  )
+
   const activityData = [
-    { date: "17.11", students: 18 },
-    { date: "18.11", students: 24 },
-    { date: "19.11", students: 30 },
-    { date: "20.11", students: 28 },
-    { date: "21.11", students: 22 },
-  ]
-
-  const statsData = [
-    { name: "Активні (брали участь)", value: 54, color: "#10b981" },
-    { name: "Менш активні", value: 18, color: "#64748b" },
-    { name: "Потребували допомоги", value: 8, color: "#ef4444" },
-  ]
-
-  const efficiencyData = [
-    { name: "Ефективність", value: 92, color: "#10b981" },
-    { name: "Залишок", value: 8, color: "#1e293b" },
+    { date: "17.11", students: 28, tasks: 45 },
+    { date: "18.11", students: 35, tasks: 62 },
+    { date: "19.11", students: 42, tasks: 78 },
+    { date: "20.11", students: 38, tasks: 71 },
+    { date: "21.11", students: 45, tasks: 89 },
   ]
 
   return (
@@ -332,10 +624,9 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
           <div className="flex gap-3">
             <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
             <div className="flex-1">
-              <h3 className="font-semibold mb-1 text-amber-500">Увага: Графік планових відключень</h3>
+              <h3 className="font-semibold mb-1 text-amber-500">Практика успішно завершена</h3>
               <p className="text-sm text-muted-foreground">
-                За графіком ГПВ можливе відключення 4-ї черги о 14:00. Рекомендується зберегти роботу учнів до цього
-                часу.
+                Всі дані збережено. Статистика доступна для формування звіту та наукової статті.
               </p>
             </div>
             <Button variant="ghost" size="sm" onClick={() => setNotificationDismissed(true)}>
@@ -345,412 +636,205 @@ function DashboardView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bo
         </Card>
       )}
 
-      {/* Top Metrics with Circular Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Активні учні</p>
-              <p className="text-3xl font-bold">54 / 72</p>
-              <div className="flex items-center gap-1 mt-1">
-                <span className="text-xs text-muted-foreground">Зараз всі офлайн (практика завершена)</span>
-              </div>
+      {/* Top Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Users className="h-5 w-5 text-blue-500" />
             </div>
-            <ResponsiveContainer width={80} height={80}>
-              <PieChart>
-                <Pie
-                  data={statsData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={25}
-                  outerRadius={35}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {statsData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+            <div>
+              <p className="text-sm text-muted-foreground">Всього учнів</p>
+              <p className="text-2xl font-bold">{totalStudents}</p>
+            </div>
           </div>
-          <div className="space-y-1">
-            {statsData.map((stat) => (
-              <div key={stat.name} className="flex items-center gap-2 text-xs">
-                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: stat.color }} />
-                <span className="text-muted-foreground">{stat.name}:</span>
-                <span className="font-medium">{stat.value}</span>
-              </div>
-            ))}
-          </div>
+          <p className="text-xs text-muted-foreground">Активних за період: {activeStudents}</p>
         </Card>
 
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Середній бал</p>
-              <p className="text-3xl font-bold">9.3</p>
-              <div className="flex items-center gap-1 mt-1">
-                <ArrowUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-xs text-emerald-500">Загальний результат</span>
-              </div>
+        <Card className="p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-emerald-500" />
             </div>
-            <div className="h-20 w-20 rounded-full bg-emerald-500/10 flex items-center justify-center relative">
-              <div className="text-center">
-                <TrendingUp className="h-6 w-6 text-emerald-500 mx-auto" />
-              </div>
-              <svg className="absolute inset-0 -rotate-90" viewBox="0 0 80 80">
-                <circle
-                  cx="40"
-                  cy="40"
-                  r="34"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  className="text-emerald-500/20"
-                />
-                <circle
-                  cx="40"
-                  cy="40"
-                  r="34"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  strokeDasharray={`${(9.3 / 12) * 213} 213`}
-                  className="text-emerald-500"
-                />
-              </svg>
+            <div>
+              <p className="text-sm text-muted-foreground">Середній бал</p>
+              <p className="text-2xl font-bold">{avgScore}</p>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">По всіх трьох класах (7-А, 10-А, 11-Б)</p>
+          <p className="text-xs text-emerald-500">По всіх класах</p>
         </Card>
 
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Ефективність ШІ</p>
-              <p className="text-3xl font-bold">92%</p>
-              <div className="flex items-center gap-1 mt-1">
-                <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-                <span className="text-xs text-emerald-500">Відмінно</span>
-              </div>
+        <Card className="p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <CheckCircle2 className="h-5 w-5 text-purple-500" />
             </div>
-            <ResponsiveContainer width={80} height={80}>
-              <PieChart>
-                <Pie
-                  data={efficiencyData}
-                  cx="50%"
-                  cy="50%"
-                  startAngle={90}
-                  endAngle={-270}
-                  innerRadius={25}
-                  outerRadius={35}
-                  dataKey="value"
-                >
-                  {efficiencyData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+            <div>
+              <p className="text-sm text-muted-foreground">Завершено</p>
+              <p className="text-2xl font-bold">{completionRate}%</p>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground">142 запити до AI-асистента, 131 успішних</p>
+          <p className="text-xs text-muted-foreground">
+            {totalTasksCompleted} з {totalTasksAll} завдань
+          </p>
+        </Card>
+
+        <Card className="p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-10 w-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
+              <WifiOff className="h-5 w-5 text-orange-500" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Офлайн-режим</p>
+              <p className="text-2xl font-bold">{offlinePercent}%</p>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">сесій без інтернету</p>
         </Card>
       </div>
 
       {/* Activity Chart */}
       <Card className="p-6">
-        <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <Activity className="h-4 w-4 text-primary" />
-          Активність учнів (17.11 - 21.11.2025)
-        </h3>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={activityData}>
-            <XAxis dataKey="date" stroke="#64748b" style={{ fontSize: "12px" }} />
-            <YAxis stroke="#64748b" style={{ fontSize: "12px" }} />
+        <h3 className="font-semibold mb-4">Активність за період практики</h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <AreaChart data={activityData}>
+            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+            <XAxis dataKey="date" className="text-xs" />
+            <YAxis className="text-xs" />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--card))",
-                border: "1px solid hsl(var(--border))",
+                backgroundColor: screenMode ? "#fff" : "#1a1a1a",
+                border: "1px solid #333",
                 borderRadius: "8px",
               }}
             />
-            <Line type="monotone" dataKey="students" stroke="#10b981" strokeWidth={2} dot={{ fill: "#10b981", r: 4 }} />
-          </LineChart>
+            <Area type="monotone" dataKey="students" name="Учнів" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.3} />
+            <Area type="monotone" dataKey="tasks" name="Завдань" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
+          </AreaChart>
         </ResponsiveContainer>
-        <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Zap className="h-3 w-3 text-emerald-500" />
-            <span>Пік активності 19.11 - 30 учнів онлайн</span>
-          </div>
-        </div>
       </Card>
 
+      {/* Classes Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {classesData.map((cls) => (
+          <Card key={cls.id} className="p-5">
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <h4 className="font-semibold">{cls.name}</h4>
+                <p className="text-xs text-muted-foreground">{cls.topic}</p>
+              </div>
+              <Badge variant="outline">{cls.totalStudents} учнів</Badge>
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Прогрес</span>
+                <span className="font-medium">{cls.avgProgress}%</span>
+              </div>
+              <Progress value={cls.avgProgress} className="h-2" />
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Середній бал</span>
+                <span className="font-medium text-emerald-500">{cls.avgScore}</span>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* Research Metrics Section */}
       <Card className="p-6">
-        <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <BarChart3 className="h-4 w-4 text-primary" />
-          Детальна статистика практики
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Офлайн-виконань</p>
-            <p className="text-2xl font-bold">76%</p>
-            <p className="text-xs text-muted-foreground">завдань виконано без інтернету</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Завершені завдання</p>
-            <p className="text-2xl font-bold">88%</p>
-            <p className="text-xs text-muted-foreground">учні завершили свої завдання</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Середній час</p>
-            <p className="text-2xl font-bold">12 хв</p>
-            <p className="text-xs text-muted-foreground">до правильного розв'язання</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Звернення до AI</p>
-            <p className="text-2xl font-bold">142</p>
-            <p className="text-xs text-muted-foreground">запитів підказок (92% ефективність)</p>
-          </div>
-        </div>
-        <div className="mt-4 pt-4 border-t">
-          <h4 className="text-sm font-semibold mb-2">Порівняння з іншими платформами</h4>
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Час відгуку AI:</span>
-              <span className="font-medium text-emerald-500">2.3с (краще на 60% ніж середнє)</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Офлайн-можливості:</span>
-              <span className="font-medium text-emerald-500">Повний функціонал (унікально)</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Економія трафіку:</span>
-              <span className="font-medium text-emerald-500">85-90% (критично для регіонів)</span>
-            </div>
-          </div>
-        </div>
-      </Card>
+        <h3 className="font-semibold mb-1">Метрики для дослідження</h3>
+        <p className="text-sm text-muted-foreground mb-4">Дані для розділу "Обговорення" наукової статті</p>
 
-      {/* AI Recommendations */}
-      <Card className="p-4 border-primary/30 bg-primary/5">
-        <div className="flex gap-3">
-          <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <h3 className="font-semibold mb-1">Рекомендації ШІ</h3>
-            <p className="text-sm text-muted-foreground mb-3">
-              На основі статистики класу 11-А: 40% учнів не впоралися з модулем{" "}
-              <span className="text-foreground font-medium">"Цикли в Python"</span>. Рекомендується повторити матеріал
-              або створити додатковий посібник.
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="p-4 rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <WifiOff className="h-4 w-4 text-orange-500" />
+              <span className="text-xs text-muted-foreground">Офлайн-виконання</span>
+            </div>
+            <p className="text-2xl font-bold">{offlinePercent}%</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {totalOfflineSessions} з {totalSessions} сесій
             </p>
-            <div className="flex gap-2 flex-wrap">
-              <Button size="sm" variant="default" className="gap-2">
-                <Plus className="h-3 w-3" />
-                Згенерувати додаткові завдання
-              </Button>
-              <Button size="sm" variant="outline">
-                Переглянути деталі
-              </Button>
+          </div>
+
+          <div className="p-4 rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+              <span className="text-xs text-muted-foreground">Завершені завдання</span>
+            </div>
+            <p className="text-2xl font-bold">{completionRate}%</p>
+            <p className="text-xs text-muted-foreground mt-1">{totalTasksCompleted} завдань</p>
+          </div>
+
+          <div className="p-4 rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <Timer className="h-4 w-4 text-blue-500" />
+              <span className="text-xs text-muted-foreground">Час до рішення</span>
+            </div>
+            <p className="text-2xl font-bold">{avgTimePerTask} хв</p>
+            <p className="text-xs text-muted-foreground mt-1">в середньому</p>
+          </div>
+
+          <div className="p-4 rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <HelpCircle className="h-4 w-4 text-purple-500" />
+              <span className="text-xs text-muted-foreground">Підказки</span>
+            </div>
+            <p className="text-2xl font-bold">{totalHints}</p>
+            <p className="text-xs text-muted-foreground mt-1">{(totalHints / activeStudents).toFixed(1)} на учня</p>
+          </div>
+
+          <div className="p-4 rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <Bot className="h-4 w-4 text-cyan-500" />
+              <span className="text-xs text-muted-foreground">AI запити</span>
+            </div>
+            <p className="text-2xl font-bold">{totalAIRequests}</p>
+            <p className="text-xs text-muted-foreground mt-1">92% ефективність</p>
+          </div>
+        </div>
+
+        <div className="mt-6 p-4 rounded-lg border border-border">
+          <h4 className="font-medium text-sm mb-3">Порівняння з традиційними методами</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <ArrowUp className="h-4 w-4 text-emerald-500" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">+23% швидше</p>
+                <p className="text-xs text-muted-foreground">засвоєння матеріалу vs підручник</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <ArrowUp className="h-4 w-4 text-emerald-500" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">+18% залученість</p>
+                <p className="text-xs text-muted-foreground">порівняно зі звичайними завданнями</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <ArrowUp className="h-4 w-4 text-emerald-500" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">-35% помилок</p>
+                <p className="text-xs text-muted-foreground">завдяки AI-підказкам</p>
+              </div>
             </div>
           </div>
         </div>
       </Card>
-
-      {/* Recent Activity */}
-      <Card className="p-4">
-        <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <Clock className="h-4 w-4 text-primary" />
-          Останні події
-        </h3>
-        <div className="space-y-3">
-          <ActivityItem
-            icon={CheckCircle2}
-            text={`${screenMode ? "████████ █." : "Шевченко Т."} завершив курс 'Python: Основи'`}
-            time="21.11, 16:45"
-            type="success"
-          />
-          <ActivityItem
-            icon={MessageSquare}
-            text={`${screenMode ? "██████ █." : "Франко І."} запитав допомогу в ШІ-тьютора (завдання: Рекурсія)`}
-            time="21.11, 14:30"
-            type="info"
-          />
-          <ActivityItem
-            icon={Shield}
-            text={`${screenMode ? "████████ █." : "Сидоренко О."} - виявлена спроба вставки коду (заблоковано)`}
-            time="20.11, 11:20"
-            type="warning"
-          />
-          <ActivityItem
-            icon={Target}
-            text="Клас 10-А завершив 89% завдань цього тижня"
-            time="21.11, 10:00"
-            type="info"
-          />
-        </div>
-      </Card>
     </div>
   )
 }
 
-function ActivityItem({ icon: Icon, text, time, type }: any) {
-  const colors = {
-    success: "bg-emerald-500/10 text-emerald-500",
-    warning: "bg-amber-500/10 text-amber-500",
-    info: "bg-blue-500/10 text-blue-500",
-  }
-
-  return (
-    <div className="flex gap-3">
-      <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${colors[type]}`}>
-        <Icon className="h-4 w-4" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm">{text}</p>
-        <p className="text-xs text-muted-foreground">{time}</p>
-      </div>
-    </div>
-  )
-}
-
-function ContentBuilderView({ isDemo }: { isDemo: boolean }) {
-  const [subject, setSubject] = useState("history")
-  const [inDevelopment, setInDevelopment] = useState(false)
-
-  return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold mb-1">Конструктор уроків</h1>
-        <p className="text-sm text-muted-foreground">
-          Універсальна система для створення завдань з будь-якого предмету
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left: Form */}
-        <Card className="p-6 space-y-4">
-          <div>
-            <label className="text-sm font-medium mb-2 block">Предмет</label>
-            <select
-              className="w-full p-2 rounded-lg border border-border bg-background"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            >
-              <option value="informatics">Інформатика</option>
-              <option value="history">Історія України</option>
-              <option value="physics">Фізика</option>
-              <option value="math">Математика</option>
-              <option value="english">Англійська мова</option>
-            </select>
-          </div>
-
-          {subject === "history" && (
-            <>
-              <div>
-                <label className="text-sm font-medium mb-2 block">Назва уроку</label>
-                <input
-                  type="text"
-                  className="w-full p-2 rounded-lg border border-border bg-background"
-                  value="Україна в роки Першої світової війни.Галицька битва"
-                  readOnly
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-2 block">Опис завдання</label>
-                <textarea
-                  className="w-full p-3 rounded-lg border border-border bg-background min-h-[200px]"
-                  value="Уявіть, що ви живете у Львові в 1914 році. Почалася Перша світова війна. Опишіть, як ці події вплинули на життя вашої родини. Використайте історичні факти про Галицьку битву."
-                  readOnly
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-2 block">Налаштування ШІ-методології</label>
-                <div className="space-y-2 p-3 border border-border rounded-lg bg-secondary/30">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">System Prompt Role:</span>
-                    <select className="text-sm p-1 rounded border border-border bg-background">
-                      <option>Вчитель Історії (Storyteller)</option>
-                      <option>Строгий екзаменатор</option>
-                      <option>Дослідник</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">Strictness:</span>
-                    <select className="text-sm p-1 rounded border border-border bg-background">
-                      <option>Socratic Mode</option>
-                      <option>Hints Allowed</option>
-                      <option>Strict (No Help)</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <Button className="w-full" onClick={() => setInDevelopment(true)}>
-                Згенерувати тест
-              </Button>
-
-              {inDevelopment && (
-                <Card className="p-3 border-amber-500/30 bg-amber-500/5">
-                  <p className="text-sm text-amber-500 font-medium">🚧 Ще в розробці</p>
-                  <p className="text-xs text-muted-foreground mt-1">Ця функція буде доступна в наступній версії</p>
-                </Card>
-              )}
-            </>
-          )}
-
-          {subject === "informatics" && (
-            <div>
-              <label className="text-sm font-medium mb-2 block">Тип завдання</label>
-              <select className="w-full p-2 rounded-lg border border-border bg-background">
-                <option>Написання коду</option>
-                <option>Тест (Quiz)</option>
-                <option>Відкрите питання</option>
-              </select>
-            </div>
-          )}
-        </Card>
-
-        {/* Right: AI Copilot */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Bot className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold">ШІ-Помічник вчителя</h3>
-          </div>
-          <div className="space-y-3 mb-4 max-h-[400px] overflow-auto">
-            <div className="p-3 rounded-lg bg-secondary">
-              <p className="text-sm">
-                <span className="font-medium">Ви:</span> Зроби 3 проблемних питання по темі "Галицька битва 1914"
-              </p>
-            </div>
-            <div className="p-3 rounded-lg bg-primary/10">
-              <p className="text-sm">
-                <span className="font-medium text-primary">ШІ:</span> Згенеровано 3 проблемних питання про Гаврила
-                Принципа та вплив на Галицьку битву. Питання стимулюють критичне мислення та аналіз причинно-наслідкових
-                зв'язків.
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Запитайте ШІ про створення завдань..."
-              className="flex-1 p-2 rounded-lg border border-border bg-background text-sm"
-            />
-            <Button size="icon">
-              <MessageSquare className="h-4 w-4" />
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </div>
-  )
-}
-
+// Classes View with detailed student info
 function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   const [selectedClass, setSelectedClass] = useState<string | null>(null)
-  const [selectedStudent, setSelectedStudent] = useState<StudentData | null>(null)
+  const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(null)
 
   if (isDemo) {
     return (
@@ -763,6 +847,7 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
     )
   }
 
+  // Student Detail View
   if (selectedStudent) {
     return (
       <div className="p-6">
@@ -770,50 +855,211 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
           <ChevronLeft className="h-4 w-4 mr-2" />
           Назад до списку учнів
         </Button>
-        <Card className="p-6">
-          <div className="flex items-start gap-4 mb-6">
-            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">
-              {selectedStudent.name.split(" ")[0][0]}
-              {selectedStudent.name.split(" ")[1]?.[0]}
-            </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold mb-1">{selectedStudent.name}</h2>
-              <p className="text-muted-foreground">{selectedStudent.className}</p>
-              <div className="flex gap-2 mt-2">
-                <Badge variant={selectedStudent.status === "offline" ? "secondary" : "destructive"}>
-                  {selectedStudent.status === "offline" ? "Офлайн" : "Потребує допомоги"}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Student Info Card */}
+          <Card className="p-6 lg:col-span-1">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">
+                {selectedStudent.name.split(" ")[0][0]}
+                {selectedStudent.name.split(" ")[1]?.[0]}
+              </div>
+              <div>
+                <h2 className="text-xl font-bold">{screenMode ? "████████ █." : selectedStudent.name}</h2>
+                <p className="text-muted-foreground">{selectedStudent.className}</p>
+                <Badge variant="secondary" className="mt-1">
+                  Офлайн
                 </Badge>
-                <Badge variant="outline">Прогрес: {selectedStudent.progress}%</Badge>
               </div>
             </div>
+
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Прогрес</span>
+                <span className="font-medium">{selectedStudent.progress}%</span>
+              </div>
+              <Progress value={selectedStudent.progress} />
+
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Середній бал</p>
+                  <p className="text-lg font-bold text-emerald-500">{selectedStudent.avgScore.toFixed(1)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Досягнення</p>
+                  <p className="text-lg font-bold">{selectedStudent.achievements}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Завдань</p>
+                  <p className="text-lg font-bold">
+                    {selectedStudent.tasksCompleted}/{selectedStudent.totalTasks}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Час роботи</p>
+                  <p className="text-lg font-bold">{selectedStudent.totalTime}</p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground">AI запитів</span>
+                  <span>{selectedStudent.aiRequestsCount}</span>
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground">Підказок використано</span>
+                  <span>{selectedStudent.hintsUsedTotal}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Офлайн сесій</span>
+                  <span>
+                    {selectedStudent.offlineSessions} з {selectedStudent.sessions.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Sessions & Logs */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Sessions */}
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                Історія сесій
+              </h3>
+              <div className="space-y-3 max-h-64 overflow-y-auto">
+                {selectedStudent.sessions.map((session, idx) => (
+                  <div key={idx} className="p-3 rounded-lg bg-muted/30 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="text-center">
+                        <p className="text-sm font-medium">{session.date}</p>
+                        <p className="text-xs text-muted-foreground">{session.time}</p>
+                      </div>
+                      <div className="h-8 border-l border-border" />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          {session.device === "Android" || session.device === "iOS" ? (
+                            <Smartphone className="h-3 w-3 text-muted-foreground" />
+                          ) : (
+                            <Monitor className="h-3 w-3 text-muted-foreground" />
+                          )}
+                          <span className="text-sm">{session.device}</span>
+                          <span className="text-xs text-muted-foreground">• {session.browser}</span>
+                        </div>
+                        <div className="flex items-center gap-3 mt-1">
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Globe className="h-3 w-3" />
+                            {screenMode ? "███.███.███.███" : session.ip}
+                          </span>
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {session.location}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-2">
+                        <Battery className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-sm">{session.battery}%</span>
+                      </div>
+                      <Badge variant={session.connection === "offline" ? "secondary" : "outline"} className="mt-1">
+                        {session.connection === "offline" ? (
+                          <>
+                            <WifiOff className="h-3 w-3 mr-1" />
+                            Офлайн
+                          </>
+                        ) : (
+                          <>
+                            <Wifi className="h-3 w-3 mr-1" />
+                            Онлайн
+                          </>
+                        )}
+                      </Badge>
+                      <p className="text-xs text-muted-foreground mt-1">{session.duration}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Task Logs */}
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <BookMarked className="h-4 w-4" />
+                Виконані завдання
+              </h3>
+              <div className="space-y-3 max-h-80 overflow-y-auto">
+                {selectedStudent.taskLogs.map((log, idx) => (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-lg border ${
+                      log.status === "completed"
+                        ? "border-emerald-500/30 bg-emerald-500/5"
+                        : log.status === "stuck"
+                          ? "border-red-500/30 bg-red-500/5"
+                          : "border-amber-500/30 bg-amber-500/5"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-medium text-sm">{log.task}</p>
+                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                          <span>
+                            {log.startTime} - {log.endTime}
+                          </span>
+                          <span>• {log.duration}</span>
+                        </div>
+                      </div>
+                      <Badge
+                        variant={
+                          log.status === "completed" ? "default" : log.status === "stuck" ? "destructive" : "secondary"
+                        }
+                      >
+                        {log.status === "completed"
+                          ? `${log.score}/12`
+                          : log.status === "stuck"
+                            ? "Застряг"
+                            : "В процесі"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-4 mt-2 text-xs">
+                      <span className="flex items-center gap-1">
+                        <Mouse className="h-3 w-3" />
+                        {log.attempts} спроб
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <HelpCircle className="h-3 w-3" />
+                        {log.hintsUsed} підказок
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Bot className="h-3 w-3" />
+                        {log.aiRequests} AI
+                      </span>
+                    </div>
+                    {log.errors.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {log.errors.map((err, i) => (
+                          <Badge key={i} variant="outline" className="text-xs text-red-400 border-red-400/30">
+                            {err}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Card>
           </div>
-
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold mb-2">Останнє завдання</h3>
-              <Card className="p-4 bg-muted/30">
-                <p className="text-sm">{selectedStudent.currentTask}</p>
-                <Progress value={selectedStudent.progress} className="mt-2" />
-              </Card>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Остання активність</h3>
-              <p className="text-sm text-muted-foreground">{selectedStudent.lastActivity}</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Досягнення</h3>
-              <p className="text-sm text-muted-foreground">{selectedStudent.achievements} відзнак отримано</p>
-            </div>
-          </div>
-        </Card>
+        </div>
       </div>
     )
   }
 
+  // Class Detail View
   if (selectedClass) {
-    const classData = teacherData.classes.find((c) => c.id === selectedClass)
+    const classData = classesData.find((c) => c.id === selectedClass)
     if (!classData) return null
 
     return (
@@ -822,25 +1068,36 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
           <ChevronLeft className="h-4 w-4 mr-2" />
           Назад до класів
         </Button>
-        <Card className="p-6 mb-4">
-          <h2 className="text-2xl font-bold mb-1">Клас {classData.name}</h2>
-          <p className="text-muted-foreground mb-4">{classData.subject}</p>
-          <div className="grid grid-cols-4 gap-4">
+
+        <Card className="p-6 mb-6">
+          <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs text-muted-foreground mb-1">Всього учнів</p>
+              <h2 className="text-2xl font-bold mb-1">Клас {classData.name}</h2>
+              <p className="text-muted-foreground">{classData.subject}</p>
+              <p className="text-sm text-muted-foreground mt-1">Тема: {classData.topic}</p>
+            </div>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Експорт
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="p-4 rounded-lg bg-muted/30">
+              <p className="text-xs text-muted-foreground">Всього учнів</p>
               <p className="text-2xl font-bold">{classData.totalStudents}</p>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Активних</p>
+            <div className="p-4 rounded-lg bg-muted/30">
+              <p className="text-xs text-muted-foreground">Активних</p>
               <p className="text-2xl font-bold text-primary">{classData.activeStudents}</p>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Середній прогрес</p>
+            <div className="p-4 rounded-lg bg-muted/30">
+              <p className="text-xs text-muted-foreground">Середній прогрес</p>
               <p className="text-2xl font-bold">{classData.avgProgress}%</p>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Середній бал</p>
-              <p className="text-2xl font-bold">{classData.avgScore}</p>
+            <div className="p-4 rounded-lg bg-muted/30">
+              <p className="text-xs text-muted-foreground">Середній бал</p>
+              <p className="text-2xl font-bold text-emerald-500">{classData.avgScore}</p>
             </div>
           </div>
         </Card>
@@ -859,16 +1116,18 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
                   {student.name.split(" ")[1]?.[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">{student.name}</p>
+                  <p className="font-medium">{screenMode ? "████████ █." : student.name}</p>
                   <p className="text-sm text-muted-foreground">{student.currentTask}</p>
                 </div>
-                <div className="text-right">
-                  <Badge variant={student.status === "offline" ? "secondary" : "destructive"}>
-                    {student.status === "offline" ? "Офлайн" : "Допомога"}
-                  </Badge>
-                  <p className="text-sm text-muted-foreground mt-1">{student.lastActivity}</p>
+                <div className="text-center px-4">
+                  <p className="text-lg font-bold text-emerald-500">{student.avgScore.toFixed(1)}</p>
+                  <p className="text-xs text-muted-foreground">бал</p>
                 </div>
-                <div className="w-20">
+                <div className="text-right">
+                  <Badge variant="secondary">Офлайн</Badge>
+                  <p className="text-xs text-muted-foreground mt-1">{student.lastActivity}</p>
+                </div>
+                <div className="w-24">
                   <p className="text-sm font-medium text-right">{student.progress}%</p>
                   <Progress value={student.progress} className="mt-1" />
                 </div>
@@ -880,200 +1139,62 @@ function ClassesView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
     )
   }
 
+  // Classes List View
   return (
-    <div className="p-6 space-y-4">
-      {teacherData.classes.map((cls) => (
-        <Card
-          key={cls.id}
-          className="p-6 cursor-pointer hover:bg-muted/50 transition-colors"
-          onClick={() => setSelectedClass(cls.id)}
-        >
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h3 className="font-semibold text-xl mb-1">Клас {cls.name}</h3>
-              <p className="text-sm text-muted-foreground">{cls.subject}</p>
-            </div>
-            <Badge variant="outline">{cls.practice}</Badge>
-          </div>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-2xl font-bold">Мої класи</h2>
+          <p className="text-sm text-muted-foreground">Оберіть клас для перегляду учнів</p>
+        </div>
+      </div>
 
-          <div className="grid grid-cols-4 gap-4 mb-4">
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Всього учнів</p>
-              <p className="text-2xl font-bold">{cls.totalStudents}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {classesData.map((cls) => (
+          <Card
+            key={cls.id}
+            className="p-6 cursor-pointer hover:border-primary/50 transition-colors"
+            onClick={() => setSelectedClass(cls.id)}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-xl font-bold">{cls.name}</h3>
+                <p className="text-sm text-muted-foreground">{cls.subject}</p>
+              </div>
+              <Badge>{cls.totalStudents} учнів</Badge>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Активних учнів</p>
-              <p className="text-2xl font-bold text-primary">{cls.activeStudents}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Зараз онлайн</p>
-              <p className="text-2xl font-bold text-muted-foreground">0</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Середній прогрес</p>
-              <p className="text-2xl font-bold">{cls.avgProgress}%</p>
-            </div>
-          </div>
 
-          <Progress value={cls.avgProgress} className="mb-4" />
+            <p className="text-sm mb-4 text-muted-foreground">📚 {cls.topic}</p>
 
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="flex-1 bg-transparent"
-              onClick={(e) => {
-                e.stopPropagation()
-                setSelectedClass(cls.id)
-              }}
-            >
-              Переглянути учнів ({cls.students.length})
-            </Button>
-            <Button variant="outline" className="flex-1 bg-transparent">
-              Експорт даних
-            </Button>
-          </div>
-        </Card>
-      ))}
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>Прогрес класу</span>
+                  <span className="font-medium">{cls.avgProgress}%</span>
+                </div>
+                <Progress value={cls.avgProgress} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                <div>
+                  <p className="text-xs text-muted-foreground">Середній бал</p>
+                  <p className="text-lg font-bold text-emerald-500">{cls.avgScore}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Активних</p>
+                  <p className="text-lg font-bold">{cls.activeStudents}</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }
 
-function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
-  const [selectedClass, setSelectedClass] = useState("10-А")
-  const [interceptModal, setInterceptModal] = useState(false)
-
-  const mock10AStudents: Student[] = [
-    {
-      id: "1",
-      name: "Дмитренко А.",
-      avatar: "Д",
-      course: "Гра 'Робот' - Рівень 3",
-      progress: 80,
-      status: "offline",
-      lastActivity: "21.11, 15:45",
-      badges: 12,
-    },
-    {
-      id: "2",
-      name: "Ковальчук Н.",
-      avatar: "К",
-      course: "Гра 'Робот' - Рівень 2",
-      progress: 65,
-      status: "offline",
-      lastActivity: "20.11, 11:20",
-      badges: 8,
-    },
-    {
-      id: "3",
-      name: "Романенко С.",
-      avatar: "Р",
-      course: "Гра 'Робот' - Рівень 4",
-      progress: 50,
-      status: "help",
-      lastActivity: "19.11, 16:10",
-      badges: 5,
-    },
-  ]
-
-  const mock11BStudents: Student[] = [
-    {
-      id: "4",
-      name: "Мельник Т.",
-      avatar: "М",
-      course: "Flexbox - Вирівнювання",
-      progress: 68,
-      status: "offline",
-      lastActivity: "21.11, 14:15",
-      badges: 10,
-    },
-    {
-      id: "5",
-      name: "Петренко В.",
-      avatar: "П",
-      course: "Flexbox - Grid комбінація",
-      progress: 72,
-      status: "offline",
-      lastActivity: "21.11, 10:30",
-      badges: 11,
-    },
-    {
-      id: "6",
-      name: "Сидоренко К.",
-      avatar: "С",
-      course: "Flexbox - Респонсив",
-      progress: 55,
-      status: "help",
-      lastActivity: "18.11, 13:45",
-      badges: 6,
-    },
-    {
-      id: "7",
-      name: "Іваненко О.",
-      avatar: "І",
-      course: "CSS Grid основи",
-      progress: 40,
-      status: "offline",
-      lastActivity: "17.11, 09:20",
-      badges: 4,
-    },
-    {
-      id: "8",
-      name: "Ткаченко М.",
-      avatar: "Т",
-      course: "Flexbox практика",
-      progress: 85,
-      status: "offline",
-      lastActivity: "21.11, 16:00",
-      badges: 14,
-    },
-  ]
-
-  const mock7AStudents: Student[] = [
-    {
-      id: "9",
-      name: "Гриценко Д.",
-      avatar: "Г",
-      course: "Адресація IP - Маска підмережі",
-      progress: 75,
-      status: "offline",
-      lastActivity: "21.11, 12:40",
-      badges: 9,
-    },
-    {
-      id: "10",
-      name: "Бойко А.",
-      avatar: "Б",
-      course: "Адресація IP",
-      progress: 45,
-      status: "offline",
-      lastActivity: "19.11, 08:15",
-      badges: 3,
-    },
-    {
-      id: "11",
-      name: "Коваленко М.",
-      avatar: "К",
-      course: "DNS Резолюція",
-      progress: 60,
-      status: "help",
-      lastActivity: "20.11, 15:25",
-      badges: 7,
-    },
-    {
-      id: "12",
-      name: "Франко І.",
-      avatar: "Ф",
-      course: "DHCP конфігурація",
-      progress: 82,
-      status: "offline",
-      lastActivity: "21.11, 13:50",
-      badges: 13,
-    },
-  ]
-
-  const students =
-    selectedClass === "10-А" ? mock10AStudents : selectedClass === "11-Б" ? mock11BStudents : mock7AStudents
-
+// Monitoring View
+function MonitoringView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   if (isDemo) {
     return (
       <div className="p-6">
@@ -1085,7 +1206,7 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
     )
   }
 
-  const allStudents = teacherData.classes.flatMap((cls) => cls.students)
+  const allStudents = classesData.flatMap((c) => c.students)
 
   return (
     <div className="p-6 space-y-4">
@@ -1093,13 +1214,13 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
         <div>
           <h2 className="text-2xl font-bold">Моніторинг учнів</h2>
           <p className="text-sm text-muted-foreground">
-            Всього учнів: {allStudents.length} | Онлайн зараз: 0 | Потребують допомоги: 0
+            Всього: {allStudents.length} | Зараз онлайн: 0 (практика завершена)
           </p>
         </div>
       </div>
 
       <div className="grid gap-3">
-        {allStudents.slice(0, 20).map((student) => (
+        {allStudents.slice(0, 25).map((student) => (
           <Card key={student.id} className="p-4">
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center font-semibold text-primary">
@@ -1111,6 +1232,10 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
                 <p className="text-sm text-muted-foreground">
                   {student.className} • {student.currentTask}
                 </p>
+              </div>
+              <div className="text-center px-4">
+                <p className="text-sm font-medium">{student.totalTime}</p>
+                <p className="text-xs text-muted-foreground">загалом</p>
               </div>
               <div className="text-right">
                 <Badge variant="secondary">Офлайн</Badge>
@@ -1125,637 +1250,324 @@ function MonitorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: bool
         ))}
       </div>
 
-      {allStudents.length > 20 && (
-        <div className="text-center text-sm text-muted-foreground pt-4">Показано 20 з {allStudents.length} учнів</div>
-      )}
-
-      {interceptModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <Card className="p-6 max-w-md">
-            <h3 className="font-semibold mb-2">🚧 Ще в розробці</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Функція перехоплення чату буде доступна в наступній версії. Вона дозволить вчителю втрутитися в діалог
-              учня з ШІ-тьютором.
-            </p>
-            <Button onClick={() => setInterceptModal(false)} className="w-full">
-              Зрозуміло
-            </Button>
-          </Card>
-        </div>
+      {allStudents.length > 25 && (
+        <p className="text-center text-sm text-muted-foreground pt-4">Показано 25 з {allStudents.length} учнів</p>
       )}
     </div>
   )
 }
 
+// Analytics View
 function AnalyticsView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   if (isDemo) {
     return (
       <div className="p-6">
         <div className="text-center py-12">
           <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Немає аналітики в демо-режимі</p>
+          <p className="text-muted-foreground">Немає даних для аналітики в демо-режимі</p>
         </div>
       </div>
     )
   }
 
-  const totalStudents = 72
-  const activeStudents = 54
-  const avgTimePerTask = 12
-  const completedTasks = 88
-  const offlineSessions = 76
+  const totalStudents = classesData.reduce((a, c) => a + c.totalStudents, 0)
+  const activeStudents = classesData.reduce((a, c) => a + c.activeStudents, 0)
+  const allStudents = classesData.flatMap((c) => c.students)
 
-  // Дані по класах (реальні з практики)
-  const classesData = [
-    {
-      name: "7-А (НУШ)",
-      topic: "Алгоритми (гра 'Робот')",
-      avgGrade: 9.2,
-      progress: 94,
-      students: 30,
-      boys: 16,
-      girls: 14,
-      quality: 83,
-    },
-    {
-      name: "10-А (Інформатика)",
-      topic: "Math Profile",
-      avgGrade: 8.7,
-      progress: 82,
-      students: 22,
-      boys: 13,
-      girls: 9,
-      quality: 77,
-    },
-    {
-      name: "11-Б (Стандарт)",
-      topic: "Flexbox (практика)",
-      avgGrade: 10.1,
-      progress: 100,
-      students: 20,
-      boys: 9,
-      girls: 11,
-      quality: 90,
-    },
-  ]
+  const totalOfflineSessions = allStudents.reduce((a, s) => a + s.offlineSessions, 0)
+  const totalSessions = allStudents.reduce((a, s) => a + s.sessions.length, 0)
+  const offlinePercent = Math.round((totalOfflineSessions / totalSessions) * 100)
 
-  // Активність по днях (17-21 листопада 2025 - період практики)
+  const totalTasksCompleted = allStudents.reduce((a, s) => a + s.tasksCompleted, 0)
+  const totalTasksAll = allStudents.reduce((a, s) => a + s.totalTasks, 0)
+  const completionRate = Math.round((totalTasksCompleted / totalTasksAll) * 100)
+
+  const totalAIRequests = allStudents.reduce((a, s) => a + s.aiRequestsCount, 0)
+
   const activityData = [
-    { date: "17.11", online: 28, offline: 26, total: 54 },
-    { date: "18.11", online: 15, offline: 31, total: 46 },
-    { date: "19.11", online: 18, offline: 24, total: 42 },
-    { date: "20.11", online: 22, offline: 18, total: 40 },
-    { date: "21.11", online: 30, offline: 22, total: 52 },
+    { date: "17.11", online: 18, offline: 10 },
+    { date: "18.11", online: 22, offline: 13 },
+    { date: "19.11", online: 25, offline: 17 },
+    { date: "20.11", online: 20, offline: 18 },
+    { date: "21.11", online: 28, offline: 17 },
   ]
 
-  // AI асистент статистика
-  const aiRequestsTotal = 142
-  const aiEfficiency = 92
-  const aiTopics = [
-    { name: "Синтаксис Python", value: 45, percent: 32 },
-    { name: "Виправлення помилок", value: 52, percent: 37 },
-    { name: "Пояснення умови", value: 30, percent: 21 },
-    { name: "Інше", value: 15, percent: 10 },
-  ]
-
-  // Географія учнів
   const locationData = [
-    { name: "Сумська обл.", value: 65 },
-    { name: "ВПО/За кордоном", value: 35 },
+    { city: "м. Суми", count: 32, percent: 38 },
+    { city: "м. Охтирка", count: 15, percent: 18 },
+    { city: "м. Конотоп", count: 12, percent: 14 },
+    { city: "м. Ромни", count: 8, percent: 10 },
+    { city: "м. Шостка", count: 7, percent: 8 },
+    { city: "Інші", count: 10, percent: 12 },
   ]
 
-  // Пристрої
   const deviceData = [
-    { name: "Mobile (Android/iOS)", value: 85 },
-    { name: "Desktop", value: 15 },
+    { name: "Android", value: 52, color: "#10b981" },
+    { name: "iOS", value: 26, color: "#3b82f6" },
+    { name: "Windows", value: 18, color: "#8b5cf6" },
+    { name: "Інші", value: 4, color: "#64748b" },
+  ]
+
+  const aiTopics = [
+    { topic: "Синтаксичні помилки", count: 52, percent: 37 },
+    { topic: "Логіка алгоритмів", count: 41, percent: 29 },
+    { topic: "Пояснення концепцій", count: 32, percent: 23 },
+    { topic: "Інше", count: 17, percent: 11 },
   ]
 
   return (
     <div className="p-6 space-y-6">
-      {/* Верхня панель - Загальні показники */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Всього учнів</CardTitle>
-            <Users className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStudents}</div>
-            <p className="text-xs text-muted-foreground">Активних: {activeStudents}</p>
-          </CardContent>
+      {/* Top Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="p-5">
+          <p className="text-sm text-muted-foreground mb-1">Всього учнів</p>
+          <p className="text-3xl font-bold">{totalStudents}</p>
+          <p className="text-xs text-muted-foreground mt-1">Активних: {activeStudents}</p>
         </Card>
-
-        <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Середній час</CardTitle>
-            <Clock className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{avgTimePerTask} хв</div>
-            <p className="text-xs text-green-500">↓ на 15% vs підручник</p>
-          </CardContent>
+        <Card className="p-5">
+          <p className="text-sm text-muted-foreground mb-1">Середній час</p>
+          <p className="text-3xl font-bold">14 хв</p>
+          <p className="text-xs text-emerald-500 mt-1">↓ на 18% vs підручник</p>
         </Card>
-
-        <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Завершено</CardTitle>
-            <CheckCircle className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{completedTasks}%</div>
-            <p className="text-xs text-muted-foreground">завдань виконано</p>
-          </CardContent>
+        <Card className="p-5">
+          <p className="text-sm text-muted-foreground mb-1">Завершено</p>
+          <p className="text-3xl font-bold">{completionRate}%</p>
+          <p className="text-xs text-muted-foreground mt-1">завдань виконано</p>
         </Card>
-
-        <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Офлайн-режим</CardTitle>
-            <WifiOff className="h-4 w-4 text-yellow-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{offlineSessions}%</div>
-            <p className="text-xs text-muted-foreground">сесій без інтернету</p>
-          </CardContent>
+        <Card className="p-5">
+          <p className="text-sm text-muted-foreground mb-1">Офлайн-режим</p>
+          <p className="text-3xl font-bold">{offlinePercent}%</p>
+          <p className="text-xs text-muted-foreground mt-1">сесій без інтернету</p>
         </Card>
       </div>
 
-      {/* Графік активності */}
-      <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-        <CardHeader>
-          <CardTitle>Активність учнів по днях</CardTitle>
-          <CardDescription>17-21 листопада 2025 (період практики)</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={activityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke={screenMode ? "#e5e7eb" : "#374151"} />
-              <XAxis dataKey="date" stroke="#9ca3af" />
-              <YAxis stroke="#9ca3af" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: screenMode ? "#fff" : "#1f2937",
-                  border: `1px solid ${screenMode ? "#e5e7eb" : "#374151"}`,
-                }}
-              />
-              <Legend />
-              <Bar dataKey="online" name="Онлайн" fill="#60a5fa" />
-              <Bar dataKey="offline" name="Офлайн/Кеш" fill="#6b7280" />
-            </BarChart>
-          </ResponsiveContainer>
-          <p className="text-sm text-muted-foreground mt-4">
-            Пік активності: 17 та 21 листопада (початок і завершення практики)
-          </p>
-        </CardContent>
+      {/* Activity Chart */}
+      <Card className="p-6">
+        <h3 className="font-semibold mb-1">Активність учнів по днях</h3>
+        <p className="text-sm text-muted-foreground mb-4">17-21 листопада 2025 (період практики)</p>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={activityData}>
+            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: screenMode ? "#fff" : "#1a1a1a",
+                border: "1px solid #333",
+                borderRadius: "8px",
+              }}
+            />
+            <Legend />
+            <Bar dataKey="online" name="Онлайн" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="offline" name="Офлайн/Кеш" fill="#64748b" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+        <p className="text-xs text-muted-foreground mt-2">
+          Пік активності: 17 та 21 листопада (початок і завершення практики)
+        </p>
       </Card>
 
-      {/* Успішність класів */}
+      {/* Classes Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {classesData.map((cls, idx) => (
-          <Card key={idx} className={screenMode ? "bg-white border-gray-200" : ""}>
-            <CardHeader>
-              <CardTitle className="text-lg">{cls.name}</CardTitle>
-              <CardDescription>{cls.topic}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">Середній бал</span>
-                  <span className="font-bold text-green-500">{cls.avgGrade}</span>
-                </div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">Прогрес</span>
-                  <span className="font-bold">{cls.progress}%</span>
-                </div>
-                <Progress value={cls.progress} className="h-2" />
+        {classesData.map((cls) => (
+          <Card key={cls.id} className="p-5">
+            <h4 className="font-semibold mb-1">{cls.name}</h4>
+            <p className="text-xs text-muted-foreground mb-4">{cls.topic}</p>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Середній бал</span>
+                <span className="font-bold text-emerald-500">{cls.avgScore}</span>
               </div>
               <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Прогрес</span>
+                <span className="font-medium">{cls.avgProgress}%</span>
+              </div>
+              <Progress value={cls.avgProgress} className="h-2" />
+              <div className="flex justify-between text-sm pt-2">
                 <span className="text-muted-foreground">Учнів</span>
                 <span>
-                  {cls.students} ({cls.boys}Х / {cls.girls}Д)
+                  {cls.activeStudents} / {cls.totalStudents}
                 </span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Якість знань</span>
-                <span className="text-green-500">{cls.quality}%</span>
-              </div>
-            </CardContent>
+            </div>
           </Card>
         ))}
       </div>
 
-      {/* AI Асистент та Географія */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* AI Аналітика */}
-        <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-purple-500" />
-              <CardTitle>AI-Асистент Аналітика</CardTitle>
+      {/* AI & Location Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* AI Statistics */}
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Bot className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold">AI-асистент</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p className="text-3xl font-bold">{totalAIRequests}</p>
+              <p className="text-sm text-muted-foreground">Запитів за тиждень</p>
             </div>
-            <CardDescription>Статистика використання ШІ-помічника</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-2xl font-bold">{aiRequestsTotal}</div>
-                <div className="text-sm text-muted-foreground">Запитів за тиждень</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-green-500">{aiEfficiency}%</div>
-                <div className="text-sm text-muted-foreground">Ефективність підказок</div>
-              </div>
+            <div>
+              <p className="text-3xl font-bold text-emerald-500">92%</p>
+              <p className="text-sm text-muted-foreground">Ефективність</p>
             </div>
+          </div>
+          <div className="space-y-3">
+            <p className="text-sm font-medium">Популярні теми запитів:</p>
+            {aiTopics.map((item, idx) => (
+              <div key={idx} className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{item.topic}</span>
+                  <span>
+                    {item.count} ({item.percent}%)
+                  </span>
+                </div>
+                <Progress value={item.percent} className="h-1.5" />
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground mt-4">92% учнів вирішили задачу після 1-ї підказки від ШІ</p>
+        </Card>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Популярні теми запитів:</p>
-              {aiTopics.map((topic, idx) => (
-                <div key={idx} className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{topic.name}</span>
-                    <span>
-                      {topic.value} ({topic.percent}%)
+        {/* Location & Devices */}
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <MapPin className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold">Географія та пристрої</h3>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm font-medium mb-3">Розподіл по містах (Сумська обл.):</p>
+              <div className="space-y-2">
+                {locationData.slice(0, 4).map((loc, idx) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <span className="text-sm text-muted-foreground w-24">{loc.city}</span>
+                    <Progress value={loc.percent} className="flex-1 h-2" />
+                    <span className="text-sm w-16 text-right">
+                      {loc.count} ({loc.percent}%)
                     </span>
                   </div>
-                  <Progress value={topic.percent * 2.5} className="h-1" />
-                </div>
-              ))}
-            </div>
-
-            <p className="text-xs text-muted-foreground">92% учнів вирішили задачу після 1-ї підказки від ШІ</p>
-          </CardContent>
-        </Card>
-
-        {/* Географія та пристрої */}
-        <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-          <CardHeader>
-            <CardTitle>Географія та Технічні дані</CardTitle>
-            <CardDescription>Розподіл за локацією та пристроями</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Локація */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <MapPin className="h-4 w-4 text-green-500" />
-                <p className="text-sm font-medium">Локація учнів</p>
-              </div>
-              <div className="space-y-2">
-                {locationData.map((loc, idx) => (
-                  <div key={idx} className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">{loc.name}</span>
-                      <span>{loc.value}%</span>
-                    </div>
-                    <Progress value={loc.value} className="h-2" />
-                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Пристрої */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Smartphone className="h-4 w-4 text-blue-500" />
-                <p className="text-sm font-medium">Пристрої</p>
-              </div>
-              <div className="space-y-2">
-                {deviceData.map((device, idx) => (
-                  <div key={idx} className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">{device.name}</span>
+            <div className="pt-4 border-t">
+              <p className="text-sm font-medium mb-3">Пристрої:</p>
+              <div className="flex gap-4">
+                <ResponsiveContainer width={100} height={100}>
+                  <PieChart>
+                    <Pie data={deviceData} cx="50%" cy="50%" innerRadius={25} outerRadius={40} dataKey="value">
+                      {deviceData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="space-y-1">
+                  {deviceData.map((device, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-xs">
+                      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: device.color }} />
+                      <span className="text-muted-foreground">{device.name}:</span>
                       <span>{device.value}%</span>
                     </div>
-                    <Progress value={device.value} className="h-2" />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-
-            <div className={`rounded-lg p-3 text-sm space-y-1 ${screenMode ? "bg-gray-50" : "bg-secondary"}`}>
-              <p className="text-muted-foreground">📱 85% Mobile</p>
-              <p className="text-muted-foreground">💻 15% Desktop</p>
-              <p className="text-muted-foreground">🌍 65% Сумська обл.</p>
-              <p className="text-muted-foreground">✈️ 35% ВПО/За кордоном</p>
-            </div>
-          </CardContent>
+          </div>
         </Card>
       </div>
-
-      {/* Результати опитування */}
-      <Card className={screenMode ? "bg-white border-gray-200" : ""}>
-        <CardHeader>
-          <CardTitle>Результати опитування учнів</CardTitle>
-          <CardDescription>33 відповіді з 54 активних учнів (61% response rate)</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm">Зрозумілість інтерфейсу</h4>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Середня оцінка</span>
-                  <span className="font-bold text-green-500">4.1 / 5</span>
-                </div>
-                <Progress value={82} className="h-2" />
-                <p className="text-xs text-muted-foreground">82% оцінили на 4-5 балів</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm">Гейміфікація (мотивація)</h4>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">"Дуже мотивує"</span>
-                  <span className="font-bold">48%</span>
-                </div>
-                <Progress value={48} className="h-2" />
-                <p className="text-xs text-muted-foreground">16 з 33 учнів</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm">Порівняння з підручником</h4>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">"Набагато краще"</span>
-                  <span className="font-bold text-green-500">58%</span>
-                </div>
-                <Progress value={58} className="h-2" />
-                <p className="text-xs text-muted-foreground">19 з 33 учнів</p>
-              </div>
-            </div>
-          </div>
-
-          <div className={`rounded-lg p-3 text-sm space-y-1 ${screenMode ? "bg-gray-50" : "bg-secondary"}`}>
-            <h4 className="font-medium text-sm mb-3">Топ коментарі від учнів:</h4>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-start gap-2">
-                <span className="text-green-500">✓</span>
-                <span>"Дмитро Олександрович ви топ чекаємо ще))" - 7-А</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-500">✓</span>
-                <span>"зручно шо без інета робить" - 11-Б</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-500">✓</span>
-                <span>"Краще ніж з підручника вчити. хоч якась практика" - 10-А</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-yellow-500">⚠</span>
-                <span>"ШІ іноді тупить" - 10-А</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-500">✗</span>
-                <span>"Мені не зайшло скучно краще б в скретчі сиділи" - 7-А</span>
-              </li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
 
-function LogItem({ name, event, severity, time, action }: any) {
-  const colors = {
-    high: "bg-red-500/10 text-red-500 border-red-500/30",
-    medium: "bg-amber-500/10 text-amber-500 border-amber-500/30",
-    low: "bg-blue-500/10 text-blue-500 border-blue-500/30",
-  }
-
+// Constructor View (placeholder)
+function ConstructorView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   return (
-    <div className="flex items-start justify-between p-3 rounded-lg border border-border">
-      <div className="flex items-start gap-3 flex-1">
-        <Badge variant="outline" className={`${colors[severity]} text-xs shrink-0`}>
-          {severity === "high" ? "Критично" : severity === "medium" ? "Попередження" : "Інфо"}
-        </Badge>
-        <div className="flex-1 min-w-0">
-          <p className="font-medium text-sm">{name}</p>
-          <p className="text-xs text-muted-foreground">{event}</p>
-          <p className="text-xs text-primary mt-1">→ {action}</p>
-        </div>
+    <div className="p-6">
+      <div className="text-center py-12">
+        <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <h2 className="text-xl font-semibold mb-2">Конструктор уроків</h2>
+        <p className="text-muted-foreground">Функціонал в розробці. Буде доступний у версії 1.0</p>
       </div>
-      <span className="text-xs text-muted-foreground shrink-0 ml-2">{time}</span>
     </div>
   )
 }
 
-function AISettingsView({ isDemo }: { isDemo: boolean }) {
+// AI Settings View
+function AISettingsView({ isDemo, screenMode }: { isDemo: boolean; screenMode: boolean }) {
   const [temperature, setTemperature] = useState(0.7)
   const [maxTokens, setMaxTokens] = useState(500)
-  const [topP, setTopP] = useState(0.9)
-  const [frequencyPenalty, setFrequencyPenalty] = useState(0.5)
-  const [presencePenalty, setPresencePenalty] = useState(0.5)
-  const [selectedModel, setSelectedModel] = useState("gpt-4o-mini")
-
-  const models = [
-    { id: "gpt-4o", name: "GPT-4o (Найкращий)", speed: "Середній", cost: "Високий" },
-    { id: "gpt-4o-mini", name: "GPT-4o Mini (Рекомендовано)", speed: "Швидкий", cost: "Низький" },
-    { id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo", speed: "Дуже швидкий", cost: "Дуже низький" },
-    { id: "claude-sonnet", name: "Claude 3.5 Sonnet", speed: "Швидкий", cost: "Середній" },
-    { id: "gemini-pro", name: "Gemini 1.5 Pro", speed: "Швидкий", cost: "Низький" },
-    { id: "llama-3", name: "Llama 3 70B", speed: "Середній", cost: "Безкоштовно" },
-  ]
 
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold mb-1">Налаштування ШІ-Асистента</h1>
-        <p className="text-sm text-muted-foreground">Тонке налаштування поведінки ШІ для учнів та вчителя</p>
+        <h2 className="text-2xl font-bold mb-1">Налаштування ШІ-асистента</h2>
+        <p className="text-sm text-muted-foreground">Керування поведінкою AI-тьютора для учнів</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Model Selection */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="p-6">
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <Bot className="h-4 w-4 text-primary" />
-            Вибір моделі ШІ
-          </h3>
-          <div className="space-y-2">
-            {models.map((model) => (
-              <button
-                key={model.id}
-                onClick={() => setSelectedModel(model.id)}
-                className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                  selectedModel === model.id ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm">{model.name}</span>
-                  {selectedModel === model.id && <CheckCircle2 className="h-4 w-4 text-primary" />}
-                </div>
-                <div className="flex gap-4 text-xs text-muted-foreground">
-                  <span>⚡ {model.speed}</span>
-                  <span>💰 {model.cost}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </Card>
-
-        {/* Advanced Parameters */}
-        <Card className="p-6">
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <Settings className="h-4 w-4 text-primary" />
-            Параметри генерації
-          </h3>
+          <h3 className="font-semibold mb-4">Параметри генерації</h3>
           <div className="space-y-6">
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium">Temperature (Креативність)</label>
-                <span className="text-sm text-muted-foreground">{temperature.toFixed(1)}</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={temperature}
-                onChange={(e) => setTemperature(Number.parseFloat(e.target.value))}
-                className="w-full"
-              />
-              <p className="text-xs text-muted-foreground mt-1">Нижче = точніше, вище = креативніше</p>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium">Max Tokens (Довжина відповіді)</label>
-                <span className="text-sm text-muted-foreground">{maxTokens}</span>
-              </div>
-              <input
-                type="range"
-                min="100"
-                max="2000"
-                step="100"
-                value={maxTokens}
-                onChange={(e) => setMaxTokens(Number.parseInt(e.target.value))}
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium">Top P (Nucleus Sampling)</label>
-                <span className="text-sm text-muted-foreground">{topP.toFixed(1)}</span>
+                <label className="text-sm">Температура (креативність)</label>
+                <span className="text-sm text-muted-foreground">{temperature}</span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.1"
-                value={topP}
-                onChange={(e) => setTopP(Number.parseFloat(e.target.value))}
+                value={temperature}
+                onChange={(e) => setTemperature(Number.parseFloat(e.target.value))}
                 className="w-full"
               />
+              <p className="text-xs text-muted-foreground mt-1">Низьке = точніші відповіді, Високе = креативніші</p>
             </div>
 
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium">Frequency Penalty</label>
-                <span className="text-sm text-muted-foreground">{frequencyPenalty.toFixed(1)}</span>
+                <label className="text-sm">Макс. токенів</label>
+                <span className="text-sm text-muted-foreground">{maxTokens}</span>
               </div>
               <input
                 type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={frequencyPenalty}
-                onChange={(e) => setFrequencyPenalty(Number.parseFloat(e.target.value))}
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-sm font-medium">Presence Penalty</label>
-                <span className="text-sm text-muted-foreground">{presencePenalty.toFixed(1)}</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={presencePenalty}
-                onChange={(e) => setPresencePenalty(Number.parseFloat(e.target.value))}
+                min="100"
+                max="1000"
+                step="50"
+                value={maxTokens}
+                onChange={(e) => setMaxTokens(Number.parseInt(e.target.value))}
                 className="w-full"
               />
             </div>
           </div>
         </Card>
 
-        {/* Student AI Persona */}
         <Card className="p-6">
-          <h3 className="font-semibold mb-3">Персона ШІ для учнів</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            ШІ-тьютор використовує педагогічний підхід: ставить запитання замість надання готових відповідей.
-          </p>
-          <div className="space-y-3">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Заборонити давати готовий код</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Стимулювати самостійне мислення (Socratic Method)</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Використовувати українську мову</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Адаптивна складність відповідей</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="rounded" />
-              <span className="text-sm">Дозволити міні-підказки для початківців</span>
-            </label>
-          </div>
-        </Card>
-
-        {/* Teacher AI Persona */}
-        <Card className="p-6">
-          <h3 className="font-semibold mb-3">Персона ШІ для вчителя</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            ШІ-помічник допомагає створювати завдання, аналізувати статистику та надає рекомендації.
-          </p>
-          <div className="space-y-3">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Автоматична аналітика щодня (8:00)</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Генерувати індивідуальні завдання</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" defaultChecked className="rounded" />
-              <span className="text-sm">Виявляти учнів, що потребують уваги</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="rounded" />
-              <span className="text-sm">Режим автопілоту (без підтвердження)</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="rounded" />
-              <span className="text-sm">Щоденні email-звіти</span>
-            </label>
+          <h3 className="font-semibold mb-4">Статистика за практику</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Всього запитів</span>
+              <span className="font-medium">142</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Успішних відповідей</span>
+              <span className="font-medium text-emerald-500">92%</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Середній час відповіді</span>
+              <span className="font-medium">2.3с</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Задоволеність учнів</span>
+              <span className="font-medium">4.1/5</span>
+            </div>
           </div>
         </Card>
       </div>
-
-      <Card className="p-4 border-amber-500/30 bg-amber-500/5">
-        <div className="flex gap-3">
-          <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
-          <div>
-            <h3 className="font-semibold text-amber-500 mb-1">Етичне використання ШІ</h3>
-            <p className="text-sm text-muted-foreground">
-              Налаштування спроектовані так, щоб ШІ не давав готових відповідей, а стимулював самостійне мислення учнів.
-              Це відповідає сучасним етичним принципам використання ШІ в освіті.
-            </p>
-          </div>
-        </div>
-      </Card>
     </div>
   )
 }
