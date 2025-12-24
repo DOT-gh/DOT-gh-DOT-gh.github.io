@@ -14,6 +14,33 @@ export type StudentData = {
   currentTask?: string
   lastActivity?: string
   achievements?: number
+  // Детальна статистика
+  detailedStats?: {
+    loginTime: string
+    ip: string
+    batteryLevel: number
+    device: string
+    offlineSessionsPercent: number
+    completedTasksPercent: number
+    avgTimeToSolution: number
+    hintsRequested: number
+    errorsCount: number
+    aiRequestsCount: number
+    sessions: {
+      date: string
+      duration: number
+      tasksCompleted: number
+      offline: boolean
+    }[]
+    taskHistory: {
+      taskName: string
+      completed: boolean
+      timeSpent: number
+      attempts: number
+      hintsUsed: number
+      date: string
+    }[]
+  }
 }
 
 export type ClassData = {
