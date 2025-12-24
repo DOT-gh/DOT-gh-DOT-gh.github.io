@@ -704,10 +704,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 50, device: "Android", city: "м. Шостка" },
-          { date: "18.11", duration: 55, device: "Android", city: "м. Шостка" },
-          { date: "19.11", duration: 60, device: "Android", city: "м. Шостка" },
-          { date: "21.11", duration: 115, device: "Android", city: "м. Шостка" },
+          { date: "17.11", duration: 50, device: "Android", city: "м. Охтирка" },
+          { date: "18.11", duration: 55, device: "Android", city: "м. Охтирка" },
+          { date: "19.11", duration: 60, device: "Android", city: "м. Охтирка" },
+          { date: "21.11", duration: 115, device: "Android", city: "м. Охтирка" },
         ],
         avgTimePerTask: 31,
         hintsUsed: 4,
@@ -726,9 +726,9 @@ const classesData = [
         offlineSessions: 2,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 65, device: "Windows", city: "м. Шостка" },
-          { date: "18.11", duration: 70, device: "Windows", city: "м. Шостка" },
-          { date: "20.11", duration: 95, device: "Windows", city: "м. Шостка" },
+          { date: "17.11", duration: 65, device: "Windows", city: "м. Конотоп" },
+          { date: "18.11", duration: 70, device: "Windows", city: "м. Конотоп" },
+          { date: "20.11", duration: 95, device: "Windows", city: "м. Конотоп" },
         ],
         avgTimePerTask: 33,
         hintsUsed: 9,
@@ -2710,7 +2710,7 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
 
           <div className="space-y-4">
             <div>
-              <p className="text-sm font-medium mb-3">Розподіл по Шосткинському р-ну та ВПО:</p>
+              <p className="text-sm font-medium mb-3">Розподіл по містах:</p>
               <div className="space-y-2">
                 {locationData.map((loc, idx) => (
                   <div key={idx} className="flex items-center gap-3">
