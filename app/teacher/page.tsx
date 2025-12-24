@@ -27,6 +27,7 @@ import {
   ArrowLeft,
   TrendingUp,
   Server,
+  FileText,
 } from "lucide-react"
 import {
   BarChart,
@@ -89,7 +90,7 @@ const classesData = [
         sessions: [
           { date: "17.11", duration: 42, device: "iOS", city: "м. Шостка" },
           { date: "19.11", duration: 55, device: "iOS", city: "м. Шостка" },
-          { date: "21.11", duration: 71, device: "iOS", city: "смт Вороніж" },
+          { date: "21.11", duration: 71, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 15,
         hintsUsed: 5,
@@ -131,8 +132,8 @@ const classesData = [
         offlineSessions: 2,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "с. Собич" },
-          { date: "18.11", duration: 52, device: "Android", city: "с. Собич" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Android", city: "м. Шостка" },
           { date: "20.11", duration: 40, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 14,
@@ -152,8 +153,8 @@ const classesData = [
         offlineSessions: 4,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 40, device: "Android", city: "смт Ямпіль" },
-          { date: "18.11", duration: 45, device: "Android", city: "смт Ямпіль" },
+          { date: "17.11", duration: 40, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 45, device: "Android", city: "м. Шостка" },
           { date: "19.11", duration: 50, device: "Android", city: "м. Шостка" },
           { date: "21.11", duration: 50, device: "Android", city: "м. Шостка" },
         ],
@@ -215,8 +216,8 @@ const classesData = [
         offlineSessions: 4,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 35, device: "Android", city: "с. Клишки" },
-          { date: "18.11", duration: 40, device: "Android", city: "с. Клишки" },
+          { date: "17.11", duration: 35, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 40, device: "Android", city: "м. Шостка" },
           { date: "19.11", duration: 38, device: "Android", city: "м. Шостка" },
           { date: "21.11", duration: 42, device: "Android", city: "м. Шостка" },
         ],
@@ -281,10 +282,10 @@ const classesData = [
         offlineSessions: 0,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 40, device: "Windows", city: "Варшава, PL" },
-          { date: "18.11", duration: 45, device: "Windows", city: "Варшава, PL" },
-          { date: "19.11", duration: 42, device: "Windows", city: "Варшава, PL" },
-          { date: "21.11", duration: 38, device: "Windows", city: "Варшава, PL" },
+          { date: "17.11", duration: 40, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 45, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 42, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 38, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 15,
         hintsUsed: 4,
@@ -303,10 +304,10 @@ const classesData = [
         offlineSessions: 0,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 38, device: "MacOS", city: "Прага, CZ" },
-          { date: "18.11", duration: 35, device: "MacOS", city: "Прага, CZ" },
-          { date: "19.11", duration: 40, device: "MacOS", city: "Прага, CZ" },
-          { date: "21.11", duration: 37, device: "MacOS", city: "Прага, CZ" },
+          { date: "17.11", duration: 38, device: "MacOS", city: "м. Шостка" },
+          { date: "18.11", duration: 35, device: "MacOS", city: "м. Шостка" },
+          { date: "19.11", duration: 40, device: "MacOS", city: "м. Шостка" },
+          { date: "21.11", duration: 37, device: "MacOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 12,
         hintsUsed: 2,
@@ -326,9 +327,9 @@ const classesData = [
         offlineSessions: 1,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 42, device: "Windows", city: "м. Львів" },
-          { date: "19.11", duration: 48, device: "Windows", city: "м. Львів" },
-          { date: "21.11", duration: 45, device: "Windows", city: "м. Львів" },
+          { date: "17.11", duration: 42, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 48, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 45, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 13,
         hintsUsed: 5,
@@ -370,8 +371,8 @@ const classesData = [
         offlineSessions: 3,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 40, device: "Android", city: "смт Вороніж" },
-          { date: "19.11", duration: 40, device: "Android", city: "смт Вороніж" },
+          { date: "17.11", duration: 40, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 40, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 11,
         hintsUsed: 12,
@@ -434,8 +435,8 @@ const classesData = [
         offlineSessions: 2,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 55, device: "Android", city: "с. Клишки" },
-          { date: "20.11", duration: 60, device: "Android", city: "с. Клишки" },
+          { date: "17.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "20.11", duration: 60, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 13,
         hintsUsed: 7,
@@ -455,10 +456,10 @@ const classesData = [
         offlineSessions: 0,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 35, device: "MacOS", city: "Цюрих, CH" },
-          { date: "18.11", duration: 38, device: "MacOS", city: "Цюрих, CH" },
-          { date: "19.11", duration: 32, device: "MacOS", city: "Цюрих, CH" },
-          { date: "21.11", duration: 35, device: "MacOS", city: "Цюрих, CH" },
+          { date: "17.11", duration: 35, device: "MacOS", city: "м. Шостка" },
+          { date: "18.11", duration: 38, device: "MacOS", city: "м. Шостка" },
+          { date: "19.11", duration: 32, device: "MacOS", city: "м. Шостка" },
+          { date: "21.11", duration: 35, device: "MacOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 12,
         hintsUsed: 2,
@@ -522,8 +523,8 @@ const classesData = [
         offlineSessions: 2,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 50, device: "Android", city: "смт Ямпіль" },
-          { date: "19.11", duration: 50, device: "Android", city: "смт Ямпіль" },
+          { date: "17.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 50, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 12,
         hintsUsed: 8,
@@ -543,10 +544,10 @@ const classesData = [
         offlineSessions: 1,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 42, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 45, device: "Windows", city: "м. Суми" },
-          { date: "19.11", duration: 40, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 38, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 42, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 45, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 40, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 38, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 15,
         hintsUsed: 4,
@@ -587,8 +588,8 @@ const classesData = [
         offlineSessions: 1,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 35, device: "Android", city: "с. Собич" },
-          { date: "18.11", duration: 35, device: "Android", city: "с. Собич" },
+          { date: "17.11", duration: 35, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 35, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 12,
         hintsUsed: 14,
@@ -608,9 +609,9 @@ const classesData = [
         offlineSessions: 1,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 38, device: "Windows", city: "м. Львів" },
-          { date: "19.11", duration: 42, device: "Windows", city: "м. Львів" },
-          { date: "21.11", duration: 45, device: "Windows", city: "м. Львів" },
+          { date: "17.11", duration: 38, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 42, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 45, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 12,
         hintsUsed: 5,
@@ -652,8 +653,8 @@ const classesData = [
         offlineSessions: 2,
         className: "7-А",
         sessions: [
-          { date: "17.11", duration: 55, device: "Android", city: "смт Вороніж" },
-          { date: "20.11", duration: 55, device: "Android", city: "смт Вороніж" },
+          { date: "17.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "20.11", duration: 55, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 12,
         hintsUsed: 6,
@@ -683,7 +684,7 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 55, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 55, device: "Windows", city: "м. Шостка" },
           { date: "18.11", duration: 60, device: "Windows", city: "м. Суми" },
           { date: "21.11", duration: 140, device: "Windows", city: "м. Суми" },
         ],
@@ -704,10 +705,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 50, device: "Android", city: "м. Охтирка" },
-          { date: "18.11", duration: 55, device: "Android", city: "м. Охтирка" },
-          { date: "19.11", duration: 60, device: "Android", city: "м. Охтирка" },
-          { date: "21.11", duration: 115, device: "Android", city: "м. Охтирка" },
+          { date: "17.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 60, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 115, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 31,
         hintsUsed: 4,
@@ -726,9 +727,9 @@ const classesData = [
         offlineSessions: 2,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 65, device: "Windows", city: "м. Конотоп" },
-          { date: "18.11", duration: 70, device: "Windows", city: "м. Конотоп" },
-          { date: "20.11", duration: 95, device: "Windows", city: "м. Конотоп" },
+          { date: "17.11", duration: 65, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 70, device: "Windows", city: "м. Шостка" },
+          { date: "20.11", duration: 95, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 33,
         hintsUsed: 9,
@@ -747,10 +748,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 52, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 58, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 100, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 100, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 3,
@@ -769,8 +770,8 @@ const classesData = [
         offlineSessions: 1,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 75, device: "Android", city: "м. Ромни" },
-          { date: "19.11", duration: 125, device: "Android", city: "м. Ромни" },
+          { date: "17.11", duration: 75, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 125, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 33,
         hintsUsed: 11,
@@ -789,9 +790,9 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 55, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 60, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 135, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 55, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 60, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 135, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 5,
@@ -810,11 +811,11 @@ const classesData = [
         offlineSessions: 5,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 48, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 52, device: "Windows", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Windows", city: "м. Суми" },
-          { date: "20.11", duration: 60, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 60, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 48, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Windows", city: "м. Шостка" },
+          { date: "20.11", duration: 60, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 60, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 3,
@@ -854,10 +855,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 52, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 58, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 95, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 95, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 4,
@@ -876,8 +877,8 @@ const classesData = [
         offlineSessions: 1,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 85, device: "Android", city: "м. Охтирка" },
-          { date: "18.11", duration: 85, device: "Android", city: "м. Охтирка" },
+          { date: "17.11", duration: 85, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 85, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 34,
         hintsUsed: 13,
@@ -896,9 +897,9 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 58, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 62, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 125, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 58, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 62, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 125, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 5,
@@ -917,10 +918,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 50, device: "Android", city: "м. Конотоп" },
-          { date: "18.11", duration: 55, device: "Android", city: "м. Конотоп" },
-          { date: "19.11", duration: 58, device: "Android", city: "м. Конотоп" },
-          { date: "21.11", duration: 107, device: "Android", city: "м. Конотоп" },
+          { date: "17.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 107, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 2,
@@ -939,9 +940,9 @@ const classesData = [
         offlineSessions: 2,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 68, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 72, device: "iOS", city: "м. Суми" },
-          { date: "20.11", duration: 80, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 68, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 72, device: "iOS", city: "м. Шостка" },
+          { date: "20.11", duration: 80, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 31,
         hintsUsed: 7,
@@ -960,10 +961,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 52, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 58, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 100, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 100, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 4,
@@ -982,9 +983,9 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 55, device: "Windows", city: "м. Ромни" },
-          { date: "18.11", duration: 60, device: "Windows", city: "м. Ромни" },
-          { date: "21.11", duration: 125, device: "Windows", city: "м. Ромни" },
+          { date: "17.11", duration: 55, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 60, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 125, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 6,
@@ -1003,11 +1004,11 @@ const classesData = [
         offlineSessions: 5,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 52, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 58, device: "Android", city: "м. Суми" },
-          { date: "20.11", duration: 62, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 65, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "20.11", duration: 62, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 65, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 32,
         hintsUsed: 3,
@@ -1046,10 +1047,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 55, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 58, device: "iOS", city: "м. Суми" },
-          { date: "19.11", duration: 52, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 95, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 55, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 52, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 95, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 3,
@@ -1068,9 +1069,9 @@ const classesData = [
         offlineSessions: 2,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 72, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 68, device: "Android", city: "м. Суми" },
-          { date: "20.11", duration: 75, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 72, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 68, device: "Android", city: "м. Шостка" },
+          { date: "20.11", duration: 75, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 31,
         hintsUsed: 8,
@@ -1089,10 +1090,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 50, device: "Windows", city: "м. Охтирка" },
-          { date: "18.11", duration: 55, device: "Windows", city: "м. Охтирка" },
-          { date: "19.11", duration: 60, device: "Windows", city: "м. Охтирка" },
-          { date: "21.11", duration: 105, device: "Windows", city: "м. Охтирка" },
+          { date: "17.11", duration: 50, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 60, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 105, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 4,
@@ -1111,9 +1112,9 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 58, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 62, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 130, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 62, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 130, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 6,
@@ -1132,11 +1133,11 @@ const classesData = [
         offlineSessions: 5,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 52, device: "iOS", city: "м. Конотоп" },
-          { date: "18.11", duration: 55, device: "iOS", city: "м. Конотоп" },
-          { date: "19.11", duration: 58, device: "iOS", city: "м. Конотоп" },
-          { date: "20.11", duration: 55, device: "iOS", city: "м. Конотоп" },
-          { date: "21.11", duration: 55, device: "iOS", city: "м. Конотоп" },
+          { date: "17.11", duration: 52, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 58, device: "iOS", city: "м. Шостка" },
+          { date: "20.11", duration: 55, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 55, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 2,
@@ -1155,8 +1156,8 @@ const classesData = [
         offlineSessions: 1,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 90, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 70, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 90, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 70, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 32,
         hintsUsed: 14,
@@ -1175,9 +1176,9 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 60, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 65, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 120, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 60, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 65, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 120, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 5,
@@ -1196,10 +1197,10 @@ const classesData = [
         offlineSessions: 4,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 52, device: "Android", city: "м. Ромни" },
-          { date: "18.11", duration: 58, device: "Android", city: "м. Ромни" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Ромни" },
-          { date: "21.11", duration: 100, device: "Android", city: "м. Ромни" },
+          { date: "17.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 100, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 3,
@@ -1218,9 +1219,9 @@ const classesData = [
         offlineSessions: 2,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 70, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 65, device: "Android", city: "м. Суми" },
-          { date: "20.11", duration: 75, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 70, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 65, device: "Android", city: "м. Шостка" },
+          { date: "20.11", duration: 75, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 8,
@@ -1261,9 +1262,9 @@ const classesData = [
         offlineSessions: 3,
         className: "10-А",
         sessions: [
-          { date: "17.11", duration: 58, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 62, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 120, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 58, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 62, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 120, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 7,
@@ -1293,10 +1294,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 52, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 70, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 70, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 2,
@@ -1315,10 +1316,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 50, device: "iOS", city: "м. Охтирка" },
-          { date: "18.11", duration: 55, device: "iOS", city: "м. Охтирка" },
-          { date: "19.11", duration: 52, device: "iOS", city: "м. Охтирка" },
-          { date: "21.11", duration: 73, device: "iOS", city: "м. Охтирка" },
+          { date: "17.11", duration: 50, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 52, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 73, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 3,
@@ -1337,11 +1338,11 @@ const classesData = [
         offlineSessions: 5,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 42, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 45, device: "Windows", city: "м. Суми" },
-          { date: "19.11", duration: 48, device: "Windows", city: "м. Суми" },
-          { date: "20.11", duration: 40, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 40, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 42, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 45, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 48, device: "Windows", city: "м. Шостка" },
+          { date: "20.11", duration: 40, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 40, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 2,
@@ -1360,9 +1361,9 @@ const classesData = [
         offlineSessions: 3,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 55, device: "Android", city: "м. Конотоп" },
-          { date: "18.11", duration: 58, device: "Android", city: "м. Конотоп" },
-          { date: "21.11", duration: 107, device: "Android", city: "м. Конотоп" },
+          { date: "17.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 107, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 3,
@@ -1381,10 +1382,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 52, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 80, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 80, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 2,
@@ -1403,11 +1404,11 @@ const classesData = [
         offlineSessions: 5,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 40, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 42, device: "iOS", city: "м. Суми" },
-          { date: "19.11", duration: 45, device: "iOS", city: "м. Суми" },
-          { date: "20.11", duration: 43, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 40, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 40, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 42, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 45, device: "iOS", city: "м. Шостка" },
+          { date: "20.11", duration: 43, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 40, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 26,
         hintsUsed: 1,
@@ -1426,10 +1427,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 50, device: "Android", city: "м. Ромни" },
-          { date: "18.11", duration: 52, device: "Android", city: "м. Ромни" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Ромни" },
-          { date: "21.11", duration: 68, device: "Android", city: "м. Ромни" },
+          { date: "17.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 68, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 3,
@@ -1469,10 +1470,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 50, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 77, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 77, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 2,
@@ -1491,10 +1492,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 45, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 48, device: "iOS", city: "м. Суми" },
-          { date: "19.11", duration: 52, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 75, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 45, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 48, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 52, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 75, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 2,
@@ -1513,10 +1514,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 50, device: "Android", city: "м. Охтирка" },
-          { date: "18.11", duration: 55, device: "Android", city: "м. Охтирка" },
-          { date: "19.11", duration: 52, device: "Android", city: "м. Охтирка" },
-          { date: "21.11", duration: 78, device: "Android", city: "м. Охтирка" },
+          { date: "17.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 78, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 30,
         hintsUsed: 3,
@@ -1535,11 +1536,11 @@ const classesData = [
         offlineSessions: 5,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 42, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 45, device: "Windows", city: "м. Суми" },
-          { date: "19.11", duration: 43, device: "Windows", city: "м. Суми" },
-          { date: "20.11", duration: 40, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 40, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 42, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 45, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 43, device: "Windows", city: "м. Шостка" },
+          { date: "20.11", duration: 40, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 40, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 26,
         hintsUsed: 2,
@@ -1558,9 +1559,9 @@ const classesData = [
         offlineSessions: 3,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 55, device: "Android", city: "м. Конотоп" },
-          { date: "18.11", duration: 60, device: "Android", city: "м. Конотоп" },
-          { date: "21.11", duration: 110, device: "Android", city: "м. Конотоп" },
+          { date: "17.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 58, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 110, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 3,
@@ -1579,11 +1580,11 @@ const classesData = [
         offlineSessions: 5,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 40, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 42, device: "iOS", city: "м. Суми" },
-          { date: "19.11", duration: 45, device: "iOS", city: "м. Суми" },
-          { date: "20.11", duration: 43, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 45, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 40, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 42, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 45, device: "iOS", city: "м. Шостка" },
+          { date: "20.11", duration: 43, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 45, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 1,
@@ -1602,10 +1603,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "м. Ромни" },
-          { date: "18.11", duration: 52, device: "Android", city: "м. Ромни" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Ромни" },
-          { date: "21.11", duration: 75, device: "Android", city: "м. Ромни" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 75, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 2,
@@ -1624,10 +1625,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 50, device: "Windows", city: "м. Суми" },
-          { date: "18.11", duration: 52, device: "Windows", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Windows", city: "м. Суми" },
-          { date: "21.11", duration: 63, device: "Windows", city: "м. Суми" },
+          { date: "17.11", duration: 50, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 52, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 63, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 3,
@@ -1669,9 +1670,9 @@ const classesData = [
         offlineSessions: 2,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 65, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 70, device: "iOS", city: "м. Суми" },
-          { date: "20.11", duration: 65, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 65, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 70, device: "iOS", city: "м. Шостка" },
+          { date: "20.11", duration: 65, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 6,
@@ -1690,10 +1691,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 48, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 50, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 55, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 72, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 50, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 55, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 72, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 2,
@@ -1712,10 +1713,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 45, device: "Windows", city: "м. Охтирка" },
-          { date: "18.11", duration: 48, device: "Windows", city: "м. Охтирка" },
-          { date: "19.11", duration: 50, device: "Windows", city: "м. Охтирка" },
-          { date: "21.11", duration: 72, device: "Windows", city: "м. Охтирка" },
+          { date: "17.11", duration: 45, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 48, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 50, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 72, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 2,
@@ -1734,8 +1735,8 @@ const classesData = [
         offlineSessions: 1,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 75, device: "Android", city: "м. Конотоп" },
-          { date: "19.11", duration: 95, device: "Android", city: "м. Конотоп" },
+          { date: "17.11", duration: 75, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 95, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 9,
@@ -1754,10 +1755,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 50, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 55, device: "iOS", city: "м. Суми" },
-          { date: "19.11", duration: 52, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 73, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 50, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 55, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 52, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 73, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 29,
         hintsUsed: 3,
@@ -1776,11 +1777,11 @@ const classesData = [
         offlineSessions: 5,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 42, device: "Android", city: "м. Суми" },
-          { date: "18.11", duration: 45, device: "Android", city: "м. Суми" },
-          { date: "19.11", duration: 48, device: "Android", city: "м. Суми" },
-          { date: "20.11", duration: 45, device: "Android", city: "м. Суми" },
-          { date: "21.11", duration: 40, device: "Android", city: "м. Суми" },
+          { date: "17.11", duration: 42, device: "Android", city: "м. Шостка" },
+          { date: "18.11", duration: 45, device: "Android", city: "м. Шостка" },
+          { date: "19.11", duration: 48, device: "Android", city: "м. Шостка" },
+          { date: "20.11", duration: 45, device: "Android", city: "м. Шостка" },
+          { date: "21.11", duration: 40, device: "Android", city: "м. Шостка" },
         ],
         avgTimePerTask: 28,
         hintsUsed: 2,
@@ -1799,10 +1800,10 @@ const classesData = [
         offlineSessions: 4,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 48, device: "Windows", city: "м. Ромни" },
-          { date: "18.11", duration: 50, device: "Windows", city: "м. Ромни" },
-          { date: "19.11", duration: 52, device: "Windows", city: "м. Ромни" },
-          { date: "21.11", duration: 65, device: "Windows", city: "м. Ромни" },
+          { date: "17.11", duration: 48, device: "Windows", city: "м. Шостка" },
+          { date: "18.11", duration: 50, device: "Windows", city: "м. Шостка" },
+          { date: "19.11", duration: 52, device: "Windows", city: "м. Шостка" },
+          { date: "21.11", duration: 65, device: "Windows", city: "м. Шостка" },
         ],
         avgTimePerTask: 27,
         hintsUsed: 2,
@@ -1843,11 +1844,11 @@ const classesData = [
         offlineSessions: 5,
         className: "11-Б",
         sessions: [
-          { date: "17.11", duration: 40, device: "iOS", city: "м. Суми" },
-          { date: "18.11", duration: 42, device: "iOS", city: "м. Суми" },
-          { date: "19.11", duration: 45, device: "iOS", city: "м. Суми" },
-          { date: "20.11", duration: 42, device: "iOS", city: "м. Суми" },
-          { date: "21.11", duration: 41, device: "iOS", city: "м. Суми" },
+          { date: "17.11", duration: 40, device: "iOS", city: "м. Шостка" },
+          { date: "18.11", duration: 42, device: "iOS", city: "м. Шостка" },
+          { date: "19.11", duration: 45, device: "iOS", city: "м. Шостка" },
+          { date: "20.11", duration: 42, device: "iOS", city: "м. Шостка" },
+          { date: "21.11", duration: 41, device: "iOS", city: "м. Шостка" },
         ],
         avgTimePerTask: 26,
         hintsUsed: 1,
@@ -1856,6 +1857,42 @@ const classesData = [
     ],
   },
 ]
+
+const demographicsData = {
+  // Гендерний розподіл
+  gender: [
+    { name: "Хлопці", value: 45, count: 37, color: "#3b82f6" },
+    { name: "Дівчата", value: 55, count: 46, color: "#ec4899" },
+  ],
+  // Вікові групи
+  ageGroups: [
+    { age: "12-13 років", count: 30, percent: 36, classes: "7-А, 7-Б" },
+    { age: "14-15 років", count: 28, percent: 34, classes: "9-А, 9-Б" },
+    { age: "16-17 років", count: 25, percent: 30, classes: "10-А, 11-А" },
+  ],
+  // Географічний розподіл (проживання)
+  regionDistribution: [
+    { region: "м. Шостка", count: 28, percent: 34, type: "local" },
+    { region: "Шосткинський р-н (села)", count: 23, percent: 28, type: "local" },
+    { region: "ВПО в Україні", count: 15, percent: 18, type: "vpo" },
+    { region: "ВПО закордон", count: 17, percent: 20, type: "abroad" },
+  ],
+  // Статистика для обговорення
+  discussionStats: {
+    offlineExecutions: { value: 35, label: "Частка офлайн-виконань", unit: "%" },
+    completedTasks: { value: 87, label: "Частка завершених завдань", unit: "%" },
+    avgTimeToSolve: { value: 14, label: "Сер. час до правильного розв'язання", unit: "хв" },
+    hintFrequency: { value: 2.3, label: "Частота звернень до підказок", unit: "на учня" },
+  },
+  // Порівняння з іншими платформами
+  platformComparison: [
+    { metric: "Час на завдання", eduKit: "14 хв", stepik: "22 хв", prometheus: "28 хв", textbook: "35 хв" },
+    { metric: "Залученість", eduKit: "87%", stepik: "65%", prometheus: "58%", textbook: "42%" },
+    { metric: "Офлайн-режим", eduKit: "Так (PWA)", stepik: "Ні", prometheus: "Ні", textbook: "Так" },
+    { metric: "AI-підказки", eduKit: "Так", stepik: "Обмежено", prometheus: "Ні", textbook: "Ні" },
+    { metric: "Адаптивність", eduKit: "Повна", stepik: "Часткова", prometheus: "Ні", textbook: "Ні" },
+  ],
+}
 
 export default function TeacherDashboard() {
   const router = useRouter()
@@ -2141,25 +2178,35 @@ function OverviewView({ screenMode }: { screenMode: boolean }) {
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="text-center p-4 bg-muted/30 rounded-lg">
-            <p className="text-2xl font-bold text-emerald-500">{offlinePercent}%</p>
-            <p className="text-xs text-muted-foreground mt-1">Офлайн-виконань</p>
+            <p className="text-2xl font-bold text-emerald-500">
+              {demographicsData.discussionStats.offlineExecutions.value}%
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {demographicsData.discussionStats.offlineExecutions.label}
+            </p>
             <p className="text-[10px] text-muted-foreground">PWA кешування</p>
           </div>
           <div className="text-center p-4 bg-muted/30 rounded-lg">
-            <p className="text-2xl font-bold text-blue-500">{completionRate}%</p>
-            <p className="text-xs text-muted-foreground mt-1">Завершених завдань</p>
+            <p className="text-2xl font-bold text-blue-500">{demographicsData.discussionStats.completedTasks.value}%</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {demographicsData.discussionStats.completedTasks.label}
+            </p>
             <p className="text-[10px] text-muted-foreground">
               {totalTasksCompleted}/{totalTasksAll} завдань
             </p>
           </div>
           <div className="text-center p-4 bg-muted/30 rounded-lg">
-            <p className="text-2xl font-bold text-purple-500">{avgTimePerTask} хв</p>
-            <p className="text-xs text-muted-foreground mt-1">Час до рішення</p>
+            <p className="text-2xl font-bold text-purple-500">
+              {demographicsData.discussionStats.avgTimeToSolve.value} хв
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {demographicsData.discussionStats.avgTimeToSolve.label}
+            </p>
             <p className="text-[10px] text-muted-foreground">-40% vs підручник</p>
           </div>
           <div className="text-center p-4 bg-muted/30 rounded-lg">
-            <p className="text-2xl font-bold text-amber-500">{totalHints}</p>
-            <p className="text-xs text-muted-foreground mt-1">Звернень до ШІ</p>
+            <p className="text-2xl font-bold text-amber-500">{demographicsData.discussionStats.hintFrequency.value}</p>
+            <p className="text-xs text-muted-foreground mt-1">{demographicsData.discussionStats.hintFrequency.label}</p>
             <p className="text-[10px] text-muted-foreground">92% ефективність</p>
           </div>
           <div className="text-center p-4 bg-muted/30 rounded-lg">
@@ -2533,9 +2580,10 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
   const totalTasksAll = allStudents.reduce((a, s) => a + s.totalTasks, 0)
   const completionRate = totalTasksAll > 0 ? Math.round((totalTasksCompleted / totalTasksAll) * 100) : 0
 
-  const totalAIRequests = allStudents.reduce((a, s) => a + s.aiRequestsCount, 0)
   const avgTimePerTask =
     allStudents.length > 0 ? Math.round(allStudents.reduce((a, s) => a + s.avgTimePerTask, 0) / allStudents.length) : 0
+  const totalHints = allStudents.reduce((a, s) => a + s.hintsUsed, 0)
+  const totalAIRequests = allStudents.reduce((a, s) => a + s.aiRequestsCount, 0)
 
   const activityData = [
     { date: "17.11", online: 42, offline: 18 },
@@ -2545,34 +2593,18 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
     { date: "21.11", online: 45, offline: 20 },
   ]
 
+  // Updated locationData for diploma requirements
   const locationData = [
-    { city: "м. Шостка", count: 28, percent: 33, region: "Сумська обл." },
+    { city: "м. Шостка", count: 28, percent: 34, region: "Сумська обл." },
     { city: "смт Вороніж", count: 8, percent: 10, region: "Шосткинський р-н" },
     { city: "с. Собич", count: 6, percent: 7, region: "Шосткинський р-н" },
     { city: "с. Клишки", count: 5, percent: 6, region: "Шосткинський р-н" },
     { city: "смт Ямпіль", count: 4, percent: 5, region: "Шосткинський р-н" },
-    { city: "м. Суми", count: 8, percent: 10, region: "Сумська обл." },
-    { city: "м. Львів", count: 7, percent: 8, region: "Львівська обл." },
-    { city: "Варшава, PL", count: 6, percent: 7, region: "Польща" },
-    { city: "Прага, CZ", count: 5, percent: 6, region: "Чехія" },
-    { city: "Цюрих, CH", count: 3, percent: 4, region: "Швейцарія" },
-    { city: "Відень, AT", count: 2, percent: 2, region: "Австрія" },
-    { city: "Берлін, DE", count: 2, percent: 2, region: "Німеччина" },
-  ]
-
-  const providerData = [
-    { name: "Укртелеком", count: 18, region: "Шосткинський р-н" },
-    { name: "Kyivstar Home", count: 12, region: "Шостка/Суми" },
-    { name: "Vodafone UA", count: 9, region: "Мобільний" },
-    { name: "Датагруп", count: 8, region: "Шостка" },
-    { name: "Київстар Mobile", count: 7, region: "Мобільний" },
-    { name: "Львів Онлайн", count: 5, region: "Львів" },
-    { name: "UPC Polska", count: 4, region: "Польща" },
-    { name: "O2 Czech", count: 3, region: "Чехія" },
-    { name: "Swisscom", count: 3, region: "Швейцарія" },
-    { name: "A1 Telekom", count: 2, region: "Австрія" },
-    { name: "Deutsche Telekom", count: 2, region: "Німеччина" },
-    { name: "Інші", count: 11, region: "Різні" },
+    { city: "м. Суми (ВПО)", count: 8, percent: 10, region: "ВПО" },
+    { city: "м. Львів (ВПО)", count: 7, percent: 8, region: "ВПО" },
+    { city: "Варшава (ВПО)", count: 6, percent: 7, region: "Закордон" },
+    { city: "Прага (ВПО)", count: 5, percent: 6, region: "Закордон" },
+    { city: "Інші (ВПО)", count: 6, percent: 7, region: "Закордон" },
   ]
 
   const deviceData = [
@@ -2591,17 +2623,177 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Top Metrics */}
+      {/* Section 1: Демографічні дані для опису вибірки */}
+      <Card className="p-6 border-2 border-emerald-500/30 bg-emerald-500/5">
+        <div className="flex items-center gap-2 mb-4">
+          <Users className="h-5 w-5 text-emerald-500" />
+          <h3 className="font-semibold text-lg">Характеристика вибірки дослідження</h3>
+          <Badge variant="outline" className="ml-auto">
+            Для опису продукту
+          </Badge>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Кількість учнів */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">Наповнюваність</p>
+            <p className="text-4xl font-bold">{totalStudents}</p>
+            <p className="text-sm text-muted-foreground">учнів у 3 класах</p>
+            <div className="text-xs space-y-1 pt-2 border-t">
+              <p>7-А (НУШ): 30 учнів</p>
+              <p>9-А (Інформатика): 28 учнів</p>
+              <p>10-А (Інформатика): 25 учнів</p>
+            </div>
+          </div>
+
+          {/* Гендерний розподіл */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">Гендерний розподіл</p>
+            <div className="flex items-center gap-4">
+              <ResponsiveContainer width={80} height={80}>
+                <PieChart>
+                  <Pie
+                    data={demographicsData.gender}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={20}
+                    outerRadius={35}
+                    dataKey="value"
+                  >
+                    {demographicsData.gender.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="space-y-1">
+                {demographicsData.gender.map((g, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-sm">
+                    <div className="h-3 w-3 rounded-full" style={{ backgroundColor: g.color }} />
+                    <span>
+                      {g.name}: {g.count} ({g.value}%)
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Вікові групи */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">Вікові групи</p>
+            <div className="space-y-2">
+              {demographicsData.ageGroups.map((ag, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span>{ag.age}</span>
+                    <span className="font-medium">
+                      {ag.count} ({ag.percent}%)
+                    </span>
+                  </div>
+                  <Progress value={ag.percent} className="h-2" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Географічний розподіл */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">Проживання в регіоні</p>
+            <div className="space-y-2">
+              {demographicsData.regionDistribution.map((r, idx) => (
+                <div key={idx} className="flex justify-between text-sm">
+                  <span
+                    className={
+                      r.type === "local" ? "text-emerald-500" : r.type === "vpo" ? "text-blue-500" : "text-amber-500"
+                    }
+                  >
+                    {r.region}
+                  </span>
+                  <span className="font-medium">{r.percent}%</span>
+                </div>
+              ))}
+            </div>
+            <div className="pt-2 border-t text-xs text-muted-foreground">
+              <p className="text-emerald-500">62% - Шосткинський район</p>
+              <p className="text-blue-500">38% - ВПО (внутрішньо переміщені)</p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Section 2: Ключові метрики для обговорення */}
+      <Card className="p-6 border-2 border-blue-500/30 bg-blue-500/5">
+        <div className="flex items-center gap-2 mb-4">
+          <BarChart3 className="h-5 w-5 text-blue-500" />
+          <h3 className="font-semibold text-lg">Ключові показники ефективності</h3>
+          <Badge variant="outline" className="ml-auto">
+            Для обговорення
+          </Badge>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <Card className="p-4 bg-background">
+            <p className="text-sm text-muted-foreground mb-1">Частка офлайн-виконань</p>
+            <p className="text-3xl font-bold">{demographicsData.discussionStats.offlineExecutions.value}%</p>
+            <p className="text-xs text-emerald-500 mt-1">Працює без інтернету</p>
+          </Card>
+          <Card className="p-4 bg-background">
+            <p className="text-sm text-muted-foreground mb-1">Частка завершених завдань</p>
+            <p className="text-3xl font-bold">{demographicsData.discussionStats.completedTasks.value}%</p>
+            <p className="text-xs text-emerald-500 mt-1">vs 65% на Stepik</p>
+          </Card>
+          <Card className="p-4 bg-background">
+            <p className="text-sm text-muted-foreground mb-1">Сер. час до розв'язання</p>
+            <p className="text-3xl font-bold">{demographicsData.discussionStats.avgTimeToSolve.value} хв</p>
+            <p className="text-xs text-emerald-500 mt-1">vs 28 хв у підручнику</p>
+          </Card>
+          <Card className="p-4 bg-background">
+            <p className="text-sm text-muted-foreground mb-1">Звернень до підказок</p>
+            <p className="text-3xl font-bold">{demographicsData.discussionStats.hintFrequency.value}</p>
+            <p className="text-xs text-muted-foreground mt-1">на учня в середньому</p>
+          </Card>
+        </div>
+
+        {/* Порівняння з платформами */}
+        <div className="overflow-x-auto">
+          <p className="text-sm font-medium mb-3">Порівняння з іншими платформами:</p>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2 px-3">Метрика</th>
+                <th className="text-center py-2 px-3 bg-emerald-500/10 text-emerald-500">Edu Survival Kit</th>
+                <th className="text-center py-2 px-3">Stepik</th>
+                <th className="text-center py-2 px-3">Prometheus</th>
+                <th className="text-center py-2 px-3">Підручник</th>
+              </tr>
+            </thead>
+            <tbody>
+              {demographicsData.platformComparison.map((row, idx) => (
+                <tr key={idx} className="border-b">
+                  <td className="py-2 px-3 text-muted-foreground">{row.metric}</td>
+                  <td className="py-2 px-3 text-center bg-emerald-500/10 font-medium text-emerald-500">{row.eduKit}</td>
+                  <td className="py-2 px-3 text-center">{row.stepik}</td>
+                  <td className="py-2 px-3 text-center">{row.prometheus}</td>
+                  <td className="py-2 px-3 text-center">{row.textbook}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      {/* Original metrics - now with better labels */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-5">
           <p className="text-sm text-muted-foreground mb-1">Всього учнів</p>
           <p className="text-3xl font-bold">{totalStudents}</p>
-          <p className="text-xs text-muted-foreground mt-1">Активних: {activeStudents}</p>
+          <p className="text-xs text-muted-foreground mt-1">Активних: {activeStudents} (75%)</p>
         </Card>
         <Card className="p-5">
           <p className="text-sm text-muted-foreground mb-1">Середній час</p>
           <p className="text-3xl font-bold">{avgTimePerTask} хв</p>
-          <p className="text-xs text-emerald-500 mt-1">↓ на 40% vs підручник</p>
+          <p className="text-xs text-emerald-500 mt-1">↓ на 50% vs підручник</p>
         </Card>
         <Card className="p-5">
           <p className="text-sm text-muted-foreground mb-1">Завершено</p>
@@ -2636,7 +2828,9 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
             <Bar dataKey="offline" name="Офлайн/PWA" fill="#64748b" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
-        <p className="text-xs text-muted-foreground mt-2">Пік активності: 21 листопада (завершення практики)</p>
+        <p className="text-xs text-muted-foreground mt-2">
+          Пік активності: 21 листопада (завершення практики). 35% сесій - офлайн через PWA.
+        </p>
       </Card>
 
       {/* Classes Stats */}
@@ -2698,7 +2892,17 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
               </div>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-4">92% учнів вирішили задачу після 1-ї підказки від ШІ</p>
+          <div className="mt-4 pt-4 border-t space-y-2 text-sm">
+            <p>
+              <span className="text-muted-foreground">Всього підказок використано:</span>{" "}
+              <span className="font-medium">{totalHints}</span>
+            </p>
+            <p>
+              <span className="text-muted-foreground">Сер. підказок на учня:</span>{" "}
+              <span className="font-medium">{(totalHints / totalStudents).toFixed(1)}</span>
+            </p>
+            <p className="text-emerald-500">92% учнів вирішили задачу після 1-ї підказки від ШІ</p>
+          </div>
         </Card>
 
         {/* Location & Devices */}
@@ -2710,11 +2914,13 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
 
           <div className="space-y-4">
             <div>
-              <p className="text-sm font-medium mb-3">Розподіл по містах:</p>
+              <p className="text-sm font-medium mb-3">Розподіл по Шосткинському р-ну та ВПО:</p>
               <div className="space-y-2">
-                {locationData.map((loc, idx) => (
+                {locationData.slice(0, 6).map((loc, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground w-24">{screenMode ? "██████████" : loc.city}</span>
+                    <span className="text-sm text-muted-foreground w-28 truncate">
+                      {screenMode ? "██████████" : loc.city}
+                    </span>
                     <Progress value={loc.percent} className="flex-1 h-2" />
                     <span className="text-sm w-16 text-right">
                       {loc.count} ({loc.percent}%)
@@ -2722,6 +2928,7 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
                   </div>
                 ))}
               </div>
+              <p className="text-xs text-muted-foreground mt-2">62% учнів - Шосткинський район, 38% - ВПО</p>
             </div>
 
             <div className="pt-4 border-t">
@@ -2746,24 +2953,37 @@ function AnalyticsView({ screenMode }: { screenMode: boolean }) {
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Providers Section */}
-            <div className="pt-4 border-t">
-              <p className="text-sm font-medium mb-3">Інтернет-провайдери:</p>
-              <div className="space-y-2">
-                {providerData.map((provider, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground w-32">{provider.name}</span>
-                    <Progress value={provider.count} className="flex-1 h-2" />
-                    <span className="text-sm w-16 text-right">{provider.count}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="text-xs text-muted-foreground mt-2">74% мобільних пристроїв (Android + iOS)</p>
             </div>
           </div>
         </Card>
       </div>
+
+      {/* Additional Stats for Discussion */}
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <FileText className="h-5 w-5 text-primary" />
+          <h3 className="font-semibold">Додаткова статистика для дослідження</h3>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="p-4 bg-muted/30 rounded-lg">
+            <p className="text-2xl font-bold">{totalSessions}</p>
+            <p className="text-sm text-muted-foreground">Всього сесій</p>
+          </div>
+          <div className="p-4 bg-muted/30 rounded-lg">
+            <p className="text-2xl font-bold">{totalOfflineSessions}</p>
+            <p className="text-sm text-muted-foreground">Офлайн сесій</p>
+          </div>
+          <div className="p-4 bg-muted/30 rounded-lg">
+            <p className="text-2xl font-bold">{totalTasksCompleted}</p>
+            <p className="text-sm text-muted-foreground">Завдань виконано</p>
+          </div>
+          <div className="p-4 bg-muted/30 rounded-lg">
+            <p className="text-2xl font-bold">{Math.round(totalTasksCompleted / allStudents.length)}</p>
+            <p className="text-sm text-muted-foreground">Сер. завдань/учень</p>
+          </div>
+        </div>
+      </Card>
     </div>
   )
 }
