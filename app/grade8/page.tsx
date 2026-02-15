@@ -15,10 +15,17 @@ export default function Grade8Page() {
   const [copied, setCopied] = useState(false)
   const [exchangeRate, setExchangeRate] = useState(0)
   const [products, setProducts] = useState<Array<{ name: string; priceUAH: number; qty: number }>>([])
+  const [studentName, setStudentName] = useState("")
+  const [studentSurname, setStudentSurname] = useState("")
+  const [studentClass, setStudentClass] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
   const SECRET_CODE = 10000
 
   useEffect(() => {
+    // Перевіряємо що код виконується на клієнті
+    if (typeof window === "undefined") return
+
     // Отримуємо дані учня з localStorage (встановлюється на головній сторінці)
     const savedName = localStorage.getItem("grade8_student_name")
     const savedSurname = localStorage.getItem("grade8_student_surname")
@@ -29,6 +36,10 @@ export default function Grade8Page() {
       window.location.href = "/"
       return
     }
+
+    setStudentName(savedName)
+    setStudentSurname(savedSurname)
+    setStudentClass(savedClass)
 
     // Генеруємо курс долара (або беремо збережений з сьогодні)
     const savedRate = localStorage.getItem("grade8_exchange_rate")
@@ -46,6 +57,8 @@ export default function Grade8Page() {
       localStorage.setItem("grade8_exchange_rate", newRate.toString())
       localStorage.setItem("grade8_date", today)
     }
+
+    setIsLoading(false)
   }, [])
 
   const generateExchangeRate = () => {
@@ -105,9 +118,17 @@ export default function Grade8Page() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const studentName = localStorage.getItem("grade8_student_name") || ""
-  const studentSurname = localStorage.getItem("grade8_student_surname") || ""
-  const studentClass = localStorage.getItem("grade8_student_class") || ""
+  // Показуємо завантаження поки дані не підтягнулись
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-muted-foreground">Завантаження...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (showCertificate) {
     return (
