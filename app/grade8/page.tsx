@@ -1,54 +1,58 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowLeft, Trophy, Copy, Check } from "lucide-react"
+import { ArrowLeft, Trophy, Copy, Check, Sparkles } from "lucide-react"
 import Link from "next/link"
 import confetti from "canvas-confetti"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import { Input } from "@/components/ui/input"
 
 export default function Grade8Page() {
-  const [studentName, setStudentName] = useState("")
-  const [studentSurname, setStudentSurname] = useState("")
-  const [studentClass, setStudentClass] = useState("")
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [exchangeRate, setExchangeRate] = useState(0)
   const [answer, setAnswer] = useState("")
   const [showCertificate, setShowCertificate] = useState(false)
   const [copied, setCopied] = useState(false)
-
-  // Секретний код який має вийти (завжди однаковий)
-  const SECRET_CODE = 10000
-
-  // Товари - динамічні ціни розраховуються автоматично
+  const [exchangeRate, setExchangeRate] = useState(0)
   const [products, setProducts] = useState<Array<{ name: string; priceUAH: number; qty: number }>>([])
 
+  const SECRET_CODE = 10000
+
   useEffect(() => {
-    // Перевіряємо чи є збережене ім'я
+    // Отримуємо дані учня з localStorage (встановлюється на головній сторінці)
     const savedName = localStorage.getItem("grade8_student_name")
     const savedSurname = localStorage.getItem("grade8_student_surname")
     const savedClass = localStorage.getItem("grade8_student_class")
+    
+    if (!savedName || !savedSurname || !savedClass) {
+      // Якщо не авторизований - повертаємо на головну
+      window.location.href = "/"
+      return
+    }
+
+    // Генеруємо курс долара (або беремо збережений з сьогодні)
     const savedRate = localStorage.getItem("grade8_exchange_rate")
     const savedDate = localStorage.getItem("grade8_date")
-
     const today = new Date().toDateString()
 
-    if (savedName && savedSurname && savedClass && savedRate && savedDate === today) {
-      setStudentName(savedName)
-      setStudentSurname(savedSurname)
-      setStudentClass(savedClass)
-      setIsLoggedIn(true)
+    if (savedRate && savedDate === today) {
       const rate = parseFloat(savedRate)
       setExchangeRate(rate)
       generateProducts(rate)
+    } else {
+      const newRate = generateExchangeRate()
+      setExchangeRate(newRate)
+      generateProducts(newRate)
+      localStorage.setItem("grade8_exchange_rate", newRate.toString())
+      localStorage.setItem("grade8_date", today)
     }
   }, [])
 
   const generateExchangeRate = () => {
-    // Генеруємо випадковий курс від 40 до 45 грн за долар
     return parseFloat((40 + Math.random() * 5).toFixed(2))
   }
 
   const generateProducts = (rate: number) => {
-    // Базові товари
     const baseProducts = [
       { name: "iPhone 15 Pro", qty: 2 },
       { name: "MacBook Air M2", qty: 1 },
@@ -67,7 +71,6 @@ export default function Grade8Page() {
       { name: "Logitech Brio 4K", qty: 5 },
     ]
 
-    // Розраховуємо ціни в гривнях так, щоб сума в доларах = SECRET_CODE
     const totalQty = baseProducts.reduce((sum, p) => sum + p.qty, 0)
     const pricePerUnitUSD = SECRET_CODE / totalQty
 
@@ -79,268 +82,257 @@ export default function Grade8Page() {
     setProducts(productsWithPrices)
   }
 
-  const handleLogin = () => {
-    if (studentName.trim().length < 2 || studentSurname.trim().length < 2 || studentClass.trim().length < 2) {
-      alert("Будь ласка, заповни всі поля!")
-      return
-    }
-
-    const rate = generateExchangeRate()
-    setExchangeRate(rate)
-    generateProducts(rate)
-
-    localStorage.setItem("grade8_student_name", studentName)
-    localStorage.setItem("grade8_student_surname", studentSurname)
-    localStorage.setItem("grade8_student_class", studentClass)
-    localStorage.setItem("grade8_exchange_rate", rate.toString())
-    localStorage.setItem("grade8_date", new Date().toDateString())
-
-    setIsLoggedIn(true)
-  }
-
-  const handleCheckAnswer = () => {
-    const userAnswer = parseInt(answer)
-
-    if (Math.abs(userAnswer - SECRET_CODE) <= 50) {
-      confetti({
-        particleCount: 300,
-        spread: 160,
-        origin: { y: 0.6 },
-        colors: ["#4ade80", "#22c55e", "#16a34a", "#fbbf24", "#f59e0b"],
-      })
+  const handleSubmit = () => {
+    if (parseInt(answer) === SECRET_CODE) {
       setShowCertificate(true)
+      confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#10b981", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6"],
+      })
     } else {
-      alert(`❌ Неправильно! Перевір розрахунки. Підказка: відповідь має бути близько ${SECRET_CODE}`)
+      alert("Неправильний код. Перевір розрахунки в Google Таблицях!")
     }
   }
 
   const copyTable = () => {
-    const tableData =
-      "№\tТовар\tЦіна в грн\tКількість\n" +
-      products.map((p, i) => `${i + 1}\t${p.name}\t${p.priceUAH.toFixed(2)}\t${p.qty}`).join("\n")
-
+    const tableData = products
+      .map((p, i) => `${i + 1}\t${p.name}\t${p.priceUAH}\t${p.qty}`)
+      .join("\n")
     navigator.clipboard.writeText(tableData)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-[#0d1117] text-white flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 mb-6 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            На головну
-          </Link>
-
-          <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-8">
-            <h1 className="text-3xl font-bold text-green-400 mb-2">8 клас: Робота з таблицями</h1>
-            <p className="text-gray-400 mb-8">Введи свої дані для початку роботи</p>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Ім'я</label>
-                <input
-                  type="text"
-                  value={studentName}
-                  onChange={(e) => setStudentName(e.target.value)}
-                  placeholder="Олександр"
-                  className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white placeholder-gray-500 focus:border-green-500 focus:outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Прізвище</label>
-                <input
-                  type="text"
-                  value={studentSurname}
-                  onChange={(e) => setStudentSurname(e.target.value)}
-                  placeholder="Коваленко"
-                  className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white placeholder-gray-500 focus:border-green-500 focus:outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Клас</label>
-                <input
-                  type="text"
-                  value={studentClass}
-                  onChange={(e) => setStudentClass(e.target.value)}
-                  placeholder="8-А"
-                  className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white placeholder-gray-500 focus:border-green-500 focus:outline-none transition-colors"
-                />
-              </div>
-
-              <button
-                onClick={handleLogin}
-                className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                Почати завдання
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const studentName = localStorage.getItem("grade8_student_name") || ""
+  const studentSurname = localStorage.getItem("grade8_student_surname") || ""
+  const studentClass = localStorage.getItem("grade8_student_class") || ""
 
   if (showCertificate) {
     return (
-      <div className="min-h-screen bg-[#0d1117] text-white flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl">
-          <div className="bg-gradient-to-br from-green-900/30 to-blue-900/30 border-2 border-green-500 rounded-2xl p-8 text-center">
-            <Trophy className="h-20 w-20 text-yellow-400 mx-auto mb-4" />
-            <h1 className="text-4xl font-bold text-green-400 mb-4">Вітаємо!</h1>
-            <p className="text-2xl text-white mb-2">
-              {studentName} {studentSurname}
-            </p>
-            <p className="text-xl text-gray-300 mb-6">Клас: {studentClass}</p>
-            <p className="text-lg text-gray-400 mb-8">
-              Ти успішно виконав завдання з таблицями та курсом долара!
-            </p>
-            <div className="inline-block bg-yellow-500/20 border-2 border-yellow-500 rounded-xl px-8 py-4">
-              <p className="text-sm text-yellow-400 mb-1">Твій код</p>
-              <p className="text-3xl font-bold text-yellow-400">{SECRET_CODE}</p>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-2xl w-full border-primary/30 bg-gradient-to-br from-card to-secondary">
+          <CardContent className="p-8 text-center space-y-6">
+            {/* Логотип замість emoji */}
+            <div className="flex justify-center">
+              <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center border-4 border-primary">
+                <Trophy className="w-12 h-12 text-primary" />
+              </div>
             </div>
-            <div className="mt-8 space-x-4">
-              <button
-                onClick={() => setShowCertificate(false)}
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
-              >
+
+            <div className="space-y-2">
+              <h1 className="text-4xl font-bold text-primary flex items-center justify-center gap-2">
+                <Sparkles className="w-8 h-8" />
+                Вітаємо!
+                <Sparkles className="w-8 h-8" />
+              </h1>
+              <p className="text-2xl font-semibold text-foreground">
+                {studentSurname} {studentName}
+              </p>
+              <p className="text-lg text-muted-foreground">Клас: {studentClass}</p>
+            </div>
+
+            <div className="py-4">
+              <p className="text-foreground mb-4">
+                Ти успішно виконав завдання з таблицями та курсом долара!
+              </p>
+              <Card className="bg-secondary border-primary/30">
+                <CardContent className="p-4">
+                  <p className="text-sm text-muted-foreground mb-2">Твій код</p>
+                  <p className="text-4xl font-mono font-bold text-primary">{SECRET_CODE}</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="flex gap-3 justify-center">
+              <Button variant="outline" onClick={() => setShowCertificate(false)}>
                 Спробувати ще раз
-              </button>
-              <Link
-                href="/"
-                className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                На головну
-              </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/">На головну</Link>
+              </Button>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 mb-6 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-          На головну
-        </Link>
-
-        <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-green-400 mb-4">Завдання 1: Курс долара та таблиці</h1>
-          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-            <p className="text-blue-400 mb-2">
-              <span className="font-semibold">Учень:</span> {studentName} {studentSurname} ({studentClass})
-            </p>
-            <p className="text-yellow-400 text-lg font-semibold">
-              Курс долара сьогодні: {exchangeRate.toFixed(2)} ₴ за 1$
-            </p>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/">
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+              Завдання 1: Курс долара та таблиці
+            </h1>
+            <p className="text-muted-foreground">8 клас • Google Таблиці</p>
           </div>
         </div>
 
-        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-white">Таблиця товарів</h2>
-            <button
-              onClick={copyTable}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copied ? "Скопійовано!" : "Копіювати таблицю"}
-            </button>
-          </div>
+        {/* Student info card */}
+        <Card className="bg-primary/10 border-primary/30">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Учень</p>
+                <p className="font-semibold text-foreground">
+                  {studentSurname} {studentName} ({studentClass})
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Курс долара сьогодні</p>
+                <p className="text-2xl font-bold text-primary">{exchangeRate} ₴ за 1$</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          <div className="overflow-x-auto select-text">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-[#21262d] border-b-2 border-green-500">
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 select-text">№</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 select-text">Товар</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-300 select-text">Ціна в грн</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-300 select-text">Кількість</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-yellow-400 select-text">
-                    Ціна в $ (заповнюєш ти)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product, index) => (
-                  <tr key={index} className="border-b border-[#30363d] hover:bg-[#21262d] transition-colors select-text">
-                    <td className="px-4 py-3 text-gray-400 select-text">{index + 1}</td>
-                    <td className="px-4 py-3 text-white select-text">{product.name}</td>
-                    <td className="px-4 py-3 text-right text-blue-400 font-mono select-text">
-                      {product.priceUAH.toFixed(2)} ₴
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-300 select-text">{product.qty}</td>
-                    <td className="px-4 py-3 text-right text-yellow-400 select-text">?</td>
+        {/* Table card */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Таблиця товарів</CardTitle>
+              <Button variant="outline" size="sm" onClick={copyTable} className="gap-2">
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? "Скопійовано!" : "Копіювати таблицю"}
+              </Button>
+            </div>
+            <CardDescription>
+              15 товарів для розрахунку. Можна виділяти та копіювати текст з таблиці.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full select-text">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left p-3 text-sm font-semibold text-muted-foreground">№</th>
+                    <th className="text-left p-3 text-sm font-semibold text-muted-foreground">Товар</th>
+                    <th className="text-right p-3 text-sm font-semibold text-muted-foreground">Ціна в грн</th>
+                    <th className="text-right p-3 text-sm font-semibold text-muted-foreground">Кількість</th>
+                    <th className="text-right p-3 text-sm font-semibold text-primary">Ціна в $ (заповнюєш ти)</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                </thead>
+                <tbody>
+                  {products.map((product, index) => (
+                    <tr key={index} className="border-b border-border/50 hover:bg-secondary/50 transition-colors select-text">
+                      <td className="p-3 text-muted-foreground select-text">{index + 1}</td>
+                      <td className="p-3 font-medium select-text">{product.name}</td>
+                      <td className="p-3 text-right font-mono text-accent select-text">
+                        {product.priceUAH.toLocaleString()} ₴
+                      </td>
+                      <td className="p-3 text-right select-text">{product.qty}</td>
+                      <td className="p-3 text-right text-primary font-semibold select-text">?</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-6 mb-8">
-          <h2 className="text-2xl font-bold text-green-400 mb-4">Інструкція виконання в Google Таблицях</h2>
-          <div className="space-y-4 text-gray-300">
-            <div className="bg-[#0d1117] rounded-lg p-4">
-              <p className="font-semibold text-white mb-2">Крок 1: Створи нову таблицю</p>
-              <p>Відкрий Google Таблиці та створи новий документ</p>
-            </div>
-            <div className="bg-[#0d1117] rounded-lg p-4">
-              <p className="font-semibold text-white mb-2">Крок 2: Скопіюй дані</p>
-              <p>Натисни кнопку "Копіювати таблицю" вище та вставити дані в Google Таблиці (Ctrl+V або Cmd+V)</p>
-            </div>
-            <div className="bg-[#0d1117] rounded-lg p-4">
-              <p className="font-semibold text-white mb-2">Крок 3: Додай колонку "Ціна в $"</p>
-              <p>У колонці E напиши формулу: =C2/{exchangeRate.toFixed(2)}</p>
-              <p className="text-sm text-gray-400 mt-1">де C2 - це ціна в гривнях, а {exchangeRate.toFixed(2)} - курс долара</p>
-            </div>
-            <div className="bg-[#0d1117] rounded-lg p-4">
-              <p className="font-semibold text-white mb-2">Крок 4: Скопіюй формулу</p>
-              <p>Виділи комірку E2 та перетягни за куточок вниз до E16 (всі 15 товарів)</p>
-            </div>
-            <div className="bg-[#0d1117] rounded-lg p-4">
-              <p className="font-semibold text-white mb-2">Крок 5: Розрахуй суму в доларах</p>
-              <p>
-                У комірці E17 напиши формулу: =SUMPRODUCT(E2:E16,D2:D16)
-              </p>
-              <p className="text-sm text-gray-400 mt-1">Ця формула помножить ціну в $ на кількість і підсумує все</p>
-            </div>
-            <div className="bg-[#0d1117] rounded-lg p-4">
-              <p className="font-semibold text-white mb-2">Крок 6: Отримай код</p>
-              <p>Округли результат в комірці E17 до цілого числа та введи його нижче</p>
-            </div>
-          </div>
-        </div>
+        {/* Instructions card */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Інструкція для Google Таблиць</CardTitle>
+            <CardDescription>Покрокове виконання завдання</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                  1
+                </div>
+                <div>
+                  <p className="font-semibold">Скопіюй таблицю</p>
+                  <p className="text-sm text-muted-foreground">
+                    Натисни кнопку "Копіювати таблицю" і вставляй дані в Google Таблиці
+                  </p>
+                </div>
+              </div>
 
-        <div className="bg-[#161b22] border border-green-500/30 rounded-xl p-6">
-          <h2 className="text-2xl font-bold text-green-400 mb-4">Введи свою відповідь</h2>
-          <p className="text-gray-300 mb-4">Яка сума в доларах вийшла у тебе за всі товари з урахуванням кількості?</p>
-          <div className="flex gap-4">
-            <input
-              type="number"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Введи суму в доларах (ціле число)"
-              className="flex-1 px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white placeholder-gray-500 focus:border-green-500 focus:outline-none transition-colors"
-            />
-            <button
-              onClick={handleCheckAnswer}
-              disabled={!answer}
-              className="px-8 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
-            >
-              Перевірити
-            </button>
-          </div>
-        </div>
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                  2
+                </div>
+                <div>
+                  <p className="font-semibold">Створи колонку "Ціна в $"</p>
+                  <p className="text-sm text-muted-foreground">
+                    В колонці E напиши формулу: <code className="bg-secondary px-1 py-0.5 rounded text-xs">=C2/{exchangeRate}</code>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                  3
+                </div>
+                <div>
+                  <p className="font-semibold">Розтягни формулу</p>
+                  <p className="text-sm text-muted-foreground">
+                    Потягни за правий нижній кут комірки E2 вниз до E16
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                  4
+                </div>
+                <div>
+                  <p className="font-semibold">Порахуй суму в доларах</p>
+                  <p className="text-sm text-muted-foreground">
+                    В комірці E17 напиши: <code className="bg-secondary px-1 py-0.5 rounded text-xs">=SUM(E2:E16)</code>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                  5
+                </div>
+                <div>
+                  <p className="font-semibold">Введи код на сайті</p>
+                  <p className="text-sm text-muted-foreground">
+                    Заокругли суму до цілого числа і введи в поле нижче
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Answer input card */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Введи свою відповідь</CardTitle>
+            <CardDescription>Твій код - це сума в доларах (заокруглена до цілого числа)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-3">
+              <Input
+                type="number"
+                placeholder="Введи код (наприклад: 10000)"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                className="flex-1 font-mono text-lg"
+              />
+              <Button onClick={handleSubmit} disabled={!answer} className="gap-2">
+                <Trophy className="w-4 h-4" />
+                Перевірити
+              </Button>
+            </div>
+            <Progress value={answer ? 50 : 0} className="h-2" />
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
