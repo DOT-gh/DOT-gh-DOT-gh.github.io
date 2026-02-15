@@ -143,7 +143,7 @@ export function Dashboard() {
                       <div>
                         <div className="mb-1.5 flex justify-between text-xs">
                           <span className="text-muted-foreground">Прогрес</span>
-                          <span className="font-mono text-foreground">0/8 завдань</span>
+                          <parameter name="font-mono text-foreground">0/1 завдань</span>
                         </div>
                         <Progress value={0} className="h-1.5" />
                       </div>
