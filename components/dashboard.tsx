@@ -21,7 +21,7 @@ const courseIcons: Record<string, React.ReactNode> = {
   algorithm: <Cpu className="h-6 w-6" />,
 }
 
-export function Dashboard() {
+export function Dashboard({ onGrade8Click }: { onGrade8Click?: () => void }) {
   const { courses, setSelectedCourse, setCurrentView, xp, level, streak, achievements } = useAppState()
   const [profileName, setProfileName] = useState("")
 
@@ -151,7 +151,15 @@ export function Dashboard() {
                         className="w-full gap-2 text-sm"
                         variant="default"
                         size="sm"
-                        onClick={() => (window.location.href = "/grade8")}
+                        onClick={() => {
+                          // Перевіряємо чи є збережені дані учня
+                          const savedName = localStorage.getItem("grade8_student_name")
+                          if (savedName) {
+                            window.location.href = "/grade8"
+                          } else {
+                            onGrade8Click?.()
+                          }
+                        }}
                       >
                         Почати
                         <ChevronRight className="h-4 w-4" />
