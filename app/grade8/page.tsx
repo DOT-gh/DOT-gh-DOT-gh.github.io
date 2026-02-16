@@ -226,13 +226,13 @@ export default function Grade8Page() {
   const CopyBtn = ({ text, field, label }: { text: string; field: CopiedField; label?: string }) => (
     <button
       onClick={() => copyToClipboard(text, field)}
-      className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-2.5 py-1 text-sm font-mono transition-colors hover:bg-secondary/80 hover:border-primary/50 group"
+      className="inline-flex items-center gap-1 sm:gap-1.5 rounded-md border border-border bg-secondary px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs sm:text-sm font-mono transition-colors hover:bg-secondary/80 hover:border-primary/50 group active:scale-95"
     >
-      <span className="text-foreground">{label || text}</span>
+      <span className="text-foreground truncate max-w-[120px] sm:max-w-none">{label || text}</span>
       {copiedField === field ? (
-        <Check className="w-3.5 h-3.5 text-primary" />
+        <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary shrink-0" />
       ) : (
-        <ClipboardCopy className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+        <ClipboardCopy className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
       )}
     </button>
   )
@@ -242,41 +242,43 @@ export default function Grade8Page() {
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/"><ArrowLeft className="w-5 h-5" /></Link>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            <Button variant="ghost" size="icon" asChild className="shrink-0">
+              <Link href="/"><ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" /></Link>
             </Button>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-foreground">8 клас: Інформатика</h1>
-              <p className="text-sm text-muted-foreground">{studentSurname} {studentName} | {studentClass}</p>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground truncate">8 клас: Інформатика</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">{studentSurname} {studentName} | {studentClass}</p>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-border pb-0">
+        <div className="flex gap-1 sm:gap-2 border-b border-border pb-0 overflow-x-auto">
           <button
             onClick={() => setActiveTab("practical")}
-            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+            className={`px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium border-b-2 transition-colors -mb-px whitespace-nowrap ${
               activeTab === "practical"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            <BookOpen className="w-4 h-4 inline mr-2" />
-            Практична робота
+            <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5 sm:mr-2" />
+            <span className="hidden xs:inline">Практична робота</span>
+            <span className="xs:hidden">Практична</span>
           </button>
           <button
             onClick={() => setActiveTab("homework")}
-            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+            className={`px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium border-b-2 transition-colors -mb-px whitespace-nowrap ${
               activeTab === "homework"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            <HomeIcon className="w-4 h-4 inline mr-2" />
-            Домашнє завдання
+            <HomeIcon className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5 sm:mr-2" />
+            <span className="hidden xs:inline">Домашнє завдання</span>
+            <span className="xs:hidden">Домашня</span>
           </button>
         </div>
 
@@ -285,12 +287,12 @@ export default function Grade8Page() {
           <div className="space-y-6">
             {/* Exchange rate */}
             <Card className="border-primary/30 bg-primary/5">
-              <CardContent className="p-4 flex items-center justify-between flex-wrap gap-3">
+              <CardContent className="p-3 sm:p-4 flex items-center justify-between flex-wrap gap-2 sm:gap-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Курс долара на сьогодні</p>
-                  <p className="text-3xl font-bold text-primary">{EXCHANGE_RATE} грн = 1$</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Курс долара на сьогодні</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-primary">{EXCHANGE_RATE} грн = 1$</p>
                 </div>
-                <CopyBtn text={String(EXCHANGE_RATE)} field="rate" label={`${EXCHANGE_RATE} (скопіювати)`} />
+                <CopyBtn text={String(EXCHANGE_RATE)} field="rate" label={`${EXCHANGE_RATE}`} />
               </CardContent>
             </Card>
 
@@ -310,22 +312,22 @@ export default function Grade8Page() {
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto rounded-lg border border-border">
-                  <table className="w-full select-text">
+                  <table className="w-full select-text min-w-[500px]">
                     <thead>
                       <tr className="bg-secondary">
-                        <th className="text-left p-3 text-sm font-semibold text-muted-foreground w-12">No</th>
-                        <th className="text-left p-3 text-sm font-semibold text-muted-foreground">Товар</th>
-                        <th className="text-right p-3 text-sm font-semibold text-muted-foreground">Ціна (грн)</th>
-                        <th className="text-right p-3 text-sm font-semibold text-primary">Ціна в $ (рахуєш ти)</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm font-semibold text-muted-foreground w-10 sm:w-12">No</th>
+                        <th className="text-left p-2 sm:p-3 text-xs sm:text-sm font-semibold text-muted-foreground">Товар</th>
+                        <th className="text-right p-2 sm:p-3 text-xs sm:text-sm font-semibold text-muted-foreground">Ціна (грн)</th>
+                        <th className="text-right p-2 sm:p-3 text-xs sm:text-sm font-semibold text-primary whitespace-nowrap">Ціна $ (ти)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {PRODUCTS.map((p, i) => (
                         <tr key={i} className="border-t border-border hover:bg-secondary/50 transition-colors select-text">
-                          <td className="p-3 text-sm text-muted-foreground select-text">{i + 1}</td>
-                          <td className="p-3 text-sm font-medium text-foreground select-text">{p.name}</td>
-                          <td className="p-3 text-sm text-right font-mono text-foreground select-text">{p.priceUAH.toLocaleString("uk-UA")}</td>
-                          <td className="p-3 text-sm text-right text-primary font-semibold select-text">?</td>
+                          <td className="p-2 sm:p-3 text-xs sm:text-sm text-muted-foreground select-text">{i + 1}</td>
+                          <td className="p-2 sm:p-3 text-xs sm:text-sm font-medium text-foreground select-text">{p.name}</td>
+                          <td className="p-2 sm:p-3 text-xs sm:text-sm text-right font-mono text-foreground select-text">{p.priceUAH.toLocaleString("uk-UA")}</td>
+                          <td className="p-2 sm:p-3 text-xs sm:text-sm text-right text-primary font-semibold select-text">?</td>
                         </tr>
                       ))}
                     </tbody>

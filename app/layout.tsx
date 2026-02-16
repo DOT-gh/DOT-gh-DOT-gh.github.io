@@ -18,11 +18,21 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Edu_Survival_Kit v.0.4 (Beta) | Навчання під час блекаутів",
   description: "Легка офлайн-платформа для навчання програмуванню під час відключень електроенергії",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "EduKit",
+  },
     generator: 'v0.app'
 }
 
 export const viewport = {
-  themeColor: "#121212",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#22c55e",
 }
 
 export default function RootLayout({
@@ -32,6 +42,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uk" className="dark">
+      <head>
+        <link rel="icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+      </head>
       <body className={`${inter.className} ${jetbrainsMono.variable} font-sans antialiased`}>
         <DevToolsBlocker />
         <AppProvider>
