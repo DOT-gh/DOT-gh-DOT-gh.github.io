@@ -57,6 +57,8 @@ export default function RootLayout({
           <AchievementToast />
           <EasterEggs />
         </AppProvider>
+        {/* Vercel Analytics - відстеження відвідувачів */}
+        <script defer src="/_vercel/insights/script.js"></script>
       </body>
     </html>
   )

@@ -66,6 +66,17 @@ export default function Grade8Page() {
       setStudentSurname(savedSurname)
       setStudentClass(savedClass)
       setIsAuthorized(true)
+      
+      // Зберігаємо візит для статистики вчителя
+      const visits = JSON.parse(localStorage.getItem("grade8_visits") || "[]")
+      visits.push({
+        name: savedName,
+        surname: savedSurname,
+        class: savedClass,
+        timestamp: new Date().toISOString(),
+        page: "grade8",
+      })
+      localStorage.setItem("grade8_visits", JSON.stringify(visits))
     } else if (profile) {
       try {
         const data = JSON.parse(profile)
