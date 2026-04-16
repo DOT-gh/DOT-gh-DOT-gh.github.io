@@ -35,16 +35,12 @@ export async function updateSession(request: NextRequest) {
 
   // Захищені маршрути - потрібна авторизація
   const protectedPaths = ['/dashboard', '/teacher', '/grade8']
-  const isProtectedPath = protectedPaths.some(path => 
+  const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )
 
-  // Публічні маршрути - доступні всім
-  const publicPaths = ['/', '/login', '/auth']
-  const isPublicPath = publicPaths.some(path => 
-    request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith('/auth')
-  )
-
+  // getUser() викликається безумовно для оновлення сесії (Supabase вимагає цього)
+  // Перевірка захисту маршруту виконується лише після отримання користувача
   if (isProtectedPath && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
