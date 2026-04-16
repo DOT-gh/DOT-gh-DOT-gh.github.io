@@ -13,17 +13,9 @@ import {
   Code2,
   GraduationCap
 } from "lucide-react"
-import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 
 export default async function LandingPage() {
-  // Перевіряємо чи користувач вже авторизований
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  if (user) {
-    redirect("/dashboard")
-  }
+
 
   return (
     <div className="min-h-screen bg-background">
