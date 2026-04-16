@@ -16,6 +16,7 @@ import {
 import { useAppState } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,6 +77,12 @@ export function TopNavBar() {
     if (batteryLevel <= 20) return "text-destructive"
     if (batteryLevel <= 50) return "text-amber-500"
     return "text-primary"
+  }
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push("/")
   }
 
   const handleTeacherAccess = () => {
@@ -240,7 +247,7 @@ export function TopNavBar() {
                 Налаштування
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">Вийти</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">Вийти</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
