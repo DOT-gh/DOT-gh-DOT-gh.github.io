@@ -31,9 +31,8 @@ export default function HomePage() {
     return () => clearTimeout(timer)
   }, [])
 
-  const handleSearch = (query: string) => {
-    console.log("[v0] Search query:", query)
-    // TODO: Implement search functionality
+  const handleSearch = (_query: string) => {
+    // Search functionality reserved for future implementation
   }
 
   if (isLoading) {

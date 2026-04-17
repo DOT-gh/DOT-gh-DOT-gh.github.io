@@ -13,9 +13,18 @@ import {
   Code2,
   GraduationCap
 } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
+import { redirect } from "next/navigation"
 
 export default async function LandingPage() {
-
+  // Якщо вже авторизований — одразу на dashboard
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) redirect("/dashboard")
+  } catch {
+    // Якщо Supabase недоступний — показуємо лендінг
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -47,25 +56,25 @@ export default async function LandingPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
-            Вчись програмувати
+            Вчись
             <br />
             <span className="text-primary">навіть під час блекаутів</span>
           </h1>
           
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-balance">
-            Інтерактивна платформа для учнів 8-11 класів з практичними завданнями, 
+            Інтерактивна платформа для учнів 5-11 класів з практичними завданнями, 
             геймфікацією та підтримкою офлайн-режиму
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="h-12 px-8 text-base gap-2" asChild>
-              <Link href="/login">
-                Розпочати безкоштовно
+              <Link href="/dashboard">
+                Спробувати демо
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="h-12 px-8 text-base" asChild>
-              <Link href="#features">Дізнатися більше</Link>
+              <Link href="/login">Увійти через Google</Link>
             </Button>
           </div>
         </div>

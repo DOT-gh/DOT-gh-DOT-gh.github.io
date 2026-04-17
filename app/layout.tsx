@@ -3,10 +3,10 @@ import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import { AppProvider } from "@/lib/store"
 import { SnowfallWrapper } from "@/components/snowfall-wrapper"
-import { DevToolsBlocker } from "@/components/dev-tools-blocker"
 import { Toaster } from "@/components/ui/toaster"
 import { AchievementToast } from "@/components/achievement-toast"
 import EasterEggs from "@/components/easter-eggs"
+import { LowBatteryAlert } from "@/components/low-battery-alert"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
@@ -16,13 +16,13 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Edu_Survival_Kit v.0.4 (Beta) | Навчання під час блекаутів",
-  description: "Легка офлайн-платформа для навчання програмуванню під час відключень електроенергії",
+  title: "dotkit.me | Навчання програмуванню",
+  description: "Інтерактивна платформа для навчання програмуванню під час блекаутів — для учнів 5–11 класів",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "EduKit",
+    title: "dotkit.me",
   },
     generator: 'v0.app'
 }
@@ -49,13 +49,13 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={`${inter.className} ${jetbrainsMono.variable} font-sans antialiased`}>
-        <DevToolsBlocker />
         <AppProvider>
           <SnowfallWrapper />
           {children}
           <Toaster />
           <AchievementToast />
           <EasterEggs />
+          <LowBatteryAlert />
         </AppProvider>
       </body>
     </html>

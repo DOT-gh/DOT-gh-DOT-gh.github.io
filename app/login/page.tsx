@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState } from "react"
 import Link from "next/link"
-import { Terminal, Sparkles, ArrowLeft } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Terminal, Sparkles, ArrowLeft, Play } from "lucide-react"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const handleGoogleLogin = async () => {
     const supabase = createClient()
@@ -30,6 +32,10 @@ export default function LoginPage() {
       setError(error instanceof Error ? error.message : "Помилка входу")
       setIsLoading(false)
     }
+  }
+
+  const handleDemoLogin = () => {
+    router.push("/dashboard")
   }
 
   return (
@@ -55,11 +61,30 @@ export default function LoginPage() {
               <div>
                 <CardTitle className="text-2xl">Вхід в Edu Survival Kit</CardTitle>
                 <CardDescription className="mt-2">
-                  Увійдіть через Google щоб продовжити навчання
+                  Увійдіть через Google або спробуйте демо без реєстрації
                 </CardDescription>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Demo button — prominent */}
+              <Button
+                onClick={handleDemoLogin}
+                className="w-full h-12 text-base gap-3"
+                variant="default"
+              >
+                <Play className="w-5 h-5" />
+                Спробувати без реєстрації (Демо)
+              </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="bg-card px-2 text-muted-foreground">або увійти через</span>
+                </div>
+              </div>
+
               <Button
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
@@ -91,21 +116,10 @@ export default function LoginPage() {
                 <p className="text-sm text-destructive text-center">{error}</p>
               )}
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border" />
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    Безпечний вхід
-                  </span>
-                </div>
-              </div>
-
               <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
                 <Sparkles className="w-4 h-4 text-primary shrink-0" />
                 <p className="text-xs text-muted-foreground">
-                  Ми використовуємо Google для безпечної авторизації. Ваші дані захищені.
+                  Демо-режим дає повний доступ до всіх курсів та функцій. Прогрес зберігається локально.
                 </p>
               </div>
             </CardContent>

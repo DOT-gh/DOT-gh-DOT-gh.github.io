@@ -166,7 +166,21 @@ export default function Grade8Page() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="g8class">Клас</Label>
-              <Input id="g8class" placeholder="8-А" value={formClass} onChange={(e) => setFormClass(e.target.value)} />
+              <select
+                id="g8class"
+                value={formClass}
+                onChange={(e) => setFormClass(e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Оберіть клас</option>
+                {[5, 6, 7, 8, 9, 10, 11].map((num) =>
+                  ["А", "Б", "В", "Г"].map((letter) => (
+                    <option key={`${num}${letter}`} value={`${num}-${letter}`}>
+                      {num}-{letter}
+                    </option>
+                  ))
+                )}
+              </select>
             </div>
             <div className="flex gap-3 pt-2">
               <Button variant="outline" className="flex-1" asChild>
