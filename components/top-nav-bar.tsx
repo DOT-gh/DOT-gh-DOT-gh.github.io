@@ -44,6 +44,19 @@ export function TopNavBar() {
   const [isAutoDetected, setIsAutoDetected] = useState(false)
   const [showTeacherInput, setShowTeacherInput] = useState(false)
   const [teacherCode, setTeacherCode] = useState("")
+  const [userName, setUserName] = useState<string | null>(null)
+  const [userAvatar, setUserAvatar] = useState<string | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        const meta = data.user.user_metadata
+        setUserName(meta?.full_name || meta?.name || data.user.email?.split("@")[0] || null)
+        setUserAvatar(meta?.avatar_url || meta?.picture || null)
+      }
+    })
+  }, [])
 
   useEffect(() => {
     const detectBattery = async () => {
@@ -101,11 +114,13 @@ export function TopNavBar() {
         {/* Left: Logo + Navigation */}
         <div className="flex items-center gap-2 sm:gap-4">
           <div className="flex items-center gap-2">
-            <Terminal className="h-5 w-5 text-primary" />
+            <div className="flex items-center justify-center h-7 px-2 rounded-md bg-primary text-primary-foreground font-mono font-bold text-xs select-none">
+              dot
+            </div>
             <span className="font-mono text-sm font-semibold tracking-tight text-foreground">
-              <span className="hidden sm:inline">Edu_Survival_Kit</span>
-              <span className="sm:hidden">ESK</span>
-              <span className="hidden sm:inline text-muted-foreground"> v.0.9</span>{" "}
+              <span className="hidden sm:inline">dot<span className="text-primary">.</span>kit</span>
+              <span className="sm:hidden">dot</span>
+              <span className="hidden sm:inline text-muted-foreground">.me</span>{" "}
               <span className="rounded bg-primary/20 px-1.5 py-0.5 text-xs text-primary">Beta</span>
             </span>
           </div>
@@ -232,12 +247,25 @@ export function TopNavBar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-1 sm:gap-2 rounded-md border border-border bg-secondary/50 px-1.5 sm:px-2.5 py-1 transition-colors hover:bg-secondary">
-                <User className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground hidden sm:inline">Гість</span>
+                {userAvatar ? (
+                  <img src={userAvatar} alt="avatar" className="h-5 w-5 rounded-full object-cover" />
+                ) : (
+                  <User className="h-3.5 w-3.5 text-muted-foreground" />
+                )}
+                <span className="text-xs text-foreground hidden sm:inline max-w-[100px] truncate">
+                  {userName || "Гість"}
+                </span>
                 <ChevronDown className="h-3 w-3 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-52">
+              {userName && (
+                <>
+                  <div className="px-3 py-2 border-b border-border">
+                    <p className="text-xs font-medium text-foreground truncate">{userName}</p>
+                  </div>
+                </>
+              )}
               <DropdownMenuItem onClick={() => setShowProfile(true)}>
                 <User className="mr-2 h-4 w-4" />
                 Профіль
@@ -247,7 +275,9 @@ export function TopNavBar() {
                 Налаштування
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut} className="text-destructive">Вийти</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
+                Вийти з акаунту
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
