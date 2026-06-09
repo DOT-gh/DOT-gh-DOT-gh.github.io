@@ -12,9 +12,12 @@ import {
   BatteryLow,
   BatteryMedium,
   BatteryFull,
+  Loader2,
 } from "lucide-react"
 import { useAppState } from "@/lib/store"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
@@ -43,6 +46,53 @@ export function TopNavBar() {
   const [isAutoDetected, setIsAutoDetected] = useState(false)
   const [showTeacherInput, setShowTeacherInput] = useState(false)
   const [teacherCode, setTeacherCode] = useState("")
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
+  const [userName, setUserName] = useState<string | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+
+    const applyUser = (user: NonNullable<Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"]> | null) => {
+      if (user) {
+        const meta = user.user_metadata
+        setUserName(
+          (meta?.full_name as string | undefined) ||
+            (meta?.name as string | undefined) ||
+            user.email ||
+            "Гість",
+        )
+        setAvatarUrl(
+          (meta?.avatar_url as string | undefined) ||
+            (meta?.picture as string | undefined) ||
+            null,
+        )
+      } else {
+        setUserName(null)
+        setAvatarUrl(null)
+      }
+      setIsAuthLoading(false)
+    }
+
+    supabase.auth.getUser().then(({ data }) => applyUser(data.user))
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      applyUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    setUserName(null)
+    setAvatarUrl(null)
+    router.refresh()
+    router.push("/login")
+  }
 
   useEffect(() => {
     const detectBattery = async () => {
@@ -225,8 +275,21 @@ export function TopNavBar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-1 sm:gap-2 rounded-md border border-border bg-secondary/50 px-1.5 sm:px-2.5 py-1 transition-colors hover:bg-secondary">
-                <User className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground hidden sm:inline">Гість</span>
+                {isAuthLoading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+                ) : (
+                  <Avatar className="h-5 w-5">
+                    {avatarUrl ? (
+                      <AvatarImage src={avatarUrl} alt={userName ?? "Гість"} />
+                    ) : null}
+                    <AvatarFallback className="bg-transparent">
+                      <User className="h-3 w-3 text-muted-foreground" />
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                <span className="text-xs text-muted-foreground hidden sm:inline max-w-[120px] truncate">
+                  {isAuthLoading ? "…" : userName ?? "Гість"}
+                </span>
                 <ChevronDown className="h-3 w-3 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
@@ -240,7 +303,9 @@ export function TopNavBar() {
                 Налаштування
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">Вийти</DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive" onClick={handleSignOut}>
+                Вийти
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
