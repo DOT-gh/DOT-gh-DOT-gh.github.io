@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/client"
+import { signInWithGoogle } from "@/lib/auth/google-login"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -44,11 +44,7 @@ export default function LoginPage() {
     setIsLoading(true)
     setError(null)
 
-    const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: "http://localhost:3000/auth/callback" },
-    })
+    const { error: authError } = await signInWithGoogle("/dashboard")
 
     if (authError) {
       setError(authError.message)

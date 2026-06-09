@@ -33,8 +33,19 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Якщо користувач авторизований і заходить на /login - редірект на dashboard
-  if (request.nextUrl.pathname === '/login' && user) {
+  const pathname =
+    request.nextUrl.pathname.replace(/\/$/, '') || '/'
+
+  // Захист /dashboard — без сесії на головну
+  if (pathname === '/dashboard' && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    url.search = ''
+    return NextResponse.redirect(url)
+  }
+
+  // Авторизований користувач на /login → dashboard
+  if (pathname === '/login' && user) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)

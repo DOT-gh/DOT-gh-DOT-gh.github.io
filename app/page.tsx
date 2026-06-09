@@ -68,7 +68,7 @@ export default async function LandingPage() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="h-12 px-8 text-base gap-2" asChild>
-              <Link href="/dashboard">
+              <Link href="/demo">
                 Спробувати демо
                 <ChevronRight className="w-4 h-4" />
               </Link>
