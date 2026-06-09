@@ -1,45 +1,43 @@
-// lib/queue/sync-manager.ts
-import { eventQueue, QueuedEvent } from './event-queue'
-import { supabaseClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
+import { eventQueue, type QueuedEvent } from './event-queue'
 
 type SyncHandler = (event: QueuedEvent) => Promise<void>
+type NetworkStatus = 'online' | 'offline'
 
 export class SyncManager {
   private isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true
   private isSyncing = false
-  private syncHandlers: Map<string, SyncHandler> = new Map()
-  private listeners: ((status: 'online' | 'offline') => void)[] = []
+  private syncHandlers = new Map<string, SyncHandler>()
+  private listeners: Array<(status: NetworkStatus) => void> = []
 
   constructor() {
     this.setupNetworkListeners()
     this.registerDefaultHandlers()
   }
 
-  // Слушатели сети
   private setupNetworkListeners(): void {
     if (typeof window === 'undefined') return
 
     window.addEventListener('online', () => this.handleOnline())
     window.addEventListener('offline', () => this.handleOffline())
 
-    // Периодическая проверка (на случай если событие не сработало)
-    setInterval(() => this.checkConnection(), 30000)
+    setInterval(() => this.checkConnection(), 30_000)
   }
 
   private handleOnline(): void {
-    console.log('[Sync] Network restored! 🌐')
     this.isOnline = true
     this.notifyListeners('online')
-    this.sync()
+    void this.sync()
   }
 
   private handleOffline(): void {
-    console.log('[Sync] Network lost 📡')
     this.isOnline = false
     this.notifyListeners('offline')
   }
 
   private checkConnection(): void {
+    if (typeof navigator === 'undefined') return
+
     const wasOnline = this.isOnline
     this.isOnline = navigator.onLine
 
@@ -50,115 +48,90 @@ export class SyncManager {
     }
   }
 
-  // Регистрация обработчиков
   registerHandler(eventType: string, handler: SyncHandler): void {
     this.syncHandlers.set(eventType, handler)
-    console.log(`[Sync] Handler registered: ${eventType}`)
   }
 
-  // Регистрация обработчиков по умолчанию
   private registerDefaultHandlers(): void {
-    // Profile update
     this.registerHandler('profile_update', async (event) => {
-      const supabase = await supabaseClient()
-      const { data, error } = await supabase
+      const supabase = createClient()
+      const { error } = await supabase
         .from('profiles')
         .update(event.payload)
         .eq('id', event.payload.id)
 
       if (error) throw new Error(error.message)
-      console.log('[Sync] Profile updated:', data)
     })
 
-    // Progress save
     this.registerHandler('progress_save', async (event) => {
-      const supabase = await supabaseClient()
-      const { data, error } = await supabase
-        .from('user_progress')
-        .upsert(event.payload)
+      const supabase = createClient()
+      const { error } = await supabase.from('user_progress').upsert(event.payload)
 
       if (error) throw new Error(error.message)
-      console.log('[Sync] Progress saved:', data)
     })
 
-    // Achievement unlock
     this.registerHandler('achievement_unlock', async (event) => {
-      const supabase = await supabaseClient()
-      const { data, error } = await supabase
-        .from('achievements')
-        .insert([event.payload])
+      const supabase = createClient()
+      const { error } = await supabase.from('achievements').insert([event.payload])
 
       if (error) throw new Error(error.message)
-      console.log('[Sync] Achievement unlocked:', data)
     })
 
-    // Code save
     this.registerHandler('code_save', async (event) => {
-      const supabase = await supabaseClient()
-      const { data, error } = await supabase
-        .from('user_code')
-        .upsert(event.payload)
+      const supabase = createClient()
+      const { error } = await supabase.from('user_code').upsert(event.payload)
 
       if (error) throw new Error(error.message)
-      console.log('[Sync] Code saved:', data)
     })
   }
 
-  // ГЛАВНАЯ ФУНКЦИЯ: Синхронизация очереди
   async sync(): Promise<void> {
-    if (this.isSyncing || !this.isOnline) {
-      console.log('[Sync] Skipping: isSyncing=', this.isSyncing, 'isOnline=', this.isOnline)
-      return
-    }
+    if (this.isSyncing || !this.isOnline) return
 
     this.isSyncing = true
-    const events = eventQueue.getAll()
 
-    console.log(`[Sync] Starting sync of ${events.length} events...`)
+    try {
+      const events = eventQueue.getAll()
 
-    for (const event of events) {
-      try {
+      for (const event of events) {
         const handler = this.syncHandlers.get(event.type)
         if (!handler) {
-          console.warn(`[Sync] No handler for: ${event.type}`)
           eventQueue.remove(event.id)
           continue
         }
 
-        await handler(event)
-        eventQueue.remove(event.id)
-        console.log(`[Sync] ✅ Synced: ${event.id}`)
-      } catch (error) {
-        const err = error instanceof Error ? error.message : String(error)
-        eventQueue.incrementRetry(event.id, err)
+        try {
+          await handler(event)
+          eventQueue.remove(event.id)
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
+          const exceeded = eventQueue.incrementRetry(event.id, message)
 
-        if (event.retries >= 3) {
-          console.error(`[Sync] ❌ Max retries exceeded: ${event.id}`)
-          eventQueue.remove(event.id) // Удалить неудачное событие
+          if (exceeded) {
+            console.error(`[SyncManager] Max retries exceeded for event: ${event.id}`)
+            eventQueue.remove(event.id)
+          }
         }
       }
+    } finally {
+      this.isSyncing = false
     }
-
-    this.isSyncing = false
-    console.log('[Sync] Completed')
   }
 
-  // Подписка на изменения статуса
-  onStatusChange(callback: (status: 'online' | 'offline') => void): () => void {
+  onStatusChange(callback: (status: NetworkStatus) => void): () => void {
     this.listeners.push(callback)
     return () => {
-      this.listeners = this.listeners.filter((l) => l !== callback)
+      this.listeners = this.listeners.filter((listener) => listener !== callback)
     }
   }
 
-  private notifyListeners(status: 'online' | 'offline'): void {
-    this.listeners.forEach((l) => l(status))
+  getStatus(): NetworkStatus {
+    return this.isOnline ? 'online' : 'offline'
   }
 
-  getStatus(): 'online' | 'offline' {
-    return this.isOnline ? 'online' : 'offline'
+  private notifyListeners(status: NetworkStatus): void {
+    this.listeners.forEach((listener) => listener(status))
   }
 }
 
-// Singleton
 export const syncManager = new SyncManager()

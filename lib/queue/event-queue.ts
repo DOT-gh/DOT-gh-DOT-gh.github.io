@@ -1,26 +1,31 @@
-// lib/queue/event-queue.ts
+export type QueuedEventType =
+  | 'profile_update'
+  | 'progress_save'
+  | 'achievement_unlock'
+  | 'code_save'
+
 export type QueuedEvent = {
   id: string
-  type: 'profile_update' | 'progress_save' | 'achievement_unlock' | 'code_save'
-  payload: any
+  type: QueuedEventType
+  payload: Record<string, unknown>
   timestamp: number
   retries: number
   lastError?: string
 }
 
+const STORAGE_KEY = 'dot-kit-event-queue'
+const MAX_RETRIES = 3
+
 export class EventQueue {
   private queue: QueuedEvent[] = []
-  private readonly STORAGE_KEY = 'dot-kit-event-queue'
-  private readonly MAX_RETRIES = 3
 
   constructor() {
     this.loadFromStorage()
   }
 
-  // Добавить событие в очередь
-  add(type: QueuedEvent['type'], payload: any): string {
+  add(type: QueuedEventType, payload: Record<string, unknown>): string {
     const event: QueuedEvent = {
-      id: `${type}-${Date.now()}-${Math.random()}`,
+      id: `${type}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
       type,
       payload,
       timestamp: Date.now(),
@@ -29,63 +34,60 @@ export class EventQueue {
 
     this.queue.push(event)
     this.saveToStorage()
-    console.log(`[Queue] Added: ${event.id}`, { type, payload })
     return event.id
   }
 
-  // Получить всю очередь
   getAll(): QueuedEvent[] {
     return [...this.queue]
   }
 
-  // Удалить событие из очереди (после успешной отправки)
+  getPendingCount(): number {
+    return this.queue.length
+  }
+
   remove(id: string): void {
     this.queue = this.queue.filter((e) => e.id !== id)
     this.saveToStorage()
-    console.log(`[Queue] Removed: ${id}`)
   }
 
-  // Увеличить счетчик попыток
-  incrementRetry(id: string, error?: string): void {
+  incrementRetry(id: string, error?: string): boolean {
     const event = this.queue.find((e) => e.id === id)
-    if (event) {
-      event.retries++
-      event.lastError = error
-      this.saveToStorage()
-      console.log(`[Queue] Retry ${event.retries}/${this.MAX_RETRIES}: ${id}`, error)
-    }
+    if (!event) return false
+
+    event.retries++
+    event.lastError = error
+    this.saveToStorage()
+    return event.retries >= MAX_RETRIES
   }
 
-  // Очистить очередь
   clear(): void {
     this.queue = []
     this.saveToStorage()
-    console.log('[Queue] Cleared')
   }
 
-  // Сохранить в localStorage
   private saveToStorage(): void {
+    if (typeof window === 'undefined') return
+
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.queue))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.queue))
     } catch (e) {
-      console.error('[Queue] Failed to save:', e)
+      console.error('[EventQueue] Failed to save:', e)
     }
   }
 
-  // Загрузить из localStorage
   private loadFromStorage(): void {
+    if (typeof window === 'undefined') return
+
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY)
+      const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
-        this.queue = JSON.parse(stored)
-        console.log(`[Queue] Loaded ${this.queue.length} events from storage`)
+        this.queue = JSON.parse(stored) as QueuedEvent[]
       }
     } catch (e) {
-      console.error('[Queue] Failed to load:', e)
+      console.error('[EventQueue] Failed to load:', e)
       this.queue = []
     }
   }
 }
 
-// Singleton
 export const eventQueue = new EventQueue()
