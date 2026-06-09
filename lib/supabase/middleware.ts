@@ -2,6 +2,24 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+  const { pathname: rawPathname } = request.nextUrl
+
+  const isPublicAsset =
+    rawPathname.startsWith('/_next') ||
+    rawPathname.startsWith('/api') ||
+    rawPathname.startsWith('/static') ||
+    rawPathname.startsWith('/workbox-') ||
+    rawPathname === '/sw.js' ||
+    rawPathname === '/manifest.json' ||
+    rawPathname === '/favicon.ico' ||
+    /\.[^/]+$/.test(rawPathname)
+
+  if (isPublicAsset) {
+    return NextResponse.next({
+      request,
+    })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
