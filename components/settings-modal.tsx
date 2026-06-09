@@ -10,8 +10,10 @@ import { useState } from "react"
 export function SettingsModal() {
   const {
     setShowSettings,
-    isOffline,
-    setIsOffline,
+    forceOffline,
+    setForceOffline,
+    pendingSyncCount,
+    isNetworkOnline,
     batteryLevel,
     fontSize,
     setFontSize,
@@ -158,6 +160,10 @@ export function SettingsModal() {
           {/* Offline Mode */}
           <div className="mb-6">
             <h3 className="mb-3 text-sm font-medium text-muted-foreground">Офлайн режим</h3>
+            <p className="mb-3 text-xs text-muted-foreground">
+              Мережа: {isNetworkOnline ? "онлайн" : "офлайн"}
+              {pendingSyncCount > 0 ? ` · ${pendingSyncCount} змін очікують синхронізації` : ""}
+            </p>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -172,7 +178,7 @@ export function SettingsModal() {
                   <HardDrive className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm text-foreground">Примусовий офлайн</span>
                 </div>
-                <Switch checked={isOffline} onCheckedChange={setIsOffline} />
+                <Switch checked={forceOffline} onCheckedChange={setForceOffline} />
               </div>
             </div>
           </div>

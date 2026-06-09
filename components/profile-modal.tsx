@@ -33,6 +33,7 @@ import { Progress } from "@/components/ui/progress"
 import { Input } from "@/components/ui/input"
 import { useState, useEffect, useMemo } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { dataLayer } from "@/lib/data-layer"
 
 type Achievement = {
   id: number
@@ -149,8 +150,13 @@ export function ProfileModal() {
     })
   }, [])
 
-  const handleSave = () => {
+  const handleSave = async () => {
     localStorage.setItem("edu_profile", JSON.stringify({ name, email }))
+    await dataLayer.saveProfile({
+      fullName: name,
+      email,
+      avatarUrl: googleAvatar ?? undefined,
+    })
     setSaved(true)
     setTimeout(() => {
       setSaved(false)

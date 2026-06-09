@@ -1,12 +1,15 @@
 {
   "name": "Edu Survival Kit",
   "short_name": "EduKit",
-  "description": "Освітня платформа з ШІ-тьютором для навчання програмування",
+  "description": "Офлайн-платформа для навчання програмуванню під час блекаутів",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#09090b",
-  "theme_color": "#8b5cf6",
+  "theme_color": "#22c55e",
   "orientation": "any",
+  "lang": "uk",
+  "categories": ["education", "productivity"],
   "icons": [
     {
       "src": "/icon-192.png",

@@ -13,6 +13,7 @@ import {
   BatteryMedium,
   BatteryFull,
   Loader2,
+  CloudOff,
 } from "lucide-react"
 import { useAppState } from "@/lib/store"
 import { Button } from "@/components/ui/button"
@@ -33,7 +34,8 @@ export function TopNavBar() {
     currentView,
     setCurrentView,
     isOffline,
-    setIsOffline,
+    isSyncing,
+    pendingSyncCount,
     batteryLevel,
     setBatteryLevel,
     setShowSettings,
@@ -181,12 +183,23 @@ export function TopNavBar() {
 
         {/* Right: Status indicators */}
         <div className="flex items-center gap-1 sm:gap-3">
-          {/* Offline toggle */}
-          <button
-            onClick={() => setIsOffline(!isOffline)}
-            className="flex items-center gap-1 sm:gap-1.5 rounded-md px-1.5 sm:px-2 py-1 transition-colors hover:bg-secondary"
+          {/* Network / sync status */}
+          <div
+            className="flex items-center gap-1 sm:gap-1.5 rounded-md px-1.5 sm:px-2 py-1"
+            title={
+              isOffline
+                ? "Офлайн — зміни зберігаються локально"
+                : pendingSyncCount > 0
+                  ? `${pendingSyncCount} змін очікують синхронізації`
+                  : "Онлайн"
+            }
           >
-            {isOffline ? (
+            {isSyncing ? (
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-500" />
+                <span className="hidden sm:inline font-mono text-xs font-medium text-amber-500">SYNC</span>
+              </>
+            ) : isOffline ? (
               <>
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-destructive opacity-75"></span>
@@ -198,13 +211,27 @@ export function TopNavBar() {
             ) : (
               <>
                 <span className="relative flex h-2 w-2">
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+                  <span
+                    className={`relative inline-flex h-2 w-2 rounded-full ${
+                      pendingSyncCount > 0 ? "bg-amber-500" : "bg-primary"
+                    }`}
+                  />
                 </span>
-                <Wifi className="h-3.5 w-3.5 text-primary" />
-                <span className="hidden sm:inline font-mono text-xs font-medium text-primary">{connectionStatus}</span>
+                {pendingSyncCount > 0 ? (
+                  <CloudOff className="h-3.5 w-3.5 text-amber-500" />
+                ) : (
+                  <Wifi className="h-3.5 w-3.5 text-primary" />
+                )}
+                <span
+                  className={`hidden sm:inline font-mono text-xs font-medium ${
+                    pendingSyncCount > 0 ? "text-amber-500" : "text-primary"
+                  }`}
+                >
+                  {connectionStatus}
+                </span>
               </>
             )}
-          </button>
+          </div>
 
           {/* Battery dropdown */}
           <DropdownMenu>

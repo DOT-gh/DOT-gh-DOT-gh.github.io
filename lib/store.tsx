@@ -3,6 +3,7 @@
 import type React from "react"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import { OfflineProvider } from "@/components/offline-provider"
 
 export interface Message {
   id: string
@@ -77,6 +78,10 @@ interface AppState {
   // App Data
   courses: Course[]
   isOffline: boolean
+  isNetworkOnline: boolean
+  forceOffline: boolean
+  pendingSyncCount: number
+  isSyncing: boolean
   connectionStatus: string
   batteryLevel: number
   fontSize: number
@@ -109,6 +114,14 @@ interface AppState {
   setShowSettings: (show: boolean) => void
   setShowProfile: (show: boolean) => void
   setIsOffline: (offline: boolean) => void
+  setForceOffline: (offline: boolean) => void
+  setNetworkStatus: (status: {
+    isNetworkOnline?: boolean
+    isOffline?: boolean
+    pendingSyncCount?: number
+    isSyncing?: boolean
+    connectionStatus?: string
+  }) => void
   setConnectionStatus: (status: string) => void
   setBatteryLevel: (level: number) => void
   setFontSize: (size: number) => void
@@ -769,8 +782,12 @@ export const useAppState = create<AppState>()(
       showSettings: false,
       showProfile: false,
       courses: initialCourses,
-      isOffline: false,
-      connectionStatus: "CONNECTED",
+      isOffline: true,
+      isNetworkOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+      forceOffline: false,
+      pendingSyncCount: 0,
+      isSyncing: false,
+      connectionStatus: typeof navigator !== "undefined" && navigator.onLine ? "ONLINE" : "OFFLINE",
       batteryLevel: 100,
       fontSize: 14,
       storageUsed: 12.4,
@@ -800,7 +817,44 @@ export const useAppState = create<AppState>()(
       setSelectedTask: (task) => set({ selectedTask: task }),
       setShowSettings: (show) => set({ showSettings: show }),
       setShowProfile: (show) => set({ showProfile: show }),
-      setIsOffline: (offline) => set({ isOffline: offline }),
+      setIsOffline: (offline) => set({ isOffline: offline, forceOffline: offline }),
+      setForceOffline: (offline) =>
+        set((state) => ({
+          forceOffline: offline,
+          isOffline: offline || !state.isNetworkOnline,
+          connectionStatus: offline
+            ? "FORCE OFFLINE"
+            : state.isNetworkOnline
+              ? state.pendingSyncCount > 0
+                ? `ONLINE · ${state.pendingSyncCount} pending`
+                : "ONLINE"
+              : "OFFLINE",
+        })),
+      setNetworkStatus: (status) =>
+        set((state) => {
+          const isNetworkOnline = status.isNetworkOnline ?? state.isNetworkOnline
+          const pendingSyncCount = status.pendingSyncCount ?? state.pendingSyncCount
+          const isSyncing = status.isSyncing ?? state.isSyncing
+          const isOffline = status.isOffline ?? state.forceOffline || !isNetworkOnline
+
+          return {
+            isNetworkOnline,
+            pendingSyncCount,
+            isSyncing,
+            isOffline,
+            connectionStatus:
+              status.connectionStatus ??
+              (isOffline
+                ? state.forceOffline && isNetworkOnline
+                  ? "FORCE OFFLINE"
+                  : "OFFLINE"
+                : isSyncing
+                  ? "SYNCING..."
+                  : pendingSyncCount > 0
+                    ? `ONLINE · ${pendingSyncCount} pending`
+                    : "ONLINE"),
+          }
+        }),
       setConnectionStatus: (status) => set({ connectionStatus: status }),
       setBatteryLevel: (level) => set({ batteryLevel: level }),
       setFontSize: (size) => set({ fontSize: size }),
@@ -924,12 +978,21 @@ export const useAppState = create<AppState>()(
     }),
     {
       name: "edu-survival-kit-storage",
+      partialize: (state) => {
+        const {
+          isNetworkOnline: _n,
+          pendingSyncCount: _p,
+          isSyncing: _s,
+          ...persisted
+        } = state
+        return persisted
+      },
     },
   ),
 )
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <OfflineProvider>{children}</OfflineProvider>
 }
 
 // Export as useStore for convenience

@@ -8,6 +8,7 @@ import { useAppState } from "@/lib/store"
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { toast } from "@/hooks/use-toast"
+import { dataLayer } from "@/lib/data-layer"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 type TokenType = "keyword" | "string" | "number" | "comment" | "builtin" | "operator" | "normal"
@@ -493,6 +494,12 @@ export function CodeEditor() {
 
         if (selectedTask && selectedCourse && !selectedTask.completed) {
           completeTask(selectedCourse.id, selectedTask.id)
+          void dataLayer.saveProgress({
+            courseId: selectedCourse.id,
+            taskId: selectedTask.id,
+            completed: true,
+            xpEarned: 100,
+          })
           toast({
             variant: "success",
             title: "Завдання виконано!",
@@ -510,8 +517,23 @@ export function CodeEditor() {
     }, 1500)
   }
 
-  const handleSave = () => {
-    setConsoleOutput([...(consoleOutput || []), "", "[Локальне сховище] Код збережено успішно"])
+  const handleSave = async () => {
+    if (selectedCourse && selectedTask) {
+      const result = await dataLayer.saveCode({
+        courseId: selectedCourse.id,
+        taskId: selectedTask.id,
+        code: localCode,
+      })
+
+      setConsoleOutput([
+        ...(consoleOutput || []),
+        "",
+        result.pending_sync
+          ? "[IndexedDB] Код збережено локально (очікує синхронізації)"
+          : "[IndexedDB + Supabase] Код збережено та синхронізовано",
+      ])
+    }
+
     toast({
       variant: "success",
       title: "Код збережено",
