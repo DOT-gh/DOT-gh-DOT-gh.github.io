@@ -835,8 +835,7 @@ export const useAppState = create<AppState>()(
           const isNetworkOnline = status.isNetworkOnline ?? state.isNetworkOnline
           const pendingSyncCount = status.pendingSyncCount ?? state.pendingSyncCount
           const isSyncing = status.isSyncing ?? state.isSyncing
-          const isOffline = status.isOffline ?? state.forceOffline || !isNetworkOnline
-
+          const isOffline = status.isOffline ?? (state.forceOffline || !isNetworkOnline)
           return {
             isNetworkOnline,
             pendingSyncCount,
