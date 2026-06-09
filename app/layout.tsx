@@ -7,6 +7,7 @@ import { DevToolsBlocker } from "@/components/dev-tools-blocker"
 import { Toaster } from "@/components/ui/toaster"
 import { AchievementToast } from "@/components/achievement-toast"
 import EasterEggs from "@/components/easter-eggs"
+import { SwRegistry } from "@/components/sw-registry" // Импорт регистратора
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
@@ -65,7 +66,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className={`${inter.className} ${jetbrainsMono.variable} font-sans antialiased`}>
-        <DevToolsBlocker />
+        {/* <DevToolsBlocker /> Отключено для дебага */}
         <AppProvider>
           <SnowfallWrapper />
           {children}
@@ -73,6 +74,7 @@ export default function RootLayout({
           <AchievementToast />
           <EasterEggs />
         </AppProvider>
+        <SwRegistry /> {/* Жесткий запуск Service Worker */}
         <script defer src="/_vercel/insights/script.js"></script>
       </body>
     </html>
