@@ -1,10 +1,11 @@
-"use client"
+'use client'
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { DemoNavBar } from "@/components/demo/demo-nav-bar"
 import { DemoShowcase } from "@/components/demo/demo-showcase"
 import { DemoCoursesPaywall } from "@/components/demo/demo-courses-paywall"
+import { DemoGoalSetter } from "@/components/demo/demo-goal-setter"
 import { signInWithGoogle } from "@/lib/auth/google-login"
 import { Button } from "@/components/ui/button"
 import { Sparkles } from "lucide-react"
@@ -37,6 +38,7 @@ export default function DemoPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Декоративные элементы */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 right-0 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-violet-500/5 blur-3xl" />
@@ -57,6 +59,11 @@ export default function DemoPage() {
             <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground">
               Ознайомтесь з можливостями платформи. Повний доступ — після безкоштовної реєстрації.
             </p>
+          </div>
+
+          {/* Наша новая "память" приложения */}
+          <div className="mx-auto max-w-xl">
+             <DemoGoalSetter />
           </div>
 
           <DemoShowcase />
