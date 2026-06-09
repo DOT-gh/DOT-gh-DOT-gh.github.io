@@ -1,29 +1,23 @@
 "use client"
 
-import { Terminal, Home, BookOpen, User, Wifi } from "lucide-react"
+import Link from "next/link"
+import { Terminal, User, Wifi, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { DemoCourse } from "./demo-types"
 
 type DemoNavBarProps = {
-  currentView: "dashboard" | "learning"
-  onGoDashboard: () => void
-  onGoLearning: () => void
-  selectedCourse: DemoCourse | null
   onLogin: () => void
   isLoginLoading: boolean
 }
 
-export function DemoNavBar({
-  currentView,
-  onGoDashboard,
-  onGoLearning,
-  selectedCourse,
-  onLogin,
-  isLoginLoading,
-}: DemoNavBarProps) {
+export function DemoNavBar({ onLogin, isLoginLoading }: DemoNavBarProps) {
   return (
-    <header className="flex h-12 items-center justify-between border-b border-border bg-card px-2 sm:px-4">
-      <div className="flex items-center gap-2 sm:gap-4">
+    <header className="flex h-12 items-center justify-between border-b border-border bg-card px-2 sm:px-4 sticky top-0 z-50">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" asChild>
+          <Link href="/">
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+        </Button>
         <div className="flex items-center gap-2">
           <Terminal className="h-5 w-5 text-primary" />
           <span className="font-mono text-sm font-semibold tracking-tight text-foreground">
@@ -34,37 +28,12 @@ export function DemoNavBar({
             </span>
           </span>
         </div>
-
-        <nav className="ml-2 sm:ml-4 flex items-center gap-1">
-          <Button
-            variant={currentView === "dashboard" ? "secondary" : "ghost"}
-            size="sm"
-            className="h-8 gap-1.5 text-xs px-2 sm:px-3"
-            onClick={onGoDashboard}
-          >
-            <Home className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Головна</span>
-          </Button>
-          <Button
-            variant={currentView === "learning" ? "secondary" : "ghost"}
-            size="sm"
-            className="h-8 gap-1.5 text-xs px-2 sm:px-3"
-            onClick={onGoLearning}
-            disabled={!selectedCourse}
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Навчання</span>
-            {selectedCourse && (
-              <span className="hidden lg:inline ml-1 text-muted-foreground">/ {selectedCourse.title}</span>
-            )}
-          </Button>
-        </nav>
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
         <div className="hidden sm:flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-primary">
           <Wifi className="h-3.5 w-3.5" />
-          <span className="font-mono">DEMO MODE</span>
+          <span className="font-mono">SHOWCASE</span>
         </div>
 
         <div className="flex items-center gap-1.5 rounded-md border border-border bg-secondary/50 px-2 py-1">
@@ -73,7 +42,7 @@ export function DemoNavBar({
         </div>
 
         <Button size="sm" onClick={onLogin} disabled={isLoginLoading}>
-          {isLoginLoading ? "Завантаження..." : "Увійти"}
+          {isLoginLoading ? "..." : "Увійти"}
         </Button>
       </div>
     </header>

@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import { AppProvider } from "@/lib/store"
 import { SnowfallWrapper } from "@/components/snowfall-wrapper"
@@ -15,24 +15,45 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
 })
 
+const THEME_COLOR = "#22c55e"
+
 export const metadata: Metadata = {
   title: "Edu_Survival_Kit v.0.4 (Beta) | Навчання під час блекаутів",
   description: "Легка офлайн-платформа для навчання програмуванню під час відключень електроенергії",
   manifest: "/manifest.json",
+  applicationName: "EduKit",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
     title: "EduKit",
+    statusBarStyle: "black-translucent",
+    startupImage: "/icon-512.png",
   },
-    generator: 'v0.app'
+  icons: {
+    icon: "/icon-192.png",
+    apple: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "EduKit",
+    "format-detection": "telephone=no",
+  },
+  generator: "v0.app",
 }
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: "#22c55e",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: THEME_COLOR },
+    { media: "(prefers-color-scheme: dark)", color: THEME_COLOR },
+  ],
 }
 
 export default function RootLayout({
@@ -44,8 +65,12 @@ export default function RootLayout({
     <html lang="uk" className="dark">
       <head>
         <link rel="icon" href="/icon-192.png" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-192.png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/icon-512.png" sizes="512x512" />
+        <meta name="theme-color" content={THEME_COLOR} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="EduKit" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={`${inter.className} ${jetbrainsMono.variable} font-sans antialiased`}>
@@ -57,7 +82,6 @@ export default function RootLayout({
           <AchievementToast />
           <EasterEggs />
         </AppProvider>
-        {/* Vercel Analytics - відстеження відвідувачів */}
         <script defer src="/_vercel/insights/script.js"></script>
       </body>
     </html>

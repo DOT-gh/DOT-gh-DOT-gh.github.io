@@ -3,6 +3,7 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import { useAppState, type Course } from "@/lib/store"
+import { createClient } from "@/lib/supabase/client"
 import { Code2, Globe, Cpu, ChevronRight, Zap, Trophy, TrendingUp, Award, Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,18 +24,37 @@ const courseIcons: Record<string, React.ReactNode> = {
 
 export function Dashboard() {
   const { courses, setSelectedCourse, setCurrentView, xp, level, streak, achievements } = useAppState()
-  const [profileName, setProfileName] = useState("")
+  const [displayName, setDisplayName] = useState<string | null>(null)
+  const [isNameLoading, setIsNameLoading] = useState(true)
 
   useEffect(() => {
-    const savedProfile = localStorage.getItem("edu_profile")
-    if (savedProfile) {
-      try {
-        const data = JSON.parse(savedProfile)
-        if (data.name) setProfileName(data.name)
-      } catch {
-        // ignore
+    const supabase = createClient()
+
+    const applyUser = (
+      user: NonNullable<Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"]> | null,
+    ) => {
+      if (user) {
+        const meta = user.user_metadata
+        const name =
+          (meta?.full_name as string | undefined) ||
+          (meta?.name as string | undefined) ||
+          null
+        setDisplayName(name)
+      } else {
+        setDisplayName(null)
       }
+      setIsNameLoading(false)
     }
+
+    supabase.auth.getUser().then(({ data }) => applyUser(data.user))
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      applyUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const motivationalMessages = [
@@ -60,7 +80,11 @@ export function Dashboard() {
       <div className="mx-auto max-w-7xl p-4 sm:p-6">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">
-            Привіт{profileName ? `, ${profileName}` : ", гість"}!
+            {isNameLoading ? (
+              <>Привіт<span className="text-muted-foreground">...</span></>
+            ) : (
+              <>Привіт, {displayName ?? "студент"}!</>
+            )}
           </h1>
           <p className="mt-1 text-sm sm:text-base text-primary">{motivation}</p>
         </div>
