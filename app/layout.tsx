@@ -26,15 +26,8 @@ export const metadata: Metadata = {
     capable: true,
     title: "EduKit",
     statusBarStyle: "black-translucent",
-    startupImage: "/icon-512.png",
   },
-  icons: {
-    icon: "/icon-192.png",
-    apple: [
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-  },
+  
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
@@ -64,14 +57,12 @@ export default function RootLayout({
   return (
     <html lang="uk" className="dark">
       <head>
-        <link rel="icon" href="/icon-192.png" />
-        <link rel="apple-touch-icon" href="/icon-192.png" sizes="192x192" />
-        <link rel="apple-touch-icon" href="/icon-512.png" sizes="512x512" />
         <meta name="theme-color" content={THEME_COLOR} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="EduKit" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className={`${inter.className} ${jetbrainsMono.variable} font-sans antialiased`}>
         <DevToolsBlocker />
