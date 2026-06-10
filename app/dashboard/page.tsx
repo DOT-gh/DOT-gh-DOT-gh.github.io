@@ -5,6 +5,7 @@ import { useAppState } from "@/lib/store"
 import { TopNavBar } from "@/components/top-nav-bar"
 import { TaskSidebar } from "@/components/task-sidebar"
 import { CodeEditor } from "@/components/code-editor-enhanced"
+import { InteractiveTask } from "@/components/interactive-task"
 import AITutorEnhanced from "@/components/ai-tutor-enhanced"
 import { Dashboard } from "@/components/dashboard"
 import { SettingsModal } from "@/components/settings-modal"
@@ -59,18 +60,26 @@ export default function HomePage() {
       {currentView === "learning" && (
         <div className="flex flex-1 overflow-hidden">
           <TaskSidebar />
-          <div className="flex flex-1 overflow-hidden" data-tour="code-editor">
-            <CodeEditor />
-          </div>
-          <div data-tour="ai-tutor">
-            <AITutorEnhanced
-              currentExercise={selectedTask}
-              code={code}
-              messages={messages}
-              addMessage={addMessage}
-              clearMessages={clearMessages}
-            />
-          </div>
+          {!selectedTask?.type || selectedTask.type === "code" ? (
+            <>
+              <div className="flex flex-1 overflow-hidden" data-tour="code-editor">
+                <CodeEditor />
+              </div>
+              <div data-tour="ai-tutor">
+                <AITutorEnhanced
+                  currentExercise={selectedTask}
+                  code={code}
+                  messages={messages}
+                  addMessage={addMessage}
+                  clearMessages={clearMessages}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-1 overflow-hidden" data-tour="code-editor">
+              <InteractiveTask />
+            </div>
+          )}
         </div>
       )}
 

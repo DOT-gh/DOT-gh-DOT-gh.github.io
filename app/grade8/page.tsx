@@ -170,7 +170,7 @@ export default function Grade8Page() {
             </div>
             <div className="flex gap-3 pt-2">
               <Button variant="outline" className="flex-1" asChild>
-                <Link href="/">Назад</Link>
+                <Link href="/dashboard">Назад</Link>
               </Button>
               <Button className="flex-1" onClick={handleLogin} disabled={!formName.trim() || !formSurname.trim() || !formClass.trim()}>
                 Почати

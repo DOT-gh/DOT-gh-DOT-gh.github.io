@@ -20,7 +20,6 @@ import {
   HardDrive,
   Database,
   Bot,
-  Gamepad2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -268,15 +267,6 @@ export function Dashboard() {
             </div>
 
             <div>
-              <div className="mb-3 sm:mb-4 flex items-center gap-2">
-                <Gamepad2 className="h-5 w-5 text-primary" />
-                <h2 className="text-base sm:text-lg font-semibold text-foreground">Ігрова зона</h2>
-                {gameStats.totalGamesPlayed > 0 && (
-                  <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-primary">
-                    Зіграно: {gameStats.totalGamesPlayed}
-                  </span>
-                )}
-              </div>
               <GamesHub />
             </div>
           </div>
