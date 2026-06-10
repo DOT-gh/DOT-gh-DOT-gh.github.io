@@ -1,10 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -29,6 +31,11 @@ import {
   Sparkles,
   Settings2,
   PlusCircle,
+  Search,
+  AlertTriangle,
+  Trophy,
+  ArrowUpDown,
+  UserPlus,
 } from "lucide-react"
 import {
   BarChart,
@@ -47,214 +54,20 @@ import Link from "next/link"
 import { BrandLogo } from "@/components/brand-logo"
 import { AIControlCenter } from "@/components/teacher/ai-control-center"
 import { AssignmentCreator } from "@/components/teacher/assignment-creator"
-
-const classesData = [
-  {
-    id: "11a",
-    name: "11-А",
-    topic: "Бази даних та SQL",
-    totalStudents: 24,
-    activeStudents: 22,
-    avgScore: 9.6,
-    avgProgress: 89,
-    students: [
-      { id: "11a-01", name: "Захарченко В.", progress: 100, lastActivity: "12.04, 16:20", currentTask: "SQL JOIN — фінальний проєкт", totalTime: "5г 40хв", tasksCompleted: 16, totalTasks: 16, aiRequestsCount: 4, offlineSessions: 5, className: "11-А", sessions: [{ date: "31.03", duration: 55, device: "Windows", city: "м. Шостка" }, { date: "05.04", duration: 62, device: "Windows", city: "м. Шостка" }, { date: "12.04", duration: 58, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 21, hintsUsed: 2, errorRate: 4 },
-      { id: "11a-02", name: "Мельниченко О.", progress: 88, lastActivity: "12.04, 14:05", currentTask: "Агрегатні функції — завдання 6", totalTime: "4г 15хв", tasksCompleted: 14, totalTasks: 16, aiRequestsCount: 9, offlineSessions: 3, className: "11-А", sessions: [{ date: "01.04", duration: 48, device: "macOS", city: "м. Шостка" }, { date: "08.04", duration: 52, device: "macOS", city: "м. Шостка" }], avgTimePerTask: 18, hintsUsed: 5, errorRate: 9 },
-      { id: "11a-03", name: "Кириленко Д.", progress: 72, lastActivity: "10.04, 17:40", currentTask: "Нормалізація БД — завдання 4", totalTime: "3г 05хв", tasksCompleted: 11, totalTasks: 16, aiRequestsCount: 17, offlineSessions: 4, className: "11-А", sessions: [{ date: "02.04", duration: 35, device: "Android", city: "с. Вороніж" }, { date: "10.04", duration: 50, device: "Android", city: "с. Вороніж" }], avgTimePerTask: 16, hintsUsed: 10, errorRate: 18 },
-    ],
-  },
-  {
-    id: "11b",
-    name: "11-Б",
-    topic: "Веб-розробка: JavaScript",
-    totalStudents: 22,
-    activeStudents: 20,
-    avgScore: 9.1,
-    avgProgress: 84,
-    students: [
-      { id: "11b-01", name: "Литвиненко А.", progress: 95, lastActivity: "12.04, 15:50", currentTask: "DOM-події — завдання 9", totalTime: "4г 50хв", tasksCompleted: 18, totalTasks: 19, aiRequestsCount: 6, offlineSessions: 4, className: "11-Б", sessions: [{ date: "30.03", duration: 50, device: "Windows", city: "м. Шостка" }, { date: "07.04", duration: 45, device: "Windows", city: "м. Шостка" }, { date: "12.04", duration: 60, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 15, hintsUsed: 3, errorRate: 7 },
-      { id: "11b-02", name: "Гончаренко С.", progress: 79, lastActivity: "11.04, 12:30", currentTask: "Масиви та методи — завдання 7", totalTime: "3г 20хв", tasksCompleted: 15, totalTasks: 19, aiRequestsCount: 14, offlineSessions: 2, className: "11-Б", sessions: [{ date: "03.04", duration: 40, device: "iOS", city: "м. Шостка" }, { date: "11.04", duration: 55, device: "iOS", city: "м. Шостка" }], avgTimePerTask: 13, hintsUsed: 8, errorRate: 15 },
-    ],
-  },
-  {
-    id: "10a",
-    name: "10-А",
-    topic: "Комп'ютерні мережі та Інтернет",
-    totalStudents: 26,
-    activeStudents: 24,
-    avgScore: 9.3,
-    avgProgress: 86,
-    students: [
-      { id: "10a-01", name: "Шевченко О.", progress: 92, lastActivity: "12.04, 14:45", currentTask: "IP-адресація — маска підмережі", totalTime: "4г 30хв", tasksCompleted: 12, totalTasks: 13, aiRequestsCount: 7, offlineSessions: 5, className: "10-А", sessions: [{ date: "31.03", duration: 45, device: "Android", city: "м. Шостка" }, { date: "06.04", duration: 50, device: "Android", city: "м. Шостка" }, { date: "12.04", duration: 48, device: "Android", city: "м. Шостка" }], avgTimePerTask: 19, hintsUsed: 4, errorRate: 8 },
-      { id: "10a-02", name: "Бойченко А.", progress: 81, lastActivity: "11.04, 16:10", currentTask: "DNS-резолюція — завдання 5", totalTime: "3г 40хв", tasksCompleted: 10, totalTasks: 13, aiRequestsCount: 12, offlineSessions: 3, className: "10-А", sessions: [{ date: "02.04", duration: 38, device: "Windows", city: "м. Шостка" }, { date: "11.04", duration: 52, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 17, hintsUsed: 7, errorRate: 12 },
-      { id: "10a-03", name: "Ковальчук М.", progress: 68, lastActivity: "09.04, 13:25", currentTask: "Протоколи TCP/IP — завдання 3", totalTime: "2г 35хв", tasksCompleted: 8, totalTasks: 13, aiRequestsCount: 20, offlineSessions: 6, className: "10-А", sessions: [{ date: "01.04", duration: 30, device: "Android", city: "с. Ямпіль" }, { date: "09.04", duration: 42, device: "Android", city: "с. Ямпіль" }], avgTimePerTask: 14, hintsUsed: 11, errorRate: 21 },
-    ],
-  },
-  {
-    id: "10v",
-    name: "10-В",
-    topic: "Опрацювання табличних даних",
-    totalStudents: 23,
-    activeStudents: 21,
-    avgScore: 8.9,
-    avgProgress: 79,
-    students: [
-      { id: "10v-01", name: "Романенко І.", progress: 90, lastActivity: "12.04, 13:15", currentTask: "Зведені таблиці — завдання 8", totalTime: "3г 55хв", tasksCompleted: 13, totalTasks: 14, aiRequestsCount: 8, offlineSessions: 2, className: "10-В", sessions: [{ date: "04.04", duration: 44, device: "Windows", city: "м. Шостка" }, { date: "12.04", duration: 49, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 16, hintsUsed: 4, errorRate: 10 },
-      { id: "10v-02", name: "Ткаченко Н.", progress: 64, lastActivity: "10.04, 11:45", currentTask: "Формули та функції — завдання 5", totalTime: "2г 20хв", tasksCompleted: 9, totalTasks: 14, aiRequestsCount: 18, offlineSessions: 4, className: "10-В", sessions: [{ date: "03.04", duration: 32, device: "Chrome OS", city: "м. Шостка" }, { date: "10.04", duration: 46, device: "Chrome OS", city: "м. Шостка" }], avgTimePerTask: 13, hintsUsed: 9, errorRate: 19 },
-    ],
-  },
-  {
-    id: "9a",
-    name: "9-А",
-    topic: "Основи програмування Python",
-    totalStudents: 27,
-    activeStudents: 25,
-    avgScore: 8.8,
-    avgProgress: 82,
-    students: [
-      { id: "9a-01", name: "Даниленко В.", progress: 95, lastActivity: "12.04, 15:10", currentTask: "Функції Python — завдання 5", totalTime: "4г 20хв", tasksCompleted: 19, totalTasks: 20, aiRequestsCount: 5, offlineSessions: 3, className: "9-А", sessions: [{ date: "30.03", duration: 55, device: "Chrome OS", city: "м. Шостка" }, { date: "05.04", duration: 48, device: "Windows", city: "м. Шостка" }, { date: "12.04", duration: 57, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 14, hintsUsed: 2, errorRate: 5 },
-      { id: "9a-02", name: "Єременко С.", progress: 60, lastActivity: "09.04, 11:00", currentTask: "Цикли — завдання 4", totalTime: "1г 30хв", tasksCompleted: 12, totalTasks: 20, aiRequestsCount: 30, offlineSessions: 1, className: "9-А", sessions: [{ date: "31.03", duration: 20, device: "iOS", city: "м. Шостка" }, { date: "09.04", duration: 70, device: "iOS", city: "м. Шостка" }], avgTimePerTask: 8, hintsUsed: 18, errorRate: 42 },
-      { id: "9a-03", name: "Полтавець Р.", progress: 78, lastActivity: "11.04, 14:35", currentTask: "Умовні оператори — завдання 6", totalTime: "2г 50хв", tasksCompleted: 15, totalTasks: 20, aiRequestsCount: 13, offlineSessions: 2, className: "9-А", sessions: [{ date: "02.04", duration: 36, device: "Android", city: "м. Шостка" }, { date: "11.04", duration: 44, device: "Android", city: "м. Шостка" }], avgTimePerTask: 11, hintsUsed: 6, errorRate: 14 },
-    ],
-  },
-  {
-    id: "9b",
-    name: "9-Б",
-    topic: "Створення вебсайтів: HTML/CSS",
-    totalStudents: 25,
-    activeStudents: 23,
-    avgScore: 9.5,
-    avgProgress: 88,
-    students: [
-      { id: "9b-01", name: "Коваленко Т.", progress: 100, lastActivity: "12.04, 16:00", currentTask: "CSS Flexbox — фінал", totalTime: "5г 10хв", tasksCompleted: 15, totalTasks: 15, aiRequestsCount: 3, offlineSessions: 6, className: "9-Б", sessions: [{ date: "30.03", duration: 60, device: "macOS", city: "м. Шостка" }, { date: "03.04", duration: 55, device: "macOS", city: "м. Шостка" }, { date: "08.04", duration: 50, device: "Chrome OS", city: "м. Шостка" }, { date: "12.04", duration: 65, device: "macOS", city: "м. Шостка" }], avgTimePerTask: 21, hintsUsed: 1, errorRate: 3 },
-      { id: "9b-02", name: "Савченко Л.", progress: 83, lastActivity: "11.04, 15:20", currentTask: "Селектори CSS — завдання 9", totalTime: "3г 30хв", tasksCompleted: 12, totalTasks: 15, aiRequestsCount: 10, offlineSessions: 3, className: "9-Б", sessions: [{ date: "04.04", duration: 42, device: "Windows", city: "м. Шостка" }, { date: "11.04", duration: 51, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 17, hintsUsed: 5, errorRate: 11 },
-    ],
-  },
-  {
-    id: "8a",
-    name: "8-А",
-    topic: "Алгоритми та програми",
-    totalStudents: 28,
-    activeStudents: 26,
-    avgScore: 9.0,
-    avgProgress: 85,
-    students: [
-      { id: "8a-01", name: "Бондаренко А.", progress: 100, lastActivity: "12.04, 14:45", currentTask: "Виконавець Робот — рівень 5", totalTime: "3г 12хв", tasksCompleted: 12, totalTasks: 12, aiRequestsCount: 8, offlineSessions: 4, className: "8-А", sessions: [{ date: "31.03", duration: 45, device: "Android", city: "м. Шостка" }, { date: "04.04", duration: 38, device: "Android", city: "м. Шостка" }, { date: "08.04", duration: 52, device: "Android", city: "м. Шостка" }, { date: "12.04", duration: 47, device: "Android", city: "м. Шостка" }], avgTimePerTask: 16, hintsUsed: 3, errorRate: 12 },
-      { id: "8a-02", name: "Василенко О.", progress: 92, lastActivity: "11.04, 13:20", currentTask: "Виконавець Робот — рівень 4", totalTime: "2г 48хв", tasksCompleted: 11, totalTasks: 12, aiRequestsCount: 15, offlineSessions: 2, className: "8-А", sessions: [{ date: "02.04", duration: 40, device: "Windows", city: "м. Шостка" }, { date: "07.04", duration: 35, device: "Windows", city: "м. Шостка" }, { date: "11.04", duration: 53, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 15, hintsUsed: 7, errorRate: 8 },
-      { id: "8a-03", name: "Гриценко М.", progress: 75, lastActivity: "10.04, 18:30", currentTask: "Розгалуження — завдання 3", totalTime: "1г 55хв", tasksCompleted: 9, totalTasks: 12, aiRequestsCount: 22, offlineSessions: 5, className: "8-А", sessions: [{ date: "01.04", duration: 25, device: "Android", city: "с. Ямпіль" }, { date: "05.04", duration: 30, device: "Android", city: "с. Ямпіль" }, { date: "10.04", duration: 60, device: "Android", city: "с. Ямпіль" }], avgTimePerTask: 13, hintsUsed: 12, errorRate: 23 },
-    ],
-  },
-  {
-    id: "8b",
-    name: "8-Б",
-    topic: "Кодування даних та графіка",
-    totalStudents: 26,
-    activeStudents: 23,
-    avgScore: 8.6,
-    avgProgress: 77,
-    students: [
-      { id: "8b-01", name: "Олійник Н.", progress: 87, lastActivity: "12.04, 12:50", currentTask: "Растрова графіка — завдання 7", totalTime: "3г 10хв", tasksCompleted: 13, totalTasks: 15, aiRequestsCount: 9, offlineSessions: 3, className: "8-Б", sessions: [{ date: "05.04", duration: 41, device: "Windows", city: "м. Шостка" }, { date: "12.04", duration: 47, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 14, hintsUsed: 5, errorRate: 13 },
-      { id: "8b-02", name: "Кравченко Ю.", progress: 62, lastActivity: "10.04, 15:35", currentTask: "Двійкове кодування — завдання 4", totalTime: "2г 05хв", tasksCompleted: 9, totalTasks: 15, aiRequestsCount: 19, offlineSessions: 2, className: "8-Б", sessions: [{ date: "03.04", duration: 28, device: "Android", city: "м. Шостка" }, { date: "10.04", duration: 39, device: "Android", city: "м. Шостка" }], avgTimePerTask: 12, hintsUsed: 10, errorRate: 24 },
-    ],
-  },
-  {
-    id: "8v",
-    name: "8-В",
-    topic: "Електронні таблиці",
-    totalStudents: 24,
-    activeStudents: 21,
-    avgScore: 8.4,
-    avgProgress: 73,
-    students: [
-      { id: "8v-01", name: "Мороз Д.", progress: 84, lastActivity: "12.04, 11:30", currentTask: "Діаграми — завдання 6", totalTime: "2г 45хв", tasksCompleted: 11, totalTasks: 13, aiRequestsCount: 11, offlineSessions: 4, className: "8-В", sessions: [{ date: "06.04", duration: 37, device: "Chrome OS", city: "м. Шостка" }, { date: "12.04", duration: 43, device: "Chrome OS", city: "м. Шостка" }], avgTimePerTask: 15, hintsUsed: 6, errorRate: 16 },
-      { id: "8v-02", name: "Лисенко К.", progress: 58, lastActivity: "09.04, 16:40", currentTask: "Формули — завдання 3", totalTime: "1г 50хв", tasksCompleted: 7, totalTasks: 13, aiRequestsCount: 24, offlineSessions: 1, className: "8-В", sessions: [{ date: "02.04", duration: 26, device: "iOS", city: "с. Вороніж" }, { date: "09.04", duration: 48, device: "iOS", city: "с. Вороніж" }], avgTimePerTask: 16, hintsUsed: 13, errorRate: 28 },
-    ],
-  },
-  {
-    id: "5a1",
-    name: "5-А (1 підгрупа)",
-    topic: "Алгоритми. Виконавець Робот",
-    totalStudents: 14,
-    activeStudents: 13,
-    avgScore: 9.4,
-    avgProgress: 91,
-    students: [
-      { id: "5a1-01", name: "Дмитренко А.", progress: 100, lastActivity: "12.04, 12:40", currentTask: "Гра «Робот» — рівень 5", totalTime: "2г 30хв", tasksCompleted: 10, totalTasks: 10, aiRequestsCount: 4, offlineSessions: 3, className: "5-А (1 підгр.)", sessions: [{ date: "01.04", duration: 30, device: "Android", city: "м. Шостка" }, { date: "08.04", duration: 35, device: "Android", city: "м. Шостка" }, { date: "12.04", duration: 32, device: "Android", city: "м. Шос����ка" }], avgTimePerTask: 10, hintsUsed: 2, errorRate: 6 },
-      { id: "5a1-02", name: "Ковальчук Н.", progress: 80, lastActivity: "11.04, 14:15", currentTask: "Гра «Робот» — рівень 4", totalTime: "1г 55хв", tasksCompleted: 8, totalTasks: 10, aiRequestsCount: 9, offlineSessions: 2, className: "5-А (1 підгр.)", sessions: [{ date: "04.04", duration: 28, device: "iOS", city: "м. Шостка" }, { date: "11.04", duration: 34, device: "iOS", city: "м. Шостка" }], avgTimePerTask: 11, hintsUsed: 5, errorRate: 12 },
-    ],
-  },
-  {
-    id: "5a2",
-    name: "5-А (2 підгрупа)",
-    topic: "Алгоритми. Виконавець Робот",
-    totalStudents: 13,
-    activeStudents: 12,
-    avgScore: 9.1,
-    avgProgress: 87,
-    students: [
-      { id: "5a2-01", name: "Романчук С.", progress: 90, lastActivity: "12.04, 13:05", currentTask: "Гра «Робот» — рівень 4", totalTime: "2г 10хв", tasksCompleted: 9, totalTasks: 10, aiRequestsCount: 6, offlineSessions: 2, className: "5-А (2 підгр.)", sessions: [{ date: "05.04", duration: 31, device: "Android", city: "м. Шостка" }, { date: "12.04", duration: 36, device: "Android", city: "м. Шостка" }], avgTimePerTask: 12, hintsUsed: 3, errorRate: 9 },
-      { id: "5a2-02", name: "Захарчук В.", progress: 70, lastActivity: "10.04, 12:25", currentTask: "Гра «Робот» — рівень 3", totalTime: "1г 40хв", tasksCompleted: 7, totalTasks: 10, aiRequestsCount: 14, offlineSessions: 4, className: "5-А (2 підгр.)", sessions: [{ date: "03.04", duration: 24, device: "Android", city: "с. Ямпіль" }, { date: "10.04", duration: 38, device: "Android", city: "с. Ямпіль" }], avgTimePerTask: 13, hintsUsed: 8, errorRate: 17 },
-    ],
-  },
-  {
-    id: "5b1",
-    name: "5-Б (1 підгрупа)",
-    topic: "Безпека в Інтернеті",
-    totalStudents: 12,
-    activeStudents: 11,
-    avgScore: 9.7,
-    avgProgress: 93,
-    students: [
-      { id: "5b1-01", name: "Калашник О.", progress: 100, lastActivity: "12.04, 15:10", currentTask: "Безпечні паролі — фінал", totalTime: "2г 20хв", tasksCompleted: 8, totalTasks: 8, aiRequestsCount: 2, offlineSessions: 2, className: "5-Б (1 підгр.)", sessions: [{ date: "07.04", duration: 33, device: "iOS", city: "м. Шостка" }, { date: "12.04", duration: 37, device: "iOS", city: "м. Шостка" }], avgTimePerTask: 14, hintsUsed: 1, errorRate: 4 },
-      { id: "5b1-02", name: "Міщенко І.", progress: 85, lastActivity: "11.04, 11:50", currentTask: "Фішинг — завдання 6", totalTime: "1г 45хв", tasksCompleted: 7, totalTasks: 8, aiRequestsCount: 7, offlineSessions: 1, className: "5-Б (1 підгр.)", sessions: [{ date: "04.04", duration: 27, device: "Android", city: "м. Шостка" }, { date: "11.04", duration: 31, device: "Android", city: "м. Шостка" }], avgTimePerTask: 12, hintsUsed: 4, errorRate: 10 },
-    ],
-  },
-  {
-    id: "5v",
-    name: "5-В",
-    topic: "Графічний редактор",
-    totalStudents: 24,
-    activeStudents: 22,
-    avgScore: 9.2,
-    avgProgress: 88,
-    students: [
-      { id: "5v-01", name: "Петриченко М.", progress: 96, lastActivity: "12.04, 10:35", currentTask: "Колаж — завдання 9", totalTime: "2г 40хв", tasksCompleted: 11, totalTasks: 12, aiRequestsCount: 5, offlineSessions: 3, className: "5-В", sessions: [{ date: "06.04", duration: 35, device: "Windows", city: "м. Шостка" }, { date: "12.04", duration: 40, device: "Windows", city: "м. Шостка" }], avgTimePerTask: 13, hintsUsed: 3, errorRate: 7 },
-      { id: "5v-02", name: "Гаврилюк Т.", progress: 74, lastActivity: "10.04, 14:20", currentTask: "Шари зображення — завдання 6", totalTime: "1г 55хв", tasksCompleted: 9, totalTasks: 12, aiRequestsCount: 12, offlineSessions: 2, className: "5-В", sessions: [{ date: "03.04", duration: 29, device: "Android", city: "м. Шостка" }, { date: "10.04", duration: 36, device: "Android", city: "м. Шостка" }], avgTimePerTask: 12, hintsUsed: 7, errorRate: 15 },
-    ],
-  },
-]
-
-// Активність за період 30.03 - 12.04 (по днях)
-const activityData = [
-  { time: "30.03", active: 42 }, { time: "31.03", active: 38 }, { time: "01.04", active: 55 },
-  { time: "02.04", active: 48 }, { time: "03.04", active: 61 }, { time: "04.04", active: 52 },
-  { time: "05.04", active: 47 }, { time: "06.04", active: 12 }, { time: "07.04", active: 15 },
-  { time: "08.04", active: 58 }, { time: "09.04", active: 44 }, { time: "10.04", active: 39 },
-  { time: "11.04", active: 51 }, { time: "12.04", active: 46 },
-]
-
-// Активність за годинами (типовий день, усереднено за період)
-const hourlyActivity = [
-  { hour: "08:00", active: 3 }, { hour: "10:00", active: 28 }, { hour: "12:00", active: 38 },
-  { hour: "14:00", active: 35 }, { hour: "16:00", active: 30 }, { hour: "18:00", active: 25 },
-  { hour: "20:00", active: 8 },
-]
-
-const deviceData = [
-  { name: "Android", value: 38 }, { name: "Windows", value: 31 },
-  { name: "iOS", value: 14 }, { name: "macOS", value: 7 },
-  { name: "Chrome OS", value: 10 },
-]
-
-// Виконання завдань по темах
-const topicStats = [
-  { topic: "Змінні", completed: 89 },
-  { topic: "Умови", completed: 76 },
-  { topic: "Цикли", completed: 64 },
-  { topic: "Функції", completed: 52 },
-  { topic: "Списки", completed: 41 },
-  { topic: "Flexbox", completed: 38 },
-]
+import {
+  classesData,
+  progressByClass,
+  summaryStats,
+  activityData,
+  deviceData,
+  topicStats,
+  hourlyActivity,
+  recentActivity,
+  riskStudents,
+  topStudents,
+  PERIOD_LABEL,
+  PERIOD_LABEL_SHORT,
+} from "@/lib/students-data"
 
 const COLORS = ["#16a34a", "#3b82f6", "#f59e0b", "#8b5cf6", "#06b6d4"]
 
@@ -267,30 +80,19 @@ const TOOLTIP_STYLE = { background: "#18181b", border: "1px solid rgba(255,255,2
 const AXIS_STROKE = "#52525b"
 const GRID_STROKE = "rgba(255,255,255,0.06)"
 
-const progressByClass = [
-  { class: "11-А", progress: 89, score: 9.6 },
-  { class: "11-Б", progress: 84, score: 9.1 },
-  { class: "10-А", progress: 86, score: 9.3 },
-  { class: "10-В", progress: 79, score: 8.9 },
-  { class: "9-А", progress: 82, score: 8.8 },
-  { class: "9-Б", progress: 88, score: 9.5 },
-  { class: "8-А", progress: 85, score: 9.0 },
-  { class: "8-Б", progress: 77, score: 8.6 },
-  { class: "8-В", progress: 73, score: 8.4 },
-  { class: "5-А (1)", progress: 91, score: 9.4 },
-  { class: "5-А (2)", progress: 87, score: 9.1 },
-  { class: "5-Б (1)", progress: 93, score: 9.7 },
-  { class: "5-В", progress: 88, score: 9.2 },
-]
 
 export default function TeacherPage() {
   const router = useRouter()
   const [hasAccess, setHasAccess] = useState(false)
-  const [selectedClass, setSelectedClass] = useState<string | null>(null)
+  const [selectedClass, setSelectedClass] = useLocalStorage<string | null>("teacher_selected_class", null)
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null)
   const [showStudentDetail, setShowStudentDetail] = useState(false)
-  const [activeTab, setActiveTab] = useState("overview")
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true)
+  const [activeTab, setActiveTab] = useLocalStorage<string>("teacher_active_tab", "overview")
+  const [notificationsEnabled, setNotificationsEnabled] = useLocalStorage<boolean>("teacher_notifications", true)
+  const [classQuery, setClassQuery] = useState("")
+  const [studentQuery, setStudentQuery] = useState("")
+  const [studentSort, setStudentSort] = useLocalStorage<"progress" | "name" | "activity">("teacher_student_sort", "progress")
+  const [statusFilter, setStatusFilter] = useLocalStorage<"all" | "active" | "invited" | "risk">("teacher_status_filter", "all")
 
   useEffect(() => {
     // Панель відкривається одразу — доступ надається автоматично (демо-режим)
@@ -315,10 +117,38 @@ export default function TeacherPage() {
   }
 
   const currentClass = classesData.find((c) => c.id === selectedClass)
-  const totalStudents = classesData.reduce((a, c) => a + c.totalStudents, 0)
-  const totalActive = classesData.reduce((a, c) => a + c.activeStudents, 0)
-  const avgScore = (classesData.reduce((a, c) => a + c.avgScore, 0) / classesData.length).toFixed(1)
-  const avgProgress = Math.round(classesData.reduce((a, c) => a + c.avgProgress, 0) / classesData.length)
+  const { totalStudents, totalActive, avgScore, avgProgress } = summaryStats
+
+  // Класи, відфільтровані пошуком, згруповані за паралеллю
+  const filteredClasses = classesData.filter(
+    (c) =>
+      c.name.toLowerCase().includes(classQuery.toLowerCase()) ||
+      c.topic.toLowerCase().includes(classQuery.toLowerCase()),
+  )
+  const parallelOrder = ["5", "8", "9", "10", "11"]
+  const groupedClasses = parallelOrder
+    .map((p) => ({
+      parallel: `${p}-ті класи`,
+      classes: filteredClasses.filter((c) => c.name.startsWith(p)),
+    }))
+    .filter((g) => g.classes.length > 0)
+
+  // Список учнів поточного класу з пошуком, фільтром та сортуванням
+  const riskIds = new Set(riskStudents.map((s) => s.id))
+  const visibleStudents = (currentClass?.students ?? [])
+    .filter((s) => s.name.toLowerCase().includes(studentQuery.toLowerCase()))
+    .filter((s) => {
+      if (statusFilter === "active") return !s.invited
+      if (statusFilter === "invited") return s.invited
+      if (statusFilter === "risk") return riskIds.has(s.id)
+      return true
+    })
+    .slice()
+    .sort((a, b) => {
+      if (studentSort === "name") return a.name.localeCompare(b.name, "uk")
+      if (studentSort === "activity") return b.lastActivityTs - a.lastActivityTs
+      return b.progress - a.progress
+    })
 
   return (
     <div className="relative min-h-screen bg-background text-foreground flex flex-col overflow-hidden">
@@ -405,7 +235,7 @@ export default function TeacherPage() {
                 Вітаємо у кабінеті вчителя
               </h2>
               <p className="relative mt-1 text-sm text-muted-foreground">
-                Повний огляд успішності учнів, активності та аналітики за період практики
+                Повний огляд ус��ішності учнів, активності та аналітики · {PERIOD_LABEL}
               </p>
             </div>
 
@@ -415,7 +245,7 @@ export default function TeacherPage() {
                 { label: "Учнів всього", value: totalStudents, sub: `${totalActive} брали участь`, icon: Users, color: "text-primary", glow: "shadow-primary/20", iconBg: "bg-primary/10" },
                 { label: "Середній бал", value: avgScore, sub: "По всіх класах", icon: TrendingUp, color: "text-green-400", glow: "shadow-green-500/20", iconBg: "bg-green-500/10" },
                 { label: "Прогрес", value: `${avgProgress}%`, sub: "Середній по курсу", icon: CheckCircle2, color: "text-blue-400", glow: "shadow-blue-500/20", iconBg: "bg-blue-500/10" },
-                { label: "AI запити", value: "103", sub: "30.03 — 12.04", icon: Bot, color: "text-amber-400", glow: "shadow-amber-500/20", iconBg: "bg-amber-500/10" },
+                { label: "AI запити", value: summaryStats.totalAiRequests, sub: PERIOD_LABEL_SHORT, icon: Bot, color: "text-amber-400", glow: "shadow-amber-500/20", iconBg: "bg-amber-500/10" },
               ].map((s) => (
                 <div key={s.label} className="group relative overflow-hidden rounded-xl border border-white/5 bg-card/60 p-4 shadow-xl backdrop-blur-md transition-all hover:border-white/10 hover:bg-card">
                   <div className="flex items-start justify-between mb-3">
@@ -435,7 +265,7 @@ export default function TeacherPage() {
               <Card className={`lg:col-span-2 ${CARD_CLS}`}>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-foreground">Активність за період</CardTitle>
-                  <CardDescription className="text-xs text-muted-foreground">30 березня — 12 квітня · кількість активних учнів</CardDescription>
+                  <CardDescription className="text-xs text-muted-foreground">{PERIOD_LABEL} · кількість активних учнів</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={200}>
@@ -526,6 +356,66 @@ export default function TeacherPage() {
               </Card>
             </div>
 
+            {/* Група ризику + ТОП учнів */}
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Card className={CARD_CLS}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2 text-foreground">
+                    <AlertTriangle className="h-4 w-4 text-amber-400" />
+                    Потребують уваги
+                  </CardTitle>
+                  <CardDescription className="text-xs text-muted-foreground">
+                    {riskStudents.length} учнів · низький прогрес, помилки або давня активність
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                    {riskStudents.slice(0, 12).map((s) => (
+                      <div key={s.id} className="flex items-center gap-3 p-2.5 rounded-lg border border-amber-500/10 bg-amber-500/[0.04]">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 font-semibold text-xs shrink-0">
+                          {s.name.charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate text-foreground">{s.name}</p>
+                          <p className="text-xs text-muted-foreground truncate">{s.className} · {s.riskReasons.join(", ")}</p>
+                        </div>
+                        <span className="text-xs font-mono text-amber-400 shrink-0">{s.progress}%</span>
+                      </div>
+                    ))}
+                    {riskStudents.length === 0 && (
+                      <p className="text-sm text-muted-foreground py-6 text-center">Немає учнів у групі ризику</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className={CARD_CLS}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2 text-foreground">
+                    <Trophy className="h-4 w-4 text-primary" />
+                    ТОП учнів
+                  </CardTitle>
+                  <CardDescription className="text-xs text-muted-foreground">Найкращі за прогресом та виконаними завданнями</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                    {topStudents.map((s, i) => (
+                      <div key={s.id} className="flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-white/[0.03]">
+                        <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold shrink-0 ${i < 3 ? "bg-primary/15 text-primary" : "bg-white/5 text-muted-foreground"}`}>
+                          {i + 1}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate text-foreground">{s.name}</p>
+                          <p className="text-xs text-muted-foreground truncate">{s.className} · {s.tasksCompleted}/{s.totalTasks} завдань</p>
+                        </div>
+                        <span className="text-xs font-mono text-primary shrink-0">{s.progress}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Період підсумки */}
             <Card className={CARD_CLS}>
               <CardHeader className="pb-2">
@@ -533,24 +423,24 @@ export default function TeacherPage() {
                   <Clock className="h-4 w-4 text-primary" />
                   Підсумки періоду
                 </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground">30 березня — 12 квітня 2026</CardDescription>
+                <CardDescription className="text-xs text-muted-foreground">{PERIOD_LABEL}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className={TILE_CLS}>
-                    <p className="text-2xl font-bold text-primary">647</p>
+                    <p className="text-2xl font-bold text-primary">{summaryStats.totalSessions}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Сесій навчання</p>
                   </div>
                   <div className={TILE_CLS}>
-                    <p className="text-2xl font-bold text-green-400">289</p>
+                    <p className="text-2xl font-bold text-green-400">{summaryStats.totalCompletedTasks}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Завершених завдань</p>
                   </div>
                   <div className={TILE_CLS}>
-                    <p className="text-2xl font-bold text-blue-400">54г</p>
+                    <p className="text-2xl font-bold text-blue-400">{summaryStats.totalHours}г</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Сумарний час</p>
                   </div>
                   <div className={TILE_CLS}>
-                    <p className="text-2xl font-bold text-amber-400">42</p>
+                    <p className="text-2xl font-bold text-amber-400">{summaryStats.totalOfflineSessions}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Офлайн сесій</p>
                   </div>
                 </div>
@@ -563,35 +453,60 @@ export default function TeacherPage() {
         {activeTab === "classes" && (
           <>
             {!selectedClass ? (
-              <div className="space-y-3">
-                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Всі класи</h2>
-                {classesData.map((cls) => (
-                  <Card key={cls.id} className={CARD_HOVER_CLS} onClick={() => setSelectedClass(cls.id)}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h3 className="font-semibold text-foreground">{cls.name}</h3>
-                          <p className="text-xs text-muted-foreground mt-0.5">{cls.topic}</p>
-                        </div>
-                        <Badge className="border-primary/30 bg-primary/10 text-primary">{cls.avgScore} балів</Badge>
-                      </div>
-                      <div className="grid grid-cols-3 gap-3 mb-3 text-center">
-                        <div>
-                          <p className="text-lg font-bold text-primary">{cls.totalStudents}</p>
-                          <p className="text-xs text-muted-foreground">Учнів</p>
-                        </div>
-                        <div>
-                          <p className="text-lg font-bold text-green-400">{cls.activeStudents}</p>
-                          <p className="text-xs text-muted-foreground">Активних</p>
-                        </div>
-                        <div>
-                          <p className="text-lg font-bold text-blue-400">{cls.avgProgress}%</p>
-                          <p className="text-xs text-muted-foreground">Прогрес</p>
-                        </div>
-                      </div>
-                      <Progress value={cls.avgProgress} className="h-1.5 bg-white/5 [&>div]:bg-gradient-to-r [&>div]:from-primary [&>div]:to-primary" />
-                    </CardContent>
-                  </Card>
+              <div className="space-y-5">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+                    Всі класи · {classesData.length} груп
+                  </h2>
+                  <div className="relative w-full sm:w-64">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={classQuery}
+                      onChange={(e) => setClassQuery(e.target.value)}
+                      placeholder="Пошук класу або теми..."
+                      className="pl-8 h-9 bg-white/[0.03] border-white/10 text-sm"
+                    />
+                  </div>
+                </div>
+
+                {groupedClasses.length === 0 && (
+                  <p className="text-sm text-muted-foreground py-8 text-center">Нічого не знайдено за запитом «{classQuery}»</p>
+                )}
+
+                {groupedClasses.map((group) => (
+                  <div key={group.parallel} className="space-y-3">
+                    <h3 className="text-xs font-medium text-primary/80 uppercase tracking-wider">{group.parallel}</h3>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {group.classes.map((cls) => (
+                        <Card key={cls.id} className={CARD_HOVER_CLS} onClick={() => { setSelectedClass(cls.id); setStudentQuery(""); setStatusFilter("all") }}>
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="min-w-0">
+                                <h3 className="font-semibold text-foreground">{cls.name}</h3>
+                                <p className="text-xs text-muted-foreground mt-0.5 truncate">{cls.topic}</p>
+                              </div>
+                              <Badge className="border-primary/30 bg-primary/10 text-primary shrink-0 ml-2">{cls.avgScore} балів</Badge>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3 mb-3 text-center">
+                              <div>
+                                <p className="text-lg font-bold text-primary">{cls.totalStudents}</p>
+                                <p className="text-xs text-muted-foreground">Учнів</p>
+                              </div>
+                              <div>
+                                <p className="text-lg font-bold text-green-400">{cls.activeStudents}</p>
+                                <p className="text-xs text-muted-foreground">Активних</p>
+                              </div>
+                              <div>
+                                <p className="text-lg font-bold text-blue-400">{cls.avgProgress}%</p>
+                                <p className="text-xs text-muted-foreground">Прогрес</p>
+                              </div>
+                            </div>
+                            <Progress value={cls.avgProgress} className="h-1.5 bg-white/5 [&>div]:bg-gradient-to-r [&>div]:from-primary [&>div]:to-primary" />
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : showStudentDetail && selectedStudent ? (
@@ -675,21 +590,69 @@ export default function TeacherPage() {
                     Всі класи
                   </Button>
                   <span className="text-sm font-semibold text-foreground">{currentClass?.name}</span>
+                  <span className="text-xs text-muted-foreground hidden sm:inline">· {currentClass?.topic}</span>
                 </div>
-                {currentClass?.students.map((student) => (
-                  <Card key={student.id} className={CARD_HOVER_CLS}
-                    onClick={() => { setSelectedStudent(student); setShowStudentDetail(true) }}>
+
+                {/* Пошук + фільтр + сортування */}
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={studentQuery}
+                      onChange={(e) => setStudentQuery(e.target.value)}
+                      placeholder="Пошук учня..."
+                      className="pl-8 h-9 bg-white/[0.03] border-white/10 text-sm"
+                    />
+                  </div>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {[
+                      { id: "all", label: "Усі" },
+                      { id: "active", label: "Активні" },
+                      { id: "invited", label: "Запрошені" },
+                      { id: "risk", label: "Група ризику" },
+                    ].map((f) => (
+                      <button
+                        key={f.id}
+                        onClick={() => setStatusFilter(f.id as typeof statusFilter)}
+                        className={`px-2.5 h-9 rounded-md text-xs font-medium border transition-colors ${
+                          statusFilter === f.id
+                            ? "border-primary/40 bg-primary/15 text-primary"
+                            : "border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setStudentSort((s) => (s === "progress" ? "name" : s === "name" ? "activity" : "progress"))}
+                      className="flex items-center gap-1 px-2.5 h-9 rounded-md text-xs font-medium border border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {studentSort === "progress" ? "Прогрес" : studentSort === "name" ? "Імʼя" : "Активність"}
+                    </button>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground">Показано {visibleStudents.length} з {currentClass?.students.length}</p>
+
+                {visibleStudents.map((student) => (
+                  <Card key={student.id} className={student.invited ? CARD_CLS : CARD_HOVER_CLS}
+                    onClick={() => { if (!student.invited) { setSelectedStudent(student); setShowStudentDetail(true) } }}>
                     <CardContent className="p-3 sm:p-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold text-sm shrink-0 ring-1 ring-primary/20">
-                          {student.name.charAt(0)}
+                        <div className={`flex h-9 w-9 items-center justify-center rounded-full font-semibold text-sm shrink-0 ring-1 ${student.invited ? "bg-white/5 text-muted-foreground ring-white/10" : "bg-gradient-to-br from-primary/20 to-primary/10 text-primary ring-primary/20"}`}>
+                          {student.invited ? <UserPlus className="h-4 w-4" /> : student.name.charAt(0)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1">
-                            <p className="text-sm font-medium truncate text-foreground">{student.name}</p>
-                            <span className="text-xs font-mono text-primary ml-2 shrink-0">{student.progress}%</span>
+                          <div className="flex items-center justify-between mb-1 gap-2">
+                            <p className="text-sm font-medium truncate text-foreground flex items-center gap-2">
+                              {student.name}
+                              {student.invited && <Badge variant="outline" className="text-[10px] border-amber-500/30 bg-amber-500/10 text-amber-400 px-1.5 py-0">Запрошено</Badge>}
+                              {!student.invited && riskIds.has(student.id) && <AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0" />}
+                            </p>
+                            <span className="text-xs font-mono text-primary ml-2 shrink-0">{student.invited ? "—" : `${student.progress}%`}</span>
                           </div>
-                          <p className="text-xs text-muted-foreground truncate">{student.currentTask}</p>
+                          <p className="text-xs text-muted-foreground truncate">{student.invited ? "Запрошення надіслано · ще не приєднав(-ся/-лась)" : student.currentTask}</p>
                           <Progress value={student.progress} className="h-1 mt-1.5 bg-white/5 [&>div]:bg-gradient-to-r [&>div]:from-primary [&>div]:to-primary" />
                         </div>
                         <div className="text-right shrink-0 hidden sm:block">
@@ -720,18 +683,18 @@ export default function TeacherPage() {
                   <Eye className="h-4 w-4 text-primary" />
                   Активність за період
                 </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground">30 березня — 12 квітня 2026</CardDescription>
+                <CardDescription className="text-xs text-muted-foreground">{PERIOD_LABEL}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className={TILE_CLS}>
                     <WifiOff className="h-5 w-5 text-amber-400 mx-auto mb-1.5" />
-                    <p className="text-xl font-bold text-foreground">42</p>
+                    <p className="text-xl font-bold text-foreground">{summaryStats.totalOfflineSessions}</p>
                     <p className="text-xs text-muted-foreground">Офлайн сесій за період</p>
                   </div>
                   <div className={TILE_CLS}>
                     <EyeOff className="h-5 w-5 text-blue-400 mx-auto mb-1.5" />
-                    <p className="text-xl font-bold text-foreground">18г</p>
+                    <p className="text-xl font-bold text-foreground">{Math.round(summaryStats.totalOfflineSessions * 0.42)}г</p>
                     <p className="text-xs text-muted-foreground">Загальний офлайн час</p>
                   </div>
                 </div>
@@ -781,19 +744,11 @@ export default function TeacherPage() {
             <Card className={CARD_CLS}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-foreground">Остання активність</CardTitle>
-                <CardDescription className="text-xs text-muted-foreground">Події за 12 квітня 2026</CardDescription>
+                <CardDescription className="text-xs text-muted-foreground">Останні події учнів за період навчання</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {[
-                    { time: "12.04 15:42", student: "Бондаренко А.", action: "Завершив завдання", class: "8-А" },
-                    { time: "12.04 15:30", student: "Коваленко Т.", action: "Запитав AI підказку", class: "9-Б" },
-                    { time: "12.04 15:10", student: "Даниленко В.", action: "Розпочав новий модуль", class: "9-А" },
-                    { time: "12.04 14:55", student: "Захарченко В.", action: "Завершив фінальний проєкт SQL", class: "11-А" },
-                    { time: "11.04 18:20", student: "Гриценко М.", action: "Отримав досягнення", class: "8-А" },
-                    { time: "11.04 16:05", student: "Литвиненко А.", action: "Завершив тему 'DOM-події'", class: "11-Б" },
-                    { time: "10.04 14:40", student: "Дмитренко А.", action: "Розпочав завдання", class: "5-А (1 підгр.)" },
-                  ].map((e, i) => (
+                  {recentActivity.map((e, i) => (
                     <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-white/[0.03] transition-colors hover:bg-white/[0.06]">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 shadow-[0_0_8px_var(--primary)]" />
                       <span className="font-mono text-xs text-muted-foreground shrink-0">{e.time}</span>
