@@ -40,7 +40,7 @@ export default function PredictionsPanel({ screenMode }: { screenMode: boolean }
   const getIcon = (type: string) => {
     switch (type) {
       case "success":
-        return <Star className="h-4 w-4 text-emerald-500" />
+        return <Star className="h-4 w-4 text-primary" />
       case "warning":
         return <AlertTriangle className="h-4 w-4 text-amber-500" />
       default:
@@ -51,7 +51,7 @@ export default function PredictionsPanel({ screenMode }: { screenMode: boolean }
   const getColor = (type: string) => {
     switch (type) {
       case "success":
-        return "border-emerald-500/30 bg-emerald-500/5"
+        return "border-primary/30 bg-primary/5"
       case "warning":
         return "border-amber-500/30 bg-amber-500/5"
       default:

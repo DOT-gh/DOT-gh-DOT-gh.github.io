@@ -14,7 +14,7 @@ export default function FunnelChart() {
     { name: "Відкрили завдання", value: 100, color: "bg-blue-500" },
     { name: "Почали виконувати", value: 85, color: "bg-cyan-500" },
     { name: "Попросили підказку", value: 62, color: "bg-teal-500" },
-    { name: "Здали спробу", value: 78, color: "bg-emerald-500" },
+    { name: "Здали спробу", value: 78, color: "bg-primary" },
     { name: "Склали успішно", value: 71, color: "bg-green-500" },
   ]
 
@@ -41,7 +41,7 @@ export default function FunnelChart() {
               </div>
               <div className="relative h-8 bg-muted rounded overflow-hidden">
                 <div
-                  className={`h-full ${stage.color} transition-all duration-500 flex items-center justify-center text-white text-xs font-medium`}
+                  className={`h-full ${stage.color} transition-all duration-500 flex items-center justify-center text-foreground text-xs font-medium`}
                   style={{ width: `${width}%` }}
                 >
                   {stage.value}%

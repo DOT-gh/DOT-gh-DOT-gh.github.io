@@ -31,17 +31,25 @@ export default async function LandingPage() {
       {/* Header */}
       <header className="border-b border-border/50 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Terminal className="w-6 h-6 text-primary" />
-            <span className="font-bold text-lg">Edu Survival Kit</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Beta</span>
+          <div className="flex items-center gap-2 min-w-0">
+            <Terminal className="w-6 h-6 text-primary shrink-0" />
+            <span className="font-bold text-lg whitespace-nowrap hidden md:inline">Edu Survival Kit</span>
+            <span className="font-bold text-lg whitespace-nowrap md:hidden">
+              ESK
+            </span>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">
+              Beta
+            </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Button variant="ghost" asChild>
               <Link href="/login">Увійти</Link>
             </Button>
             <Button asChild>
-              <Link href="/login">Почати навчання</Link>
+              <Link href="/login">
+                <span className="hidden sm:inline">Почати навчання</span>
+                <span className="sm:hidden">Почати</span>
+              </Link>
             </Button>
           </div>
         </div>
