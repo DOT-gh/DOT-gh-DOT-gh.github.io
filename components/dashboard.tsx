@@ -4,7 +4,24 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import { useAppState, type Course } from "@/lib/store"
 import { createClient } from "@/lib/supabase/client"
-import { Code2, Globe, Cpu, ChevronRight, Zap, Trophy, TrendingUp, Award, Palette } from "lucide-react"
+import {
+  Code2,
+  Globe,
+  Cpu,
+  ChevronRight,
+  Zap,
+  Trophy,
+  TrendingUp,
+  Award,
+  Palette,
+  FileCode2,
+  Puzzle,
+  Shield,
+  HardDrive,
+  Database,
+  Bot,
+  Gamepad2,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -15,15 +32,22 @@ import { AchievementsPanel } from "@/components/gamification/achievements-panel"
 import { Leaderboard } from "@/components/gamification/leaderboard"
 import ExtendedBadges from "@/components/gamification/extended-badges"
 import ThemeSelector from "@/components/theme-selector"
+import { GamesHub } from "@/components/games/games-hub"
 
 const courseIcons: Record<string, React.ReactNode> = {
   python: <Code2 className="h-6 w-6" />,
   web: <Globe className="h-6 w-6" />,
   algorithm: <Cpu className="h-6 w-6" />,
+  js: <FileCode2 className="h-6 w-6" />,
+  scratch: <Puzzle className="h-6 w-6" />,
+  cyber: <Shield className="h-6 w-6" />,
+  data: <HardDrive className="h-6 w-6" />,
+  sql: <Database className="h-6 w-6" />,
+  ai: <Bot className="h-6 w-6" />,
 }
 
 export function Dashboard() {
-  const { courses, setSelectedCourse, setCurrentView, xp, level, streak, achievements } = useAppState()
+  const { courses, setSelectedCourse, setCurrentView, xp, level, streak, achievements, gameStats } = useAppState()
   const [displayName, setDisplayName] = useState<string | null>(null)
   const [isNameLoading, setIsNameLoading] = useState(true)
 
@@ -184,46 +208,76 @@ export function Dashboard() {
                   </CardContent>
                 </Card>
 
-                {/* Неактивні курси (сірі) */}
-                {courses.map((course) => (
-                  <Card
-                    key={course.id}
-                    className="group border-border bg-card/50 flex flex-col opacity-50 cursor-not-allowed"
-                  >
-                    <CardHeader className="pb-2 sm:pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-                          {courseIcons[course.icon]}
-                        </div>
-                        <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] sm:text-xs font-medium text-muted-foreground">
-                          Незабаром
-                        </span>
-                      </div>
-                      <CardTitle className="mt-2 sm:mt-3 text-sm sm:text-base text-muted-foreground">
-                        {course.title}
-                      </CardTitle>
-                      <CardDescription className="text-xs sm:text-sm">{course.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-1 flex flex-col justify-end">
-                      <div className="space-y-3">
-                        <div>
-                          <div className="mb-1.5 flex justify-between text-xs">
-                            <span className="text-muted-foreground">Прогрес</span>
-                            <span className="font-mono text-muted-foreground">
-                              {course.completedTasks}/{course.totalTasks} завдань
-                            </span>
+                {/* Інтерактивні курси */}
+                {courses.map((course) => {
+                  const isDone = course.completedTasks >= course.totalTasks && course.totalTasks > 0
+                  const isStarted = course.completedTasks > 0
+                  return (
+                    <Card
+                      key={course.id}
+                      className="group border-border bg-card transition-colors hover:border-primary/50 flex flex-col"
+                    >
+                      <CardHeader className="pb-2 sm:pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-primary/20 text-primary">
+                            {courseIcons[course.icon] ?? <Code2 className="h-6 w-6" />}
                           </div>
-                          <Progress value={course.progress} className="h-1.5" />
+                          {isDone ? (
+                            <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-primary">
+                              ЗАВЕРШЕНО
+                            </span>
+                          ) : isStarted ? (
+                            <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-amber-500">
+                              В ПРОЦЕСІ
+                            </span>
+                          ) : (
+                            <span className="rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-green-500">
+                              ДОСТУПНО
+                            </span>
+                          )}
                         </div>
-                        <Button className="w-full gap-2 text-sm" variant="secondary" size="sm" disabled>
-                          Незабаром
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <CardTitle className="mt-2 sm:mt-3 text-sm sm:text-base">{course.title}</CardTitle>
+                        <CardDescription className="text-xs sm:text-sm">{course.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex-1 flex flex-col justify-end">
+                        <div className="space-y-3">
+                          <div>
+                            <div className="mb-1.5 flex justify-between text-xs">
+                              <span className="text-muted-foreground">Прогрес</span>
+                              <span className="font-mono text-foreground">
+                                {course.completedTasks}/{course.totalTasks} завдань
+                              </span>
+                            </div>
+                            <Progress value={course.progress} className="h-1.5" />
+                          </div>
+                          <Button
+                            className="w-full gap-2 text-sm"
+                            variant={isDone ? "secondary" : "default"}
+                            size="sm"
+                            onClick={() => handleStartCourse(course)}
+                          >
+                            {isDone ? "Повторити" : isStarted ? "Продовжити" : "Почати"}
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
+            </div>
+
+            <div>
+              <div className="mb-3 sm:mb-4 flex items-center gap-2">
+                <Gamepad2 className="h-5 w-5 text-primary" />
+                <h2 className="text-base sm:text-lg font-semibold text-foreground">Ігрова зона</h2>
+                {gameStats.totalGamesPlayed > 0 && (
+                  <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-primary">
+                    Зіграно: {gameStats.totalGamesPlayed}
+                  </span>
+                )}
+              </div>
+              <GamesHub />
             </div>
           </div>
 
