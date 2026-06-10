@@ -68,7 +68,7 @@ export default function LoginPage() {
           </span>
         </div>
 
-        <Card className="w-full max-w-md border-border/50 bg-card/80 shadow-2xl backdrop-blur">
+        <Card className="w-full max-w-md border border-primary/40 bg-card/90 shadow-2xl shadow-primary/20 ring-1 ring-primary/20 backdrop-blur">
           <CardHeader className="space-y-3 text-center">
             <CardTitle className="text-2xl font-bold">Ласкаво просимо</CardTitle>
             <CardDescription className="text-base">
@@ -80,7 +80,7 @@ export default function LoginPage() {
             <Button
               size="lg"
               variant="outline"
-              className="h-12 w-full border-border/60 bg-background/50 text-base font-medium hover:bg-secondary/50"
+              className="h-12 w-full border border-primary/50 bg-primary/5 text-base font-medium transition-colors hover:border-primary hover:bg-primary/10"
               onClick={handleGoogleLogin}
               disabled={isLoading}
             >

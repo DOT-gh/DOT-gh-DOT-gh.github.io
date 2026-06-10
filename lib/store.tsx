@@ -559,7 +559,7 @@ class LinkedList:
         title: "Хеш-таблиця",
         description: "Швидкий пошук за ключем",
         completed: false,
-        content: `# Хеш-таблиця
+        content: `# Хе��-таблиця
 # Використовуємо словник Python як приклад
 
 # Створіть словник студентів
@@ -796,7 +796,7 @@ let count = 0
         completed: false,
         content: `# Координати
 # Сцена Scratch: X від -240 до 240, Y від -180 до 180
-# Центр сцени: (0, 0)
+# Це��тр сцени: (0, 0)
 
 # Куди потрапить спрайт із командою:
 # [Перейти в x: -240 y: 180]  -> який це кут?
@@ -1925,3 +1925,5 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
 // Export as useStore for convenience
 export const useStore = useAppState
+// Alias used by the games components
+export const useAppStore = useAppState

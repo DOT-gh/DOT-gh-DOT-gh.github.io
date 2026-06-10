@@ -179,7 +179,7 @@ export default async function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">100+</div>
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">200+</div>
               <p className="text-muted-foreground">Учнів</p>
             </div>
             <div className="text-center">
