@@ -20,15 +20,144 @@ function hashString(str: string): number {
 }
 
 function getAIResponse(message: string, previousMessages: any[]): string {
-  const lowerMessage = message.toLowerCase()
+  const lowerMessage = message.toLowerCase().trim()
   const msgHash = hashString(message + previousMessages.length.toString())
 
-  // Помилки та debugging
+  // ============= 1. ПРОХАННЯ ВИРІШИТИ ЗА УЧНЯ (відмова + направлення) =============
+  const solveForMePatterns = [
+    "зроби за мене", "виріши за мене", "реши за меня", "напиши код",
+    "напиши мені код", "напиши за мене", "дай код", "дай готовий код",
+    "дай відповідь", "дай готову відповідь", "готова відповідь",
+    "готове рішення", "зроби завдання", "виконай завдання", "виконай за мене",
+    "реши задачу", "вирішити задачу за мене", "напиши програму", "напиши скрипт",
+    "напиши функцію", "зроби домашку", "зроби домашнє", "зроби дз",
+    "зроби д/з", "зроби це за мене", "зроби все", "зроби все за мене",
+    "рішення задачі", "розв'язок", "розв'яжи", "розвяжи", "розв'яжи за мене",
+    "реши мені", "реши мне", "дай мені код", "дай мне код",
+    "виконай завдання за мене",
+    "solve for me", "do it for me", "write the code", "give me the code",
+    "give me the answer", "just give me", "write my homework", "do my homework",
+  ]
+
+  if (solveForMePatterns.some((p) => lowerMessage.includes(p))) {
+    const refusals = [
+      "Вибач, але я не можу вирішити завдання за тебе — моя задача навчити, а не виконати роботу. Але я з радістю підкажу, де в тебе помилка або який підхід вибрати. З чого хочеш почати?",
+      "Ні, готову відповідь я не дам — так ти нічого не навчишся. Давай разом розберемо: що саме в задачі викликає складнощі? Я підкажу наступний крок.",
+      "Я тьютор, а не генератор рішень. Зроблю інакше: постав задачу словами — що має робити код? А потім я допоможу перевести це в Python крок за кроком.",
+      "Якщо я зроблю за тебе, на контрольній ти застрягнеш. Краще покажи свою спробу (навіть неправильну) — розберемо разом і знайдемо, де втрачається логіка.",
+      "Готовий код не дам — це твоя практика. Але можу розбити задачу на менші кроки. Скажи: який перший крок ти зрозумів, а де починаються питання?",
+      "Не можу дати відповідь, зате можу поставити правильні питання. Почни з цього: які вхідні дані в задачі? Який має бути результат? Відповіси — рухаємось далі.",
+      "Моя робота — підштовхувати тебе до відповіді, а не видавати її. Надішли свій код (якщо є) або опиши логіку словами — покажу, де можна покращити.",
+      "Рішення за тебе = нуль знань у тебе. Давай по-іншому: поясни, як ти УЯВЛЯЄШ алгоритм (без коду). А я підкажу які конструкції Python тобі знадобляться.",
+    ]
+    return refusals[msgHash % refusals.length]
+  }
+
+  // ============= 2. ПРИВІТАННЯ =============
+  if (
+    /^(привіт|здоров|добрий день|добрий ранок|добрий вечір|хай|йо|hello|hi|hey)/i.test(lowerMessage) ||
+    lowerMessage === "hi" || lowerMessage === "йо"
+  ) {
+    const greetings = [
+      "Привіт! Я твій ШІ-тьютор. Готовий допомогти розібратися з завданням — але не робити його за тебе. Над чим працюєш?",
+      "Здоров! Розказуй — яка тема курсу зараз? Python, HTML/CSS, алгоритми? Я підкажу правильний напрямок.",
+      "Привіт! Перш ніж почнемо: покажи мені свій код або опиши завдання. Разом швидше розберемось.",
+    ]
+    return greetings[msgHash % greetings.length]
+  }
+
+  // ============= 3. ЯК СПРАВИ / ЯК ТИ =============
+  if (
+    lowerMessage.includes("як справи") ||
+    lowerMessage.includes("як ти") ||
+    lowerMessage.includes("як поживаєш") ||
+    lowerMessage.includes("як діла")
+  ) {
+    const responses = [
+      "Я ШІ — почуваюся стабільно добре :) А ось як твої справи з кодом? Де застряг?",
+      "Чудово, дякую! Завжди радий новому питанню. Що вивчаєш зараз?",
+      "Все гаразд, готовий до роботи. Краще розкажи ТИ як — розібрався з останнім завданням?",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // ============= 4. ДЯКУЮ / ДЯКА =============
+  if (
+    lowerMessage.includes("дякую") ||
+    lowerMessage.includes("дяка") ||
+    lowerMessage.includes("спасибі") ||
+    lowerMessage === "thx" ||
+    lowerMessage === "ty"
+  ) {
+    const responses = [
+      "Будь ласка! Якщо ще щось — пиши. Головне — практикуйся самостійно.",
+      "Нема за що. Пам'ятай: знання приходять тільки через власну роботу. Успіхів!",
+      "Радий був допомогти! Наступного разу спробуй спочатку сам — а потім уточнюй у мене.",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // ============= 5. ЯК ТЕБЕ ЗВАТИ / ХТО ТИ =============
+  if (
+    lowerMessage.includes("як тебе звати") ||
+    lowerMessage.includes("хто ти") ||
+    lowerMessage.includes("твоє ім") ||
+    lowerMessage.includes("як тебе звут")
+  ) {
+    return "Я — ШІ-тьютор платформи Edu Survival Kit. Без імені, але з принципом: підказую, не вирішую. Тож питай — я поруч."
+  }
+
+  // ============= 6. ЩО ТИ ВМІЄШ / ДОПОМОГА =============
+  if (
+    lowerMessage.includes("що ти вмієш") ||
+    lowerMessage.includes("що ти можеш") ||
+    lowerMessage.includes("як ти допомагаєш") ||
+    lowerMessage.includes("чим ти допоможеш")
+  ) {
+    return "Я можу: 1) пояснити теорію (Python, HTML/CSS, алгоритми), 2) знайти помилку у твоєму коді, 3) підказати наступний крок у завданні, 4) пояснити синтаксис. Чого НЕ роблю — не пишу готовий код за тебе."
+  }
+
+  // ============= 7. ТИ РОЗУМНИЙ / КРУТИЙ / ШІ =============
+  if (
+    lowerMessage.includes("ти розумний") ||
+    lowerMessage.includes("ти крутий") ||
+    lowerMessage.includes("ти бот") ||
+    lowerMessage.includes("ти штучний інтелект") ||
+    lowerMessage.includes("ти ai") ||
+    lowerMessage.includes("ти ші")
+  ) {
+    const responses = [
+      "Так, я ШІ :) Але не такий, що вирішує за тебе. Я навчаю тебе думати самому — це важливіше.",
+      "Дякую! Я тренувався на курсах інформатики, тож орієнтуюсь у шкільній програмі. Питай — не соромся.",
+      "Розумний рівно настільки, щоб не дати тобі списати, але допомогти зрозуміти. Над чим працюємо?",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // ============= 8. НЕ РОЗУМІЮ / ВАЖКО / СКЛАДНО =============
+  if (
+    lowerMessage.includes("не розумію") ||
+    lowerMessage.includes("важко") ||
+    lowerMessage.includes("складно") ||
+    lowerMessage.includes("не знаю") ||
+    lowerMessage.includes("тяжко")
+  ) {
+    const responses = [
+      "Нормально — на початку усім важко. Давай по маленьких кроках: опиши одним реченням, що тобі треба зробити в завданні.",
+      "Усі через це проходять! Не здавайся. Скажи: яка саме частина завдання найбільш незрозуміла — умова, алгоритм чи синтаксис?",
+      "Якщо важко — значить вчишся :) Розкажи, що вже пробував. Навіть неправильна спроба — це прогрес.",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // ============= 9. ПОМИЛКИ ТА DEBUGGING =============
   if (
     lowerMessage.includes("помилка") ||
     lowerMessage.includes("error") ||
     lowerMessage.includes("не працює") ||
-    lowerMessage.includes("не работает")
+    lowerMessage.includes("не работает") ||
+    lowerMessage.includes("баг") ||
+    lowerMessage.includes("bug")
   ) {
     const responses = [
       "Бачу проблему! Спершу перевір: чи є двокрапка після if/for/while? Чи правильні відступи? Покажи код - допоможу знайти помилку.",
@@ -40,7 +169,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Цикли for
+  // ============= 10. ЦИКЛИ FOR =============
   if (lowerMessage.includes("for") || lowerMessage.includes("цикл")) {
     const responses = [
       "Цикл for: `for i in range(5):` - виконає код 5 разів (i буде 0,1,2,3,4). Не забудь двокрапку і відступ!",
@@ -52,7 +181,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // While цикли
+  // ============= 11. WHILE =============
   if (lowerMessage.includes("while")) {
     const responses = [
       "while працює ПОКИ умова True. Важливо: щось всередині циклу має змінити умову, інакше - нескінченний цикл!",
@@ -62,7 +191,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Функції
+  // ============= 12. ФУНКЦІЇ =============
   if (lowerMessage.includes("функ") || lowerMessage.includes("def") || lowerMessage.includes("return")) {
     const responses = [
       "Функція: `def назва(параметр):` - двокрапка обов'язкова! Всередині - відступ. Виклик: `назва(значення)`.",
@@ -74,7 +203,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Списки
+  // ============= 13. СПИСКИ =============
   if (
     lowerMessage.includes("список") ||
     lowerMessage.includes("list") ||
@@ -91,7 +220,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Print та вивід
+  // ============= 14. PRINT =============
   if (
     lowerMessage.includes("print") ||
     lowerMessage.includes("вивід") ||
@@ -107,7 +236,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Умови if
+  // ============= 15. УМОВИ IF =============
   if (
     lowerMessage.includes("if") ||
     lowerMessage.includes("умов") ||
@@ -123,7 +252,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Підказки
+  // ============= 16. ПІДКАЗКИ =============
   if (
     lowerMessage.includes("підказ") ||
     lowerMessage.includes("hint") ||
@@ -140,7 +269,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Змінні
+  // ============= 17. ЗМІННІ =============
   if (lowerMessage.includes("змінн") || lowerMessage.includes("переменн") || lowerMessage.includes("variable")) {
     const responses = [
       "Змінна створюється присвоєнням: `x = 5`, `name = 'Іван'`. Тип визначається автоматично.",
@@ -151,7 +280,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // HTML/CSS питання
+  // ============= 18. HTML/CSS =============
   if (
     lowerMessage.includes("html") ||
     lowerMessage.includes("css") ||
@@ -167,7 +296,7 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Приклад/покажи
+  // ============= 19. ПРИКЛАД =============
   if (lowerMessage.includes("приклад") || lowerMessage.includes("покаж") || lowerMessage.includes("пример")) {
     const responses = [
       "Ось базовий приклад - спробуй адаптувати під своє завдання. Що саме незрозуміло в синтаксисі?",
@@ -178,7 +307,27 @@ function getAIResponse(message: string, previousMessages: any[]): string {
     return responses[msgHash % responses.length]
   }
 
-  // Загальні відповіді для невизначених питань
+  // ============= 20. АЛГОРИТМ =============
+  if (lowerMessage.includes("алгоритм")) {
+    const responses = [
+      "Алгоритм — це послідовність кроків. Почни з простого: що на вході? Що на виході? Які дії між ними?",
+      "Спершу напиши алгоритм словами (українською), тільки потім переводь у код. Так менше помилок.",
+      "Розіб'ємо алгоритм на 3 частини: 1) отримати дані, 2) обробити їх, 3) вивести результат. Яка частина незрозуміла?",
+    ]
+    return responses[msgHash % responses.length]
+  }
+
+  // ============= 21. БЛЕКАУТ / ОФЛАЙН =============
+  if (
+    lowerMessage.includes("блекаут") ||
+    lowerMessage.includes("офлайн") ||
+    lowerMessage.includes("без інтернету") ||
+    lowerMessage.includes("світло")
+  ) {
+    return "Платформа працює навіть без інтернету — всі курси кешуються. Тож продовжуй вчитися коли немає світла (з ноутом/планшетом). Я теж доступний офлайн з базовими підказками."
+  }
+
+  // ============= ЗАГАЛЬНІ ВІДПОВІДІ =============
   const generalResponses = [
     "Цікаве питання! Уточни: який код пробував написати і що саме не вийшло?",
     "Давай розберемось! Опиши детальніше задачу - що має робити твій код?",
@@ -195,13 +344,11 @@ export function AiTutorChat() {
   const { messages, addMessage, clearMessages, isOffline } = useAppState()
   const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
-  const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const safeMessages = messages || []
-
   const safeAddMessage = addMessage || (() => {})
   const safeClearMessages = clearMessages || (() => {})
 
@@ -212,7 +359,6 @@ export function AiTutorChat() {
   }
 
   useEffect(() => {
-    // Scroll immediately and after a short delay to ensure content is rendered
     scrollToBottom()
     const timer = setTimeout(scrollToBottom, 100)
     return () => clearTimeout(timer)
@@ -221,20 +367,17 @@ export function AiTutorChat() {
   const handleSend = () => {
     if (!input.trim() || !addMessage) return
 
-    // Add user message
     safeAddMessage({ role: "user", content: input.trim() })
     const userInput = input
     setInput("")
 
-    // Simulate AI thinking
     setIsTyping(true)
 
-    // Simulate AI response after delay
     setTimeout(() => {
       setIsTyping(false)
       const response = getAIResponse(userInput, safeMessages)
       safeAddMessage({ role: "assistant", content: response })
-    }, 1500)
+    }, 1200)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -244,171 +387,164 @@ export function AiTutorChat() {
     }
   }
 
-  // Quick actions
   const quickActions = [
+    { label: "Привіт", query: "Привіт!" },
     { label: "Де помилка?", query: "Де в моєму коді помилка?" },
     { label: "Підказка", query: "Дай підказку" },
-    { label: "Синтаксис", query: "Поясни синтаксис for циклу" },
-    { label: "HTML/CSS", query: "Що таке Flexbox?" },
+    { label: "Синтаксис for", query: "Поясни синтаксис for циклу" },
+    { label: "Flexbox?", query: "Що таке Flexbox?" },
     { label: "Змінні", query: "Що таке змінна в Python?" },
+    { label: "Що вмієш?", query: "Що ти вмієш?" },
   ]
-
-  const MobileToggle = () => (
-    <Button
-      variant="default"
-      size="sm"
-      className="fixed bottom-20 right-4 z-50 xl:hidden gap-2 shadow-lg rounded-full h-12 w-12 p-0"
-      onClick={() => setMobileOpen(true)}
-    >
-      <MessageSquare className="h-5 w-5" />
-    </Button>
-  )
-
-  const ChatContent = () => (
-    <aside
-      className={cn(
-        "flex flex-col bg-sidebar",
-        // Desktop: static sidebar
-        "hidden xl:flex xl:w-80",
-        // Mobile: overlay when open
-        mobileOpen && "fixed inset-0 z-50 flex w-full sm:w-96 xl:relative xl:w-80",
-      )}
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-sidebar-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/20">
-            <Sparkles className="h-4 w-4 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-sm font-semibold text-sidebar-foreground">ШІ-Асистент</h2>
-            <p className="text-xs text-muted-foreground">{isOffline ? "Offline Mode" : "Online"}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={safeClearMessages}>
-            <Trash2 className="h-3.5 w-3.5" />
-          </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7 xl:hidden" onClick={() => setMobileOpen(false)}>
-            <X className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7 hidden xl:flex" onClick={() => setCollapsed(true)}>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Messages */}
-      <div ref={messagesContainerRef} className="flex-1 space-y-4 overflow-y-auto p-4">
-        {safeMessages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 mb-3">
-              <Bot className="h-6 w-6 text-primary" />
-            </div>
-            <p className="text-sm text-foreground font-medium">Привіт! Я твій ШІ-тьютор</p>
-            <p className="text-xs text-muted-foreground mt-1 max-w-[200px]">
-              Я допоможу розібратися з кодом, але не дам готових відповідей
-            </p>
-          </div>
-        ) : (
-          safeMessages.map((msg) => (
-            <div key={msg.id} className={cn("flex gap-3", msg.role === "user" && "flex-row-reverse")}>
-              {/* Avatar */}
-              <div
-                className={cn(
-                  "flex h-7 w-7 shrink-0 items-center justify-center rounded-md",
-                  msg.role === "user" && "bg-accent",
-                  msg.role === "assistant" && "bg-primary/20",
-                  msg.role === "system" && "bg-secondary",
-                )}
-              >
-                {msg.role === "user" && <User className="h-4 w-4 text-accent-foreground" />}
-                {msg.role === "assistant" && <Bot className="h-4 w-4 text-primary" />}
-                {msg.role === "system" && <Bot className="h-4 w-4 text-muted-foreground" />}
-              </div>
-
-              {/* Message bubble */}
-              <div
-                className={cn(
-                  "max-w-[85%] rounded-lg px-3 py-2 text-sm",
-                  msg.role === "user" && "bg-accent text-accent-foreground",
-                  msg.role === "assistant" && "bg-card text-card-foreground border border-border",
-                  msg.role === "system" && "bg-secondary/50 text-muted-foreground font-mono text-xs",
-                )}
-              >
-                {msg.content}
-              </div>
-            </div>
-          ))
-        )}
-
-        {isTyping && (
-          <div className="flex gap-3">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/20">
-              <Bot className="h-4 w-4 text-primary animate-pulse" />
-            </div>
-            <div className="bg-card border border-border rounded-lg px-3 py-2">
-              <div className="flex gap-1">
-                <span className="h-2 w-2 rounded-full bg-muted-foreground animate-bounce" />
-                <span className="h-2 w-2 rounded-full bg-muted-foreground animate-bounce [animation-delay:0.1s]" />
-                <span className="h-2 w-2 rounded-full bg-muted-foreground animate-bounce [animation-delay:0.2s]" />
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Quick actions */}
-      <div className="border-t border-sidebar-border px-3 py-2">
-        <div className="flex flex-wrap gap-1.5">
-          {quickActions.map((action) => (
-            <button
-              key={action.label}
-              onClick={() => {
-                setInput(action.query)
-              }}
-              className="rounded-full bg-secondary/70 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-            >
-              {action.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className="border-t border-sidebar-border p-3">
-        <div className="flex gap-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Запитай підказку..."
-            className="flex-1 bg-input text-sm placeholder:text-muted-foreground"
-            disabled={isTyping}
-          />
-          <Button
-            size="icon"
-            className="shrink-0 bg-primary hover:bg-primary/90"
-            onClick={handleSend}
-            disabled={!input.trim() || isTyping}
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
-        <p className="mt-2 text-center font-mono text-[10px] text-muted-foreground">
-          ШІ не дає готових відповідей — лише підказки
-        </p>
-      </div>
-    </aside>
-  )
 
   return (
     <>
-      {!mobileOpen && <MobileToggle />}
-      <ChatContent />
-      {mobileOpen && <div className="fixed inset-0 z-40 bg-black/60 xl:hidden" onClick={() => setMobileOpen(false)} />}
+      {/* Mobile toggle button */}
+      {!mobileOpen && (
+        <Button
+          variant="default"
+          size="sm"
+          className="fixed bottom-20 right-4 z-50 xl:hidden gap-2 shadow-lg rounded-full h-12 w-12 p-0"
+          onClick={() => setMobileOpen(true)}
+        >
+          <MessageSquare className="h-5 w-5" />
+        </Button>
+      )}
+
+      {/* Chat sidebar — inline JSX (not a nested component) to preserve input focus */}
+      <aside
+        className={cn(
+          "flex flex-col bg-sidebar",
+          "hidden xl:flex xl:w-80",
+          mobileOpen && "fixed inset-0 z-50 flex w-full sm:w-96 xl:relative xl:w-80",
+        )}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-sidebar-border px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/20">
+              <Sparkles className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold text-sidebar-foreground">ШІ-Асистент</h2>
+              <p className="text-xs text-muted-foreground">{isOffline ? "Offline Mode" : "Online"}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={safeClearMessages}>
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-7 w-7 xl:hidden" onClick={() => setMobileOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div ref={messagesContainerRef} className="flex-1 space-y-4 overflow-y-auto p-4">
+          {safeMessages.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 mb-3">
+                <Bot className="h-6 w-6 text-primary" />
+              </div>
+              <p className="text-sm text-foreground font-medium">Привіт! Я твій ШІ-тьютор</p>
+              <p className="text-xs text-muted-foreground mt-1 max-w-[200px]">
+                Я допоможу розібратися з кодом, але не дам готових відповідей
+              </p>
+            </div>
+          ) : (
+            safeMessages.map((msg) => (
+              <div key={msg.id} className={cn("flex gap-3", msg.role === "user" && "flex-row-reverse")}>
+                <div
+                  className={cn(
+                    "flex h-7 w-7 shrink-0 items-center justify-center rounded-md",
+                    msg.role === "user" && "bg-accent",
+                    msg.role === "assistant" && "bg-primary/20",
+                    msg.role === "system" && "bg-secondary",
+                  )}
+                >
+                  {msg.role === "user" && <User className="h-4 w-4 text-accent-foreground" />}
+                  {msg.role === "assistant" && <Bot className="h-4 w-4 text-primary" />}
+                  {msg.role === "system" && <Bot className="h-4 w-4 text-muted-foreground" />}
+                </div>
+
+                <div
+                  className={cn(
+                    "max-w-[85%] rounded-lg px-3 py-2 text-sm",
+                    msg.role === "user" && "bg-accent text-accent-foreground",
+                    msg.role === "assistant" && "bg-card text-card-foreground border border-border",
+                    msg.role === "system" && "bg-secondary/50 text-muted-foreground font-mono text-xs",
+                  )}
+                >
+                  {msg.content}
+                </div>
+              </div>
+            ))
+          )}
+
+          {isTyping && (
+            <div className="flex gap-3">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/20">
+                <Bot className="h-4 w-4 text-primary animate-pulse" />
+              </div>
+              <div className="bg-card border border-border rounded-lg px-3 py-2">
+                <div className="flex gap-1">
+                  <span className="h-2 w-2 rounded-full bg-muted-foreground animate-bounce" />
+                  <span className="h-2 w-2 rounded-full bg-muted-foreground animate-bounce [animation-delay:0.1s]" />
+                  <span className="h-2 w-2 rounded-full bg-muted-foreground animate-bounce [animation-delay:0.2s]" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Quick actions */}
+        <div className="border-t border-sidebar-border px-3 py-2">
+          <div className="flex flex-wrap gap-1.5">
+            {quickActions.map((action) => (
+              <button
+                key={action.label}
+                onClick={() => setInput(action.query)}
+                className="rounded-full bg-secondary/70 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Input — DO NOT disable while typing (keeps focus) */}
+        <div className="border-t border-sidebar-border p-3">
+          <div className="flex gap-2">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Запитай підказку..."
+              className="flex-1 bg-input text-sm placeholder:text-muted-foreground"
+              autoComplete="off"
+            />
+            <Button
+              size="icon"
+              className="shrink-0 bg-primary hover:bg-primary/90"
+              onClick={handleSend}
+              disabled={!input.trim() || isTyping}
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
+          <p className="mt-2 text-center font-mono text-[10px] text-muted-foreground">
+            ШІ не дає готових відповідей — лише підказки
+          </p>
+        </div>
+      </aside>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-black/60 xl:hidden" onClick={() => setMobileOpen(false)} />
+      )}
     </>
   )
 }
