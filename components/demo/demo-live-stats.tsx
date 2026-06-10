@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Users, BookOpen, CheckCircle2, Code2, Trophy, Clock } from "lucide-react"
+import { Users, BookOpen, CheckCircle2, Layers, Trophy, Clock } from "lucide-react"
 
 type Stat = {
   icon: typeof Users
@@ -12,11 +12,11 @@ type Stat = {
 }
 
 const STATS: Stat[] = [
-  { icon: Users, value: 1240, suffix: "+", label: "Учнів навчається", color: "text-primary" },
-  { icon: BookOpen, value: 86, suffix: "", label: "Інтерактивних уроків", color: "text-accent" },
-  { icon: CheckCircle2, value: 14500, suffix: "+", label: "Виконаних завдань", color: "text-primary" },
-  { icon: Code2, value: 320, suffix: "k", label: "Рядків коду написано", color: "text-accent" },
-  { icon: Trophy, value: 97, suffix: "%", label: "Завершують курс", color: "text-primary" },
+  { icon: Users, value: 200, suffix: "+", label: "Учнів навчається", color: "text-primary" },
+  { icon: BookOpen, value: 67, suffix: "", label: "Інтерактивних уроків", color: "text-accent" },
+  { icon: CheckCircle2, value: 1100, suffix: "+", label: "Виконаних завдань", color: "text-primary" },
+  { icon: Layers, value: 13, suffix: "", label: "Активних класів", color: "text-accent" },
+  { icon: Trophy, value: 80, suffix: "%", label: "Завершують курс", color: "text-primary" },
   { icon: Clock, value: 24, suffix: "/7", label: "Доступ до платформи", color: "text-accent" },
 ]
 
