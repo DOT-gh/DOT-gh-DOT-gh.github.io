@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Home,
@@ -28,6 +29,7 @@ import {
   TrendingUp,
   Server,
   FileText,
+  Lock,
 } from "lucide-react"
 import {
   BarChart,
@@ -1903,21 +1905,50 @@ export default function TeacherDashboard() {
   const [screenMode, setScreenMode] = useState(false)
   const [selectedClass, setSelectedClass] = useState<string | null>(null)
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null)
+  const [codeInput, setCodeInput] = useState("")
+  const [codeErr, setCodeErr] = useState(false)
+
+  const tryUnlock = () => {
+    if (codeInput === "Teacher443" || codeInput === "Teacher123") {
+      localStorage.setItem("teacherAccessCode", codeInput)
+      localStorage.setItem("edu_teacher_access", "true")
+      localStorage.setItem("edu_teacher_code", codeInput)
+      setIsAuthorized(true)
+      setCodeErr(false)
+    } else {
+      setCodeErr(true)
+    }
+  }
 
   useEffect(() => {
-    const code = searchParams.get("code")
-    if (code === "Teacher443") {
+    const isValidCode = (c: string | null) => c === "Teacher443" || c === "Teacher123" || c === "true"
+    // Читаємо код з усіх можливих джерел: query через хук, напряму з URL та localStorage
+    const codeFromHook = searchParams.get("code")
+    const codeFromUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("code") : null
+    const stored1 = typeof window !== "undefined" ? localStorage.getItem("teacherAccessCode") : null
+    const stored2 = typeof window !== "undefined" ? localStorage.getItem("edu_teacher_access") : null
+    const stored3 = typeof window !== "undefined" ? localStorage.getItem("edu_teacher_code") : null
+
+    const code = codeFromHook || codeFromUrl
+
+    if (isValidCode(code) || isValidCode(stored1) || isValidCode(stored2) || isValidCode(stored3)) {
       setIsAuthorized(true)
+      // Зберігаємо код, щоб доступ зберігався при наступних переходах
+      if (typeof window !== "undefined" && isValidCode(code) && code) {
+        localStorage.setItem("teacherAccessCode", code)
+        localStorage.setItem("edu_teacher_access", "true")
+        localStorage.setItem("edu_teacher_code", code)
+      }
     }
     setIsLoading(false)
   }, [searchParams])
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-muted-foreground">Завантаження...</p>
+          <div className="animate-spin h-8 w-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-zinc-500">Завантаження...</p>
         </div>
       </div>
     )
@@ -1925,15 +1956,34 @@ export default function TeacherDashboard() {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-emerald-500/10 blur-[120px]" />
+        </div>
+        <Card className="relative max-w-md w-full rounded-2xl border border-white/10 bg-zinc-900/60 backdrop-blur-xl shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle>Доступ заборонено</CardTitle>
-            <CardDescription>Введіть код доступу через меню профілю на головній сторінці</CardDescription>
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 ring-1 ring-emerald-500/20">
+              <Lock className="h-6 w-6 text-emerald-400" />
+            </div>
+            <CardTitle className="text-white">Доступ до архіву</CardTitle>
+            <CardDescription className="text-zinc-400">Введіть код доступу вчителя, щоб переглянути статистику практики 2025</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button className="w-full" onClick={() => router.push("/")}>
-              На головну
+          <CardContent className="space-y-3">
+            <Input
+              type="password"
+              placeholder="Код доступу"
+              value={codeInput}
+              onChange={(e) => { setCodeInput(e.target.value); setCodeErr(false) }}
+              onKeyDown={(e) => e.key === "Enter" && tryUnlock()}
+              className={`bg-white/5 border-white/10 text-white placeholder:text-zinc-500 ${codeErr ? "border-red-500" : ""}`}
+            />
+            {codeErr && <p className="text-xs text-red-400">Невірний код доступу</p>}
+            <Button className="w-full bg-emerald-500 text-white hover:bg-emerald-600" onClick={tryUnlock}>
+              Увійти
+            </Button>
+            <Button variant="ghost" className="w-full text-zinc-400 hover:text-white hover:bg-white/5" onClick={() => router.push("/teacher?code=Teacher443")}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              До панелі вчителя
             </Button>
           </CardContent>
         </Card>

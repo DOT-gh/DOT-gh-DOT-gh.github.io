@@ -28,6 +28,8 @@ import {
   Bell,
   GraduationCap,
   Sparkles,
+  Settings2,
+  PlusCircle,
 } from "lucide-react"
 import {
   BarChart,
@@ -43,6 +45,8 @@ import {
   Cell,
 } from "recharts"
 import Link from "next/link"
+import { AIControlCenter } from "@/components/teacher/ai-control-center"
+import { AssignmentCreator } from "@/components/teacher/assignment-creator"
 
 const classesData = [
   {
@@ -233,6 +237,8 @@ export default function TeacherPage() {
           {[
             { id: "overview", label: "Огляд", icon: BarChart3 },
             { id: "classes", label: "Класи", icon: Users },
+            { id: "ai", label: "AI Помічник", icon: Settings2 },
+            { id: "assignments", label: "Завдання", icon: PlusCircle },
             { id: "activity", label: "Активність", icon: Activity },
             { id: "archive", label: "Архів", icon: FileText },
           ].map((tab) => (
@@ -568,6 +574,12 @@ export default function TeacherPage() {
           </>
         )}
 
+        {/* ── AI ASSISTANT TAB ── */}
+        {activeTab === "ai" && <AIControlCenter />}
+
+        {/* ── ASSIGNMENTS TAB ── */}
+        {activeTab === "assignments" && <AssignmentCreator />}
+
         {/* ── ACTIVITY TAB ── */}
         {activeTab === "activity" && (
           <div className="space-y-4">
@@ -680,7 +692,7 @@ export default function TeacherPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button variant="outline" className="w-full justify-start border-white/10 bg-white/5 text-zinc-200 hover:bg-white/10 hover:text-white" asChild>
-                  <Link href="/teacher/practice-2025">
+                  <Link href="/teacher/practice-2025?code=Teacher443">
                     <BookOpen className="mr-2 h-4 w-4 text-emerald-400" />
                     Практика 2025 — 83 учні, 3 класи (повна статистика)
                   </Link>
